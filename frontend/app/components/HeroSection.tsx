@@ -19,7 +19,7 @@ const HeroSection: React.FC = () => {
 
       <div className={styles.imageWrapper}>
         <img 
-          src="/images/splash-screen.png" 
+          src="/images/splash-screen.jpeg" 
           alt="Pineapple splash" 
           className={styles.pineappleImage}
         />
