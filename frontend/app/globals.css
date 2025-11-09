@@ -1,0 +1,80 @@
+/* frontend/app/globals.css */
+
+/* 1. IMPOR BOOTSTRAP 5 (WAJIB UAS) */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+/* 2. KONFIGURASI ROOT DAN TEMA */
+:root {
+  /* Warna Dasar */
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Warna Kustom Proyek */
+  --color-primary: #f7a94f;
+  /* Oranye/Kuning */
+  --color-secondary: #ec5a81;
+  /* Pink */
+  --color-success-bg: #E9F8E3;
+  /* Hijau Muda Gradien */
+  --color-hero-bg: #ECFCCA;
+  /* Hijau Muda Hero */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+
+/* 3. RESET DAN FONT STYLING */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+/* Mengatur font untuk semua elemen, menggunakan font kustom Anda */
+body {
+  color: var(--foreground);
+  background: var(--background);
+  /* Ganti dengan Abhaya Libre jika tersedia, jika tidak, gunakan sans-serif yang bersih */
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Font Judul (H1, H2, dll) - Menggunakan Playfair Display */
+h1,
+h2,
+h3,
+h4,
+.mainTitle,
+.bannerTitle {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  color: #333;
+  /* Default warna judul */
+}
+
+/* Memastikan tidak ada overflow */
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Link Styling */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Dark Mode Preference */
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+}

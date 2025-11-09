@@ -1,0 +1,276 @@
+/* frontend/app/mission/MissionPage.module.css */
+
+.missionPageContainer {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #FDFBF7;
+}
+
+/* Main Mission Section */
+.missionSection {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 80px 80px 120px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: start;
+}
+
+.missionContent {
+    position: sticky;
+    top: 100px;
+}
+
+.mainTitle {
+    font-size: 64px;
+    line-height: 1.1;
+    margin: 0 0 30px 0;
+    font-weight: 400;
+    color: #1a1a1a;
+}
+
+.highlightOrange {
+    font-style: italic;
+    color: #FF8C00;
+    font-weight: 400;
+}
+
+.missionText {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #4a4a4a;
+    margin: 0 0 40px 0;
+}
+
+/* Quote Box */
+.quoteBox {
+    background: linear-gradient(135deg, #FFB800 0%, #FFA500 100%);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(255, 184, 0, 0.2);
+}
+
+.quoteText {
+    font-size: 22px;
+    line-height: 1.5;
+    color: #1a1a1a;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    font-style: italic;
+}
+
+.quoteAuthor {
+    font-size: 14px;
+    color: #1a1a1a;
+    margin: 0;
+    opacity: 0.8;
+}
+
+/* Mission Features */
+.missionFeatures {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.featuresList {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.featureItem {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.featureItem:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transform: translateX(8px);
+}
+
+.featureIcon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+}
+
+.featureContent {
+    flex: 1;
+}
+
+.featureTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+}
+
+.featureDescription {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #4a4a4a;
+    margin: 0;
+}
+
+/* Stats Cards */
+.statsCards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 20px;
+}
+
+.statCard {
+    background-color: #ffffff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    border: 2px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.statCard:hover {
+    border-color: #FFB800;
+    box-shadow: 0 8px 24px rgba(255, 184, 0, 0.15);
+    transform: translateY(-4px);
+}
+
+.statNumber {
+    font-size: 56px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 12px 0;
+    line-height: 1;
+}
+
+.statLabel {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #4a4a4a;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .missionSection {
+        padding: 60px 60px 100px;
+        gap: 60px;
+    }
+
+    .mainTitle {
+        font-size: 52px;
+    }
+
+    .missionText {
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 768px) {
+    .missionSection {
+        grid-template-columns: 1fr;
+        padding: 40px 30px 80px;
+        gap: 50px;
+    }
+
+    .missionContent {
+        position: static;
+    }
+
+    .mainTitle {
+        font-size: 42px;
+    }
+
+    .missionText {
+        font-size: 16px;
+    }
+
+    .quoteBox {
+        padding: 30px;
+    }
+
+    .quoteText {
+        font-size: 20px;
+    }
+
+    .featureItem {
+        padding: 20px;
+    }
+
+    .featureIcon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .featureTitle {
+        font-size: 18px;
+    }
+
+    .featureDescription {
+        font-size: 14px;
+    }
+
+    .statNumber {
+        font-size: 48px;
+    }
+
+    .statLabel {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .missionSection {
+        padding: 30px 20px 60px;
+        gap: 40px;
+    }
+
+    .mainTitle {
+        font-size: 32px;
+    }
+
+    .missionText {
+        font-size: 15px;
+    }
+
+    .quoteBox {
+        padding: 24px;
+    }
+
+    .quoteText {
+        font-size: 18px;
+    }
+
+    .featureItem {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+    }
+
+    .statsCards {
+        grid-template-columns: 1fr;
+    }
+
+    .statNumber {
+        font-size: 42px;
+    }
+
+    .statLabel {
+        font-size: 14px;
+    }
+}

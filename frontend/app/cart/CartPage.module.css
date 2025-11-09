@@ -1,0 +1,250 @@
+/* frontend/app/cart/CartPage.module.css */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 80px 120px;
+    background-color: #FDFBF7;
+    min-height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.title {
+    font-size: 42px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Search Bar */
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 12px 20px;
+    width: 350px;
+    transition: all 0.3s ease;
+}
+
+.searchBar:focus-within {
+    border-color: #FFB800;
+    box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
+}
+
+.searchBar svg {
+    color: #999;
+    flex-shrink: 0;
+}
+
+.searchInput {
+    border: none;
+    outline: none;
+    font-size: 15px;
+    width: 100%;
+    background: transparent;
+    color: #1a1a1a;
+}
+
+.searchInput::placeholder {
+    color: #999;
+}
+
+/* Cart Content */
+.cartContent {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Items List */
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background-color: #ffffff;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Checkout Section */
+.checkoutSection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 32px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* Select All */
+.selectAllWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.selectAllCheckbox {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    accent-color: #FFB800;
+}
+
+.selectAllLabel {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Total */
+.totalWrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.totalLabel {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.totalAmount {
+    font-size: 24px;
+    font-weight: 700;
+    color: #E91E63;
+}
+
+/* Checkout Button */
+.checkoutButton {
+    padding: 14px 48px;
+    background-color: #FFB800;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+}
+
+.checkoutButton:hover {
+    background-color: #FFA500;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 184, 0, 0.4);
+}
+
+.checkoutButton:active {
+    transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        padding: 40px 60px 100px;
+    }
+
+    .title {
+        font-size: 36px;
+    }
+
+    .searchBar {
+        width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 30px 80px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .title {
+        font-size: 32px;
+    }
+
+    .searchBar {
+        width: 100%;
+    }
+
+    .itemsList {
+        padding: 16px;
+    }
+
+    .checkoutSection {
+        flex-direction: column;
+        gap: 20px;
+        align-items: stretch;
+        padding: 20px;
+    }
+
+    .selectAllWrapper {
+        justify-content: flex-start;
+    }
+
+    .totalWrapper {
+        justify-content: space-between;
+        padding: 16px 0;
+        border-top: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .checkoutButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 20px 60px;
+    }
+
+    .title {
+        font-size: 28px;
+    }
+
+    .itemsList {
+        padding: 12px;
+    }
+
+    .checkoutSection {
+        padding: 16px;
+    }
+
+    .selectAllLabel {
+        font-size: 16px;
+    }
+
+    .totalLabel {
+        font-size: 18px;
+    }
+
+    .totalAmount {
+        font-size: 20px;
+    }
+
+    .checkoutButton {
+        padding: 12px 32px;
+        font-size: 15px;
+    }
+}

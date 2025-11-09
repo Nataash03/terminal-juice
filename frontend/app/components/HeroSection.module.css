@@ -1,0 +1,187 @@
+/* frontend/app/components/HeroSection.module.css */
+
+.heroContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: calc(100vh - 80px);
+    background: linear-gradient(to bottom, #FDFCE5, #F5F4D8);
+    padding: 60px 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.content {
+    flex: 1;
+    max-width: 550px;
+    z-index: 2;
+}
+
+.mainTitle {
+    font-size: 72px;
+    line-height: 1.1;
+    margin: 0 0 30px 0;
+    font-weight: 400;
+    color: #1a1a1a;
+}
+
+.mainTitle .highlightItalic {
+    font-style: italic;
+    color: #D4AF37;
+    font-weight: 400;
+}
+
+.tagline {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #4a4a4a;
+    margin: 0 0 40px 0;
+    max-width: 450px;
+}
+
+.sipFreshButton {
+    display: inline-block;
+    background-color: #FFB800;
+    color: #1a1a1a;
+    padding: 16px 32px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+}
+
+.sipFreshButton:hover {
+    background-color: #FFA500;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(255, 184, 0, 0.4);
+}
+
+.imageWrapper {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+}
+
+.pineappleImage {
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+}
+
+.qualityBadge {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+    text-align: center;
+    z-index: 3;
+}
+
+.percentage {
+    font-size: 72px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.badgeText {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #4a4a4a;
+    font-weight: 400;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .heroContainer {
+        padding: 40px 60px;
+    }
+
+    .mainTitle {
+        font-size: 56px;
+    }
+
+    .imageWrapper {
+        height: 500px;
+    }
+
+    .pineappleImage {
+        max-width: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .heroContainer {
+        flex-direction: column;
+        padding: 40px 30px;
+        min-height: auto;
+    }
+
+    .content {
+        max-width: 100%;
+        margin-bottom: 40px;
+    }
+
+    .mainTitle {
+        font-size: 42px;
+    }
+
+    .tagline {
+        font-size: 16px;
+    }
+
+    .imageWrapper {
+        width: 100%;
+        height: 400px;
+    }
+
+    .pineappleImage {
+        max-width: 400px;
+    }
+
+    .qualityBadge {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .percentage {
+        font-size: 56px;
+    }
+
+    .badgeText {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heroContainer {
+        padding: 30px 20px;
+    }
+
+    .mainTitle {
+        font-size: 32px;
+    }
+
+    .imageWrapper {
+        height: 300px;
+    }
+
+    .pineappleImage {
+        max-width: 300px;
+    }
+
+    .percentage {
+        font-size: 42px;
+    }
+
+    .badgeText {
+        font-size: 12px;
+    }
+}
