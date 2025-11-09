@@ -1,0 +1,188 @@
+/* frontend/app/shop/ShopPage.module.css */
+
+.shopPageContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 80px;
+    min-height: 100vh;
+}
+
+/* --- Product Range Section --- */
+.productRangeSection {
+    margin-top: 40px;
+}
+
+.rangeHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 20px;
+}
+
+.rangeTitle {
+    font-size: 32px;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.discoverItalic {
+    font-style: italic;
+    font-weight: 600;
+    color: #D4AF37;
+}
+
+/* --- Filter Buttons --- */
+.filterButtons {
+    display: flex;
+    gap: 12px;
+}
+
+.filterButton {
+    background: none;
+    border: 1px solid #e0e0e0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #4a4a4a;
+}
+
+.filterButton:hover {
+    border-color: #FFB800;
+    color: #1a1a1a;
+}
+
+.filterButton.active {
+    background-color: #FFB800;
+    border-color: #FFB800;
+    color: #1a1a1a;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(255, 184, 0, 0.2);
+}
+
+/* --- Product Grid --- */
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin: 40px 0;
+    justify-items: center;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* --- Product Card Styling --- */
+.productCard {
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.productImageWrapper {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.productCard:hover .productImageWrapper {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.productImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Slider Controls (Untuk Demo/Placeholder) --- */
+.sliderControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.arrowButton {
+    background: #f0f0f0;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #1a1a1a;
+}
+
+.arrowButton:hover {
+    background-color: #FFB800;
+    color: #ffffff;
+}
+
+.exploreMoreButton {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.exploreMoreButton:hover {
+    background-color: #4a4a4a;
+}
+
+
+/* --- Responsive Design --- */
+@media (max-width: 1024px) {
+    .shopPageContainer {
+        padding: 40px 60px;
+    }
+
+    .rangeHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .shopPageContainer {
+        padding: 30px 30px;
+    }
+
+    .productGrid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    .rangeTitle {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .shopPageContainer {
+        padding: 20px 20px;
+    }
+
+    .filterButtons {
+        flex-wrap: wrap;
+    }
+}

@@ -7,7 +7,8 @@ import styles from './AuthForm.module.css';
 
 interface AuthFormProps {
   type: 'login' | 'register';
-  role?: 'buyer' | 'seller';
+  // Properti 'role' harus ada untuk membedakan Seller dan Buyer
+  role: 'buyer' | 'seller'; 
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
@@ -78,10 +79,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
       // Simulasi API call
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      console.log(`[AUTH SUCCESS] Type: ${type}, Email: ${email}, Username: ${username}`);
+      console.log(`[AUTH SUCCESS] Type: ${type}, Role: ${role}, Email: ${email}, Username: ${username}`);
       
       alert(`${type === 'login' ? 'Login' : 'Registrasi'} Berhasil! Redirecting...`);
-      // window.location.href = '/dashboard';
+      // Lakukan redirect berdasarkan ROLE
+      // window.location.href = role === 'seller' ? '/dashboard/seller' : '/dashboard';
 
     } catch (error: any) {
       setErrors(prev => ({ 
@@ -93,17 +95,30 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
     }
   };
 
-  // Dynamic content based on type
-  const title = type === 'login' ? 'Sign in' : 'Create Account';
-  const subtitle = type === 'login' 
+  // --- Konten Dinamis Berdasarkan TIPE dan ROLE ---
+  const isLogin = type === 'login';
+  const isSeller = role === 'seller';
+  
+  // 1. Judul Utama
+  const title = isLogin 
+    ? (isSeller ? 'Seller Sign In' : 'Sign In') 
+    : (isSeller ? 'Seller Account Registration' : 'Create Account'); 
+
+  // 2. Teks Subtitle
+  const subtitle = isLogin 
     ? 'Belum punya akun?' 
     : 'Sudah punya akun?';
-  const subtitleLink = type === 'login' 
-    ? 'Juice up' 
-    : 'Sign in';
-  const subtitleHref = type === 'login' 
-    ? '/register' 
-    : '/login';
+  
+  // 3. Tautan Pengalih
+  const subtitleLink = isLogin 
+    ? 'Juice Up' 
+    : 'Sign In';
+
+  // 4. Tujuan Tautan Pengalih (menggunakan rute yang sudah kita tetapkan)
+  const subtitleHref = isLogin 
+    ? (isSeller ? '/seller/register' : '/register') // Jika Login, arahkan ke Register role yang sama
+    : (isSeller ? '/seller/login' : '/login'); // Jika Register, arahkan ke Login role yang sama
+
 
   return (
     <div className={styles.container}>

@@ -1,9 +1,12 @@
 // frontend/app/layout.tsx
-
-import "bootstrap/dist/css/bootstrap.min.css";
 import './globals.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+
+export const metadata = {
+  title: 'Terminal Juice - Fresh & Natural Flavours',
+  description: 'Savour the juicy essence of fruit in every sip.',
+};
 
 export default function RootLayout({
   children,
@@ -13,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar /> {/* Letakkan Navbar di sini */}
+        <Navbar />
         <main>{children}</main>
         <Footer />
       </body>

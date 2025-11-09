@@ -1,14 +1,14 @@
 /* frontend/app/cart/CartPage.module.css */
 
+/* CONTAINER & LAYOUT */
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 80px 120px;
-    background-color: #FDFBF7;
-    min-height: 100vh;
+    padding: 40px 80px;
+    min-height: 80vh;
 }
 
-/* Header */
+/* HEADER SECTION */
 .header {
     display: flex;
     justify-content: space-between;
@@ -17,28 +17,28 @@
 }
 
 .title {
-    font-size: 42px;
-    font-weight: 600;
+    font-size: 32px;
+    font-weight: 550;
     color: #1a1a1a;
     margin: 0;
 }
 
-/* Search Bar */
+/* SEARCH BAR */
 .searchBar {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background-color: #ffffff;
+    gap: 10px;
+    padding: 10px 15px;
     border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    padding: 12px 20px;
-    width: 350px;
-    transition: all 0.3s ease;
+    border-radius: 25px;
+    max-width: 300px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
 }
 
 .searchBar:focus-within {
-    border-color: #FFB800;
-    box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .searchBar svg {
@@ -49,128 +49,94 @@
 .searchInput {
     border: none;
     outline: none;
-    font-size: 15px;
-    width: 100%;
+    flex-grow: 1;
+    font-size: 16px;
     background: transparent;
-    color: #1a1a1a;
 }
 
 .searchInput::placeholder {
     color: #999;
 }
 
-/* Cart Content */
+/* CART CONTENT */
 .cartContent {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
 }
 
-/* Items List */
 .itemsList {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    background-color: #ffffff;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    gap: 15px;
 }
 
-/* Checkout Section */
+/* CHECKOUT SECTION */
 .checkoutSection {
+    position: sticky;
+    bottom: 0;
+    margin-top: 40px;
+    padding: 24px 40px;
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 20px;
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
+    z-index: 10;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 24px 32px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    gap: 30px;
 }
 
-/* Select All */
-.selectAllWrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.selectAllCheckbox {
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    accent-color: #FFB800;
-}
-
-.selectAllLabel {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1a1a1a;
-    cursor: pointer;
-    margin: 0;
-}
-
-/* Total */
-.totalWrapper {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.totalLabel {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1a1a1a;
-}
-
-.totalAmount {
-    font-size: 24px;
-    font-weight: 700;
-    color: #E91E63;
-}
-
-/* Checkout Button */
+/* Checkout Button (Paling Kiri) */
 .checkoutButton {
-    padding: 14px 48px;
-    background-color: #FFB800;
-    color: #1a1a1a;
-    border: none;
-    border-radius: 12px;
+    background: #ffd4e8;
+    color: #e91e63;
+    padding: 14px 50px;
+    border: 2px solid #e91e63;
+    border-radius: 30px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+    flex-shrink: 0;
 }
 
-.checkoutButton:hover {
-    background-color: #FFA500;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 184, 0, 0.4);
+.checkoutButton:hover:not(:disabled) {
+    background: #ffc4d6;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.2);
 }
 
-.checkoutButton:active {
-    transform: translateY(0);
+.checkoutButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-/* Responsive Design */
+/* Total Label (Tengah) */
+.totalLabel {
+    font-size: 28px;
+    font-weight: 550;
+    color: #1a1a1a;
+    margin-left: auto;
+}
+
+/* Total Amount (Kanan) */
+.totalAmount {
+    font-size: 28px;
+    font-weight: 550;
+    color: #e91e63;
+}
+
+/* RESPONSIVE DESIGN */
 @media (max-width: 1024px) {
     .container {
-        padding: 40px 60px 100px;
-    }
-
-    .title {
-        font-size: 36px;
-    }
-
-    .searchBar {
-        width: 300px;
+        padding: 30px 40px;
     }
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 30px 30px 80px;
+        padding: 20px;
     }
 
     .header {
@@ -179,72 +145,51 @@
         gap: 20px;
     }
 
-    .title {
-        font-size: 32px;
-    }
-
     .searchBar {
         width: 100%;
-    }
-
-    .itemsList {
-        padding: 16px;
+        max-width: 100%;
     }
 
     .checkoutSection {
         flex-direction: column;
-        gap: 20px;
         align-items: stretch;
+        gap: 15px;
         padding: 20px;
-    }
-
-    .selectAllWrapper {
-        justify-content: flex-start;
-    }
-
-    .totalWrapper {
-        justify-content: space-between;
-        padding: 16px 0;
-        border-top: 1px solid #e0e0e0;
-        border-bottom: 1px solid #e0e0e0;
     }
 
     .checkoutButton {
         width: 100%;
+        order: 3;
+    }
+
+    .totalLabel {
+        order: 1;
+        margin-left: 0;
+        text-align: left;
+    }
+
+    .totalAmount {
+        order: 2;
+        text-align: left;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 20px 20px 60px;
+        padding: 15px;
     }
 
     .title {
-        font-size: 28px;
+        font-size: 24px;
     }
 
-    .itemsList {
-        padding: 12px;
-    }
-
-    .checkoutSection {
-        padding: 16px;
-    }
-
-    .selectAllLabel {
-        font-size: 16px;
-    }
-
-    .totalLabel {
-        font-size: 18px;
-    }
-
+    .totalLabel,
     .totalAmount {
         font-size: 20px;
     }
 
     .checkoutButton {
-        padding: 12px 32px;
-        font-size: 15px;
+        font-size: 14px;
+        padding: 12px 24px;
     }
 }

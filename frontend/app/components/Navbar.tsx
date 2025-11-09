@@ -46,16 +46,16 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
 
-          {/* Cart Icon */}
-          <button className={styles.iconButton} aria-label="Cart">
+          {/* Cart Icon (Diubah menjadi Link) */}
+          <Link href="/cart" className={styles.iconButton} aria-label="Cart">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
               <line x1="3" y1="6" x2="21" y2="6"/>
               <path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
-          </button>
+          </Link>
 
-          {/* Hamburger Menu */}
+          {/* Hamburger Menu (untuk Dropdown) */}
           <button 
             className={`${styles.hamburger} ${menuOpen ? styles.active : ''}`}
             onClick={toggleMenu}
@@ -71,22 +71,35 @@ const Navbar: React.FC = () => {
       {/* Dropdown Menu */}
       {menuOpen && (
         <div className={styles.dropdownMenu}>
-          <Link href="/dashboard" className={styles.dropdownLink} onClick={toggleMenu}>
+          {/* Tautan ke Dashboard Seller */}
+          <Link href="/dashboard/seller" className={styles.dropdownLink} onClick={toggleMenu}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="3" width="7" height="7"/>
               <rect x="14" y="3" width="7" height="7"/>
               <rect x="14" y="14" width="7" height="7"/>
               <rect x="3" y="14" width="7" height="7"/>
             </svg>
-            Dashboard
+            Seller Dashboard
           </Link>
-          <Link href="/profile" className={styles.dropdownLink} onClick={toggleMenu}>
+
+          {/* Tautan Login Buyer Standar */}
+          <Link href="/login" className={styles.dropdownLink} onClick={toggleMenu}> 
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            Profile
+            Sign In / Profile (Buyer)
           </Link>
+          
+          {/* Tautan Khusus Login Seller */}
+          <Link href="/seller/login" className={styles.dropdownLink} onClick={toggleMenu}> 
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 15a4 4 0 0 0 4-4V5a4 4 0 0 0-8 0v6a4 4 0 0 0 4 4z"/>
+              <path d="M21 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2"/>
+            </svg>
+            Login as Seller
+          </Link>
+          
         </div>
       )}
     </header>

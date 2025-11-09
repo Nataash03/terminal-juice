@@ -1,253 +1,177 @@
-/* frontend/app/dashboard/seller/SellerDashboard.module.css */
+/* frontend/app/dashboard/seller/sellerDashboard.module.css */
+
+/* LAYOUT CONTAINER */
 
 .container {
     display: flex;
     min-height: 100vh;
-    background: linear-gradient(135deg, #F5FCF5 0%, #FFF9F5 50%, #FFF5F9 100%);
+    background-color: #fefdf5;
 }
 
-/* Sidebar */
+/* SIDEBAR */
+
 .sidebar {
     width: 280px;
     background-color: #ffffff;
-    padding: 40px 24px;
+    padding: 40px 30px;
     display: flex;
     flex-direction: column;
     gap: 40px;
-    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.04);
-    position: sticky;
-    top: 0;
-    height: 100vh;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
-.profileSection {
+.profile {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.avatarWrapper {
-    margin-bottom: 20px;
+    justify-content: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f0f0f0;
 }
 
 .avatar {
-    width: 140px;
-    height: 140px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    background: linear-gradient(135deg, #ffe5d9 0%, #ffd4cc 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    font-size: 24px;
+    font-weight: 600;
+    color: #ff6b6b;
 }
 
-/* Navigation Menu */
-.navMenu {
+/* Navigation */
+.nav {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
 }
 
 .navItem {
-    padding: 14px 20px;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #4a4a4a;
+    padding: 16px 24px;
+    border: none;
+    background: transparent;
+    border-radius: 15px;
     font-size: 16px;
     font-weight: 500;
+    color: #666;
+    text-align: left;
+    cursor: pointer;
     transition: all 0.3s ease;
-    text-align: center;
 }
 
 .navItem:hover {
-    background-color: #FFF5F9;
-    color: #1a1a1a;
+    background-color: #fef0f0;
+    color: #333;
 }
 
-.navItem.active {
-    background: linear-gradient(135deg, #FFE5D9 0%, #FFC4D6 100%);
-    color: #1a1a1a;
+.navItemActive {
+    background: linear-gradient(135deg, #ffd4e8 0%, #ffe5f0 100%);
+    color: #333;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(255, 196, 214, 0.3);
 }
 
-.logoutButton {
-    margin-top: auto;
-    padding: 14px 20px;
-    background-color: transparent;
-    border: none;
-    border-radius: 12px;
-    color: #4a4a4a;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-align: center;
-}
+/* MAIN CONTENT */
 
-.logoutButton:hover {
-    background-color: #FFF5F9;
-    color: #E91E63;
-}
-
-/* Main Content */
-.mainContent {
+.main {
     flex: 1;
-    padding: 60px 80px;
+    padding: 40px 60px;
+    overflow-y: auto;
+}
+
+.header {
+    margin-bottom: 40px;
 }
 
 .pageTitle {
     font-size: 48px;
-    font-weight: 400;
+    font-weight: 700;
     color: #1a1a1a;
-    margin: 0 0 40px 0;
+    margin: 0;
+    font-family: Georgia, serif;
 }
 
-.titleItalic {
-    font-style: italic;
-    font-weight: 400;
-}
+/* ========================================
+     STATS GRID
+     ======================================== */
 
-/* Stats Grid */
 .statsGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     margin-bottom: 60px;
 }
 
 .statCard {
-    background: linear-gradient(135deg, #FFE5D9 0%, #FFC4D6 100%);
-    padding: 40px 32px;
+    background: linear-gradient(135deg, #ffd4e8 0%, #ffe5f0 100%);
     border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 8px 24px rgba(255, 196, 214, 0.2);
-    transition: transform 0.3s ease;
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .statCard:hover {
     transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(233, 30, 99, 0.15);
 }
 
 .statValue {
     font-size: 36px;
     font-weight: 700;
-    color: #1a1a1a;
-    margin: 0 0 12px 0;
+    color: #e91e63;
+    line-height: 1.2;
 }
 
 .statLabel {
-    font-size: 18px;
-    color: #4a4a4a;
+    font-size: 14px;
+    color: #666;
     font-weight: 500;
 }
 
-/* Top Selling Section */
-.topSellingSection {
-    background-color: #ffffff;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+/* ========================================
+     TOP PRODUCTS SECTION
+     ======================================== */
+
+.topProducts {
+    margin-top: 60px;
 }
 
 .sectionTitle {
     font-size: 36px;
-    font-weight: 400;
+    font-weight: 700;
     color: #1a1a1a;
-    margin: 0 0 32px 0;
+    margin: 0 0 30px 0;
+    font-family: Georgia, serif;
 }
 
-.productsList {
+.productsContent {
     display: flex;
-    flex-direction: column;
-    gap: 24px;
-    margin-bottom: 32px;
-}
-
-.productItem {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.productInfo {
-    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 16px;
+    padding: 40px;
+}
+
+.productImageWrapper {
+    max-width: 600px;
+    width: 100%;
 }
 
 .productImage {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: auto;
     object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
 }
 
-.productName {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1a1a1a;
-}
+/* ========================================
+     RESPONSIVE DESIGN
+     ======================================== */
 
-/* Progress Bar */
-.progressBar {
-    width: 100%;
-    height: 12px;
-    background-color: #E8E8E8;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-.progressFill {
-    height: 100%;
-    background: linear-gradient(90deg, #A8D5A8 0%, #C8E6C8 100%);
-    border-radius: 6px;
-    transition: width 0.5s ease;
-}
-
-/* See Others Button */
-.seeOthersButton {
-    width: 100%;
-    padding: 16px;
-    background: linear-gradient(135deg, #FFE5D9 0%, #FFC4D6 100%);
-    color: #1a1a1a;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(255, 196, 214, 0.3);
-}
-
-.seeOthersButton:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 196, 214, 0.4);
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .sidebar {
-        width: 240px;
-        padding: 30px 20px;
-    }
-
-    .mainContent {
-        padding: 50px 60px;
-    }
-
-    .pageTitle {
-        font-size: 40px;
-    }
-
+@media (max-width: 1200px) {
     .statsGrid {
-        gap: 20px;
-    }
-
-    .statCard {
-        padding: 32px 24px;
-    }
-
-    .statValue {
-        font-size: 32px;
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -258,30 +182,21 @@
 
     .sidebar {
         width: 100%;
-        height: auto;
-        position: static;
-        padding: 24px 20px;
+        padding: 20px;
     }
 
-    .avatar {
-        width: 100px;
-        height: 100px;
-    }
-
-    .navMenu {
+    .nav {
         flex-direction: row;
-        flex-wrap: wrap;
-        gap: 12px;
+        overflow-x: auto;
+        gap: 10px;
     }
 
-    .navItem,
-    .logoutButton {
-        flex: 1;
-        min-width: 120px;
+    .navItem {
+        white-space: nowrap;
     }
 
-    .mainContent {
-        padding: 40px 30px;
+    .main {
+        padding: 20px;
     }
 
     .pageTitle {
@@ -293,54 +208,196 @@
         gap: 16px;
     }
 
-    .topSellingSection {
-        padding: 30px 24px;
+    .sectionTitle {
+        font-size: 24px;
     }
 
-    .sectionTitle {
-        font-size: 28px;
+    .tableWrapper {
+        overflow-x: auto;
     }
 }
 
 @media (max-width: 480px) {
-    .mainContent {
-        padding: 30px 20px;
-    }
-
     .pageTitle {
-        font-size: 28px;
-    }
-
-    .statCard {
-        padding: 24px 20px;
+        font-size: 24px;
     }
 
     .statValue {
         font-size: 28px;
     }
 
-    .statLabel {
-        font-size: 16px;
-    }
-
-    .topSellingSection {
-        padding: 24px 20px;
-    }
-
     .sectionTitle {
-        font-size: 24px;
+        font-size: 20px;
     }
+}
 
-    .productImage {
-        width: 50px;
-        height: 50px;
-    }
+/* ========================================
+     PRODUCTS PAGE STYLES
+     ======================================== */
 
-    .productName {
-        font-size: 16px;
-    }
+.tableWrapper {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
 
-    .progressBar {
-        height: 10px;
-    }
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead {
+    background-color: #ffd4e8;
+}
+
+.table th {
+    padding: 16px 20px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #666;
+    font-size: 14px;
+}
+
+.table tbody tr:hover {
+    background-color: #fef9fc;
+}
+
+.productThumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 10px;
+}
+
+.editBtn,
+.deleteBtn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.editBtn {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.editBtn:hover {
+    background-color: #bbdefb;
+}
+
+.deleteBtn {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.deleteBtn:hover {
+    background-color: #ffcdd2;
+}
+
+.addProductBtn {
+    background: linear-gradient(135deg, #e91e63 0%, #ff1493 100%);
+    color: #ffffff;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.25);
+}
+
+.addProductBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(233, 30, 99, 0.35);
+}
+
+/* ========================================
+     NOTIFICATIONS PAGE STYLES
+     ======================================== */
+
+.notificationsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.notificationCard {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.notificationCard:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.notificationRead {
+    opacity: 0.6;
+}
+
+.notificationIcon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.notificationContent {
+    flex: 1;
+}
+
+.notificationTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+}
+
+.notificationMessage {
+    font-size: 14px;
+    color: #666;
+    margin: 0 0 8px 0;
+    line-height: 1.5;
+}
+
+.notificationTime {
+    font-size: 12px;
+    color: #999;
+}
+
+.unreadBadge {
+    width: 12px;
+    height: 12px;
+    background-color: #e91e63;
+    border-radius: 50%;
+    position: absolute;
+    top: 24px;
+    right: 24px;
 }

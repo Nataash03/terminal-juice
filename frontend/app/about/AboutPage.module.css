@@ -5,7 +5,7 @@
     margin: 0 auto;
 }
 
-/* --- Who We Are Section --- */
+/*  Who We Are Section */
 .whoWeAreSection {
     display: flex;
     padding: 60px 80px;
@@ -43,7 +43,7 @@
 }
 
 
-/* --- Testimonials Section --- */
+/* Testimonials Section */
 .testimonialsSection {
     /* GRADASI BOX PEACH KE PINK */
     background: linear-gradient(180deg, #FFE8D2 0%, #FFD6E7 100%);

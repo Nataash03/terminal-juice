@@ -1,141 +1,182 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
+/* frontend/app/page.module.css */
 
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
+.pageContainer {
+  width: 100%;
   min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  background-color: #FDFBF7;
 }
 
-.main {
+/* Product Range Section */
+.productRangeSection {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 80px 120px;
+}
+
+.rangeHeader {
   display: flex;
-  min-height: 100vh;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
   justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
+  align-items: center;
+  margin-bottom: 60px;
 }
 
-.intro {
+.rangeTitle {
+  font-size: 56px;
+  font-weight: 400;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.discoverItalic {
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Filter Buttons */
+.filterButtons {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+  gap: 12px;
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
+.filterButton {
+  padding: 12px 28px;
+  border: 1px solid #d4d4d4;
+  background-color: #ffffff;
+  border-radius: 25px;
+  font-size: 15px;
   font-weight: 500;
-  color: var(--text-primary);
+  color: #4a4a4a;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.ctas {
+.filterButton:hover {
+  border-color: #1a1a1a;
+  background-color: #f8f8f8;
+}
+
+.filterButton.active {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-color: #1a1a1a;
+}
+
+/* Product List */
+.productList {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
+  gap: 30px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 20px 0;
+  margin-bottom: 40px;
+
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
 }
 
-.ctas a {
+.productList::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari, Opera */
+}
+
+/* Slider Controls */
+.sliderControls {
   display: flex;
   justify-content: center;
+  gap: 16px;
+}
+
+.arrowButton {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #A8D5A8;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
+  justify-content: center;
   cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  transition: all 0.3s ease;
+  color: #4a4a4a;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.arrowButton:hover {
+  background-color: #A8D5A8;
+  color: #ffffff;
+  transform: scale(1.05);
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.arrowButton:active {
+  transform: scale(0.95);
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .productRangeSection {
+    padding: 60px 60px 100px;
   }
 
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
+  .rangeTitle {
+    font-size: 48px;
+  }
+
+  .productList {
+    gap: 20px;
   }
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
+@media (max-width: 768px) {
+  .productRangeSection {
+    padding: 40px 30px 80px;
   }
 
-  .intro {
+  .rangeHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 40px;
+  }
+
+  .rangeTitle {
+    font-size: 36px;
+  }
+
+  .filterButtons {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 10px;
+  }
+
+  .filterButton {
+    white-space: nowrap;
+    padding: 10px 24px;
+    font-size: 14px;
+  }
+
+  .productList {
     gap: 16px;
   }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+@media (max-width: 480px) {
+  .productRangeSection {
+    padding: 30px 20px 60px;
   }
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+  .rangeTitle {
+    font-size: 28px;
+  }
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
+  .filterButton {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
 
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  .arrowButton {
+    width: 45px;
+    height: 45px;
   }
 }

@@ -42,7 +42,7 @@ export default function AboutPage() {
         {/* Gambar Buah Beri dan Jeruk */}
         <div className={styles.imageRight}>
           {/* Asumsikan gambar disimpan di /public/images/about-fruits.jpg */}
-          <img src="/public/images/who-are-we.jpg" alt="Mixed berries and oranges" />
+          <img src="images/who-are-we.jpg" alt="Mixed berries and oranges" />
         </div>
       </section>
 

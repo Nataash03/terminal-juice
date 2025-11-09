@@ -6,14 +6,15 @@
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
-    background: linear-gradient(135deg, #FDFCE5 0%, #F5F4D8 100%);
+    background: linear-gradient(135deg, #f9f8df 0%, #f5f2d8 100%);
     gap: 60px;
 }
 
 /* Illustration */
 .illustration {
     flex: 1;
-    max-width: 450px;
+    max-width: 600px;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,6 +23,7 @@
 .illustrationImage {
     width: 100%;
     height: auto;
+    max-height: 70vh;
     object-fit: contain;
     filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
     animation: float 3s ease-in-out infinite;
@@ -185,7 +187,7 @@
     }
 
     .illustration {
-        max-width: 350px;
+        max-width: 450px;
     }
 
     .formCard {

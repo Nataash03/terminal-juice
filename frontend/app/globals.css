@@ -6,7 +6,7 @@
 
 /* 2. KONFIGURASI ROOT DAN TEMA */
 :root {
-  /* Warna Dasar */
+  /* Warna Dasar (Default Light Mode) */
   --background: #ffffff;
   --foreground: #171717;
 
@@ -19,6 +19,12 @@
   /* Hijau Muda Gradien */
   --color-hero-bg: #ECFCCA;
   /* Hijau Muda Hero */
+
+  /* --- WARNA GRADIENT UNTUK BODY (Flavours Page Tint) --- */
+  --color-page-bg-start: #FDFDE9;
+  /* Kuning/Krem Pucat */
+  --color-page-bg-end: #F5FBEF;
+  /* Hijau Pucat */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,17 +42,19 @@
   margin: 0;
 }
 
-/* Mengatur font untuk semua elemen, menggunakan font kustom Anda */
+/* Mengatur font untuk semua elemen */
 body {
   color: var(--foreground);
-  background: var(--background);
-  /* Ganti dengan Abhaya Libre jika tersedia, jika tidak, gunakan sans-serif yang bersih */
+  /* Terapkan Gradien lembut ke body */
+  background: linear-gradient(180deg, var(--color-page-bg-start) 0%, var(--color-page-bg-end) 100%);
+  min-height: 100vh;
+
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Font Judul (H1, H2, dll) - Menggunakan Playfair Display */
+/* Font Judul (H1, H2, dll) */
 h1,
 h2,
 h3,
@@ -56,17 +64,14 @@ h4,
   font-family: 'Playfair Display', Georgia, serif;
   font-weight: 700;
   color: #333;
-  /* Default warna judul */
 }
 
-/* Memastikan tidak ada overflow */
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
 }
 
-/* Link Styling */
 a {
   color: inherit;
   text-decoration: none;
@@ -76,5 +81,10 @@ a {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--background);
+    background-image: none;
   }
 }
