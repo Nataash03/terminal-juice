@@ -23,7 +23,7 @@ const TestimonialCard: React.FC<TestimonialProps> = ({ quote, author, role }) =>
     <div className={styles.card}>
       <StarRating />
       <p className={styles.quote}>{quote}</p>
-      <p className={styles.author}>**{author}**</p>
+      <p className={styles.author}>{author}</p>
       <p className={styles.role}>{role}</p>
     </div>
   );
