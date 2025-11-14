@@ -168,6 +168,7 @@
     color: #1a1a1a;
     margin: 0 0 50px 0;
     text-align: center;
+    background-color: #FDFDE9;
 }
 
 .productGrid {
@@ -336,7 +337,7 @@
 /* --- Juice Slider Section --- */
 .juiceSliderSection {
     /* Background hijau muda sesuai gambar */
-    background-color: #f7f9fb;
+    background-color: #FDFDE9;
     padding: 60px 0;
 }
 

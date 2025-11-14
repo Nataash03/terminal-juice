@@ -124,7 +124,7 @@ export default async function FlavoursPage() {
               id={product.id}
               name={product.name}
               imageSrc={product.imageSrc}
-              bgColor={product.bgColor || '#f0f0f0'} 
+              bgColor={product.bgColor || '#ECFCCA'} 
             />
           ))}
         </div>
