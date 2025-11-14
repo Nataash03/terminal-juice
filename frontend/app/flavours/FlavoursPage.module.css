@@ -1,10 +1,6 @@
 /* frontend/app/flavours/FlavoursPage.module.css */
 
-.flavoursPageContainer {
-    width: 100%;
-    min-height: 100vh;
-    background-color: #FDFBF7;
-}
+
 
 /* Banner Section */
 .flavourBanner {

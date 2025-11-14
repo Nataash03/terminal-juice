@@ -1,101 +1,176 @@
-/* frontend/app/about/AboutPage.module.css */
-
+/* AboutPage.module.css */
 .aboutPageContainer {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 40px 24px 80px;
+    color: #1b1b1b;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-/*  Who We Are Section */
-.whoWeAreSection {
-    display: flex;
-    padding: 60px 80px;
-    gap: 50px;
-    align-items: flex-start;
+/* WHO WE ARE */
+.whoSection {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 32px;
+    align-items: center;
+    margin-bottom: 48px;
 }
 
-.contentLeft {
-    flex: 1;
+.whoLeft h1 {
+    font-size: 34px;
+    margin: 0 0 12px;
 }
 
-.sectionTitle {
-    font-size: 36px;
-    font-weight: 800;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.textBlock {
-    font-size: 16px;
+.whoLeft p {
+    color: #556;
     line-height: 1.7;
-    color: #555;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
-.imageRight {
-    flex: 1;
-}
-
-.imageRight img {
+.whoImg {
     width: 100%;
-    height: auto;
-    border-radius: 10px;
+    border-radius: 12px;
     object-fit: cover;
 }
 
-
-/* Testimonials Section */
+/* TESTIMONIALS */
 .testimonialsSection {
-    /* GRADASI BOX PEACH KE PINK */
-    background: linear-gradient(180deg, #FFE8D2 0%, #FFD6E7 100%);
-    padding: 80px 80px 60px 80px;
-    text-align: center;
+    background: #fdeef6;
+    /* pinkish background like screenshot box */
+    border-radius: 16px;
+    padding: 36px 28px 48px;
+    padding-top: 0px;
+    position: relative;
+    margin-top: 28px;
 }
 
-.testimonialHeader {
-    margin-bottom: 40px;
+.testimonialHeaderWrapper {
+    text-align: center;
+    margin-bottom: 18px;
+    position: relative;
 }
 
 .emoji {
-    font-size: 30px;
-    display: block;
-    margin-bottom: 10px;
+    position: absolute;
+    top: 0;
+    /* letakkan di ujung container pink */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* tarik 50% ke atas -> pas di border */
+    font-size: 42px;
+    /* lebih gede dikit biar manis */
+    background: none;
+    z-index: 5;
+    /* supaya nongol di depan */
 }
 
 .testimonialTitle {
-    font-size: 32px;
-    font-weight: 800;
-    color: #333;
+    font-size: 28px;
+    margin: 12px 0 0;
+    font-weight: 600;
+    padding-top: 20px;
+
 }
 
 .loveHighlight {
-    color: #ec5a81;
-    /* Warna pink dari desain */
+    color: #d14b87;
+    /* pinkish */
+    font-style: italic;
 }
 
-.testimonialGrid {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    margin-bottom: 30px;
+/* Carousel container */
+.testimonialCarouselContainer {
+    position: relative;
+    overflow: hidden;
+    padding: 22px 6px 8px;
 }
 
-.sliderDots {
+/* Slides wrapper */
+.slidesContainer {
+    display: flex;
+    transition: transform 400ms ease;
+    will-change: transform;
+}
+
+/* Each slide takes full viewport of container */
+.slide {
+    flex: 0 0 100%;
+    padding: 8px 14px;
+    box-sizing: border-box;
+}
+
+/* Grid of 4 cards inside each slide */
+.cardGroup {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: stretch;
+}
+
+.cardWrapper {
+    /* visual spacing for card box */
+}
+
+/* Responsive: 2 columns on small screens, 1 column on very small */
+@media (max-width: 1000px) {
+    .whoSection {
+        grid-template-columns: 1fr;
+    }
+
+    .cardGroup {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 520px) {
+    .cardGroup {
+        grid-template-columns: 1fr;
+    }
+
+    .testimonialTitle {
+        font-size: 22px;
+    }
+}
+
+/* Controls (prev, dots, next) */
+.controls {
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 18px;
+}
+
+.controlBtn {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    min-width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.dots {
+    display: flex;
     gap: 8px;
+    align-items: center;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
-    background-color: #ddd;
-    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.12);
+    border: none;
+    cursor: pointer;
 }
 
-.dotActive {
-    width: 8px;
-    height: 8px;
-    background-color: #ec5a81;
-    /* Pink aktif */
-    border-radius: 50%;
+.activeDot {
+    background: #f5b60a;
 }

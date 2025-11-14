@@ -1,11 +1,5 @@
 /* frontend/app/mission/MissionPage.module.css */
 
-.missionPageContainer {
-    width: 100%;
-    min-height: 100vh;
-    background-color: #FDFBF7;
-}
-
 /* Main Mission Section */
 .missionSection {
     max-width: 1400px;
