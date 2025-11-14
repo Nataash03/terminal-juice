@@ -2,12 +2,11 @@
 import React from 'react';
 import styles from './FlavoursPage.module.css';
 import { getProducts, JuiceProduct } from '../services/product.service';
-import ProductCard from '../components/ProductCard';
-
-// Hapus definisi CarouselSlide yang tidak terpakai untuk fokus pada Benefits
+// Hapus import ProductCard karena kita hanya menggunakan JuiceSliderItem
+// import ProductCard from '../components/ProductCard'; 
+import JuiceSliderItem from '../components/JuiceSliderItem'; // <-- Pertahankan ini
 
 // Data untuk Manfaat (Benefits)
-// PENTING: Mengganti 'icon' (emoji) dengan 'imagePath' yang diharapkan
 const benefitsData = [
   // Asumsi: Anda memiliki gambar di public/images/benefits/
   { name: 'Antioxidants', imagePath: '/images/antioxidants.webp', color: '#ffc0cb' }, // Pink
@@ -16,8 +15,6 @@ const benefitsData = [
   { name: 'Immunity', imagePath: '/images/immunity.png', color: '#fffacd' },     // Yellow
   { name: 'Detox', imagePath: '/images/detox.png', color: '#d0f0c0' },      // Light Green
 ];
-
-// ... (Komponen CarouselSlideComponent dihapus atau diabaikan)
 
 export default async function FlavoursPage() {
   // Ambil data produk dari service
@@ -47,7 +44,7 @@ export default async function FlavoursPage() {
 
   return (
     <div className={styles.flavoursPageContainer}>
-      {/* Banner Section - Kembali ke struktur asli (non-carousel) */}
+      {/* Banner Section - Tetap Sama */}
       <section className={styles.flavourBanner}>
         <div className={styles.bannerContent}>
           <h1 className={styles.bannerTitle}>
@@ -61,26 +58,24 @@ export default async function FlavoursPage() {
           </a>
         </div>
         
-        {/* Konten Visual Banner */}
+        {/* Konten Visual Banner - Tetap Sama */}
         <div className={styles.bannerVisual}>
-          {/* Untuk contoh pertama, kita perlu menambahkan gambar visual di sini */}
-          {/* Karena di screenshot pertama ada elemen visual yang besar di kanan */}
           <img 
-            src="/images/juice-bottle-design.png" // Menggunakan gambar desain yang sesuai dengan screenshot pertama
+            src="/images/juice-bottle-design.png" 
             alt="Juice product design elements" 
             className={styles.bannerImage}
             style={{ 
-              maxWidth: '600px', // Menyesuaikan ukuran agar sesuai dengan visual di kanan atas
+              maxWidth: '600px',
               position: 'absolute',
               right: '-100px',
               top: '-50px',
-              transform: 'scale(1.2)' // Memperbesar sedikit agar visual lebih dominan
+              transform: 'scale(1.2)'
             }}
           />
         </div>
       </section>
 
-      {/* Benefits Section */}
+      {/* Benefits Section - Tetap Sama */}
       <section className={styles.benefitsSection}>
         <h2 className={styles.benefitsTitle}>
           Huge Benefits{' '}
@@ -103,7 +98,6 @@ export default async function FlavoursPage() {
                 className={styles.benefitCircle} 
                 style={{ backgroundColor: benefit.color }}
               >
-                {/* Perbaikan: Menggunakan imagePath baru yang berisi path gambar ikon */}
                 <img 
                   src={benefit.imagePath} 
                   alt={benefit.name}
@@ -116,23 +110,27 @@ export default async function FlavoursPage() {
         </div>
       </section>
 
-      {/* Product Catalogue */}
-      <section className={styles.productCatalogue}>
-        {/* ... (Konten Product Catalogue tetap sama) */}
-        <h2 className={styles.catalogueTitle}>All Our Delicious Juices</h2>
-        <div className={styles.productGrid}>
+      {/* Product Catalogue / Juice Slider (REVISI) */}
+      {/* Menggunakan JuiceSliderItem untuk menampilkan daftar produk di section ini */}
+      <section className={styles.juiceSliderSection}>
+        {/* Menggunakan judul yang Anda sebutkan: All Our Delicious Juices */}
+        <h2 className={styles.catalogueTitle}>All Our Delicious Juices</h2> 
+        
+        {/* Container untuk Horizontal Scroll */}
+        <div className={styles.juiceSliderContainer}> 
           {products.map((product) => (
-            <ProductCard
-              id={product.id}
+            <JuiceSliderItem
               key={product.id}
+              id={product.id}
               name={product.name}
-              price={product.price}
               imageSrc={product.imageSrc}
               bgColor={product.bgColor || '#f0f0f0'} 
             />
           ))}
         </div>
       </section>
+      
+      {/* HAPUS: Section Product Catalogue (Grid Kartu Penuh) yang ada sebelumnya */}
     </div>
   );
 }

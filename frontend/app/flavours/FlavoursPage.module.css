@@ -336,3 +336,42 @@
         gap: 20px;
     }
 }
+
+/* --- Juice Slider Section --- */
+.juiceSliderSection {
+    /* Background hijau muda sesuai gambar */
+    background-color: #f7f9fb;
+    padding: 60px 0;
+}
+
+.catalogueTitle {
+    font-size: 38px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.juiceSliderContainer {
+    /* PENTING: Memaksa item tetap di satu baris dan mengaktifkan scroll */
+    display: flex;
+    overflow-x: scroll;
+    /* Mengizinkan scrolling horizontal */
+    overflow-y: hidden;
+    /* Mencegah scroll vertikal */
+    padding: 0 50px 30px 50px;
+    /* Padding di kiri/kanan dan bawah untuk scrollbar */
+    gap: 60px;
+    /* Jarak antar item diperbesar */
+
+    /* Mencegah wrap */
+    flex-wrap: nowrap;
+
+    /* Menyembunyikan scrollbar (opsional) */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.juiceSliderContainer::-webkit-scrollbar {
+    display: none;
+}

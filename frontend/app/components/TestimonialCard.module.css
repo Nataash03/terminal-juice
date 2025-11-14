@@ -5,36 +5,117 @@
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    max-width: 300px;
+    /* HAPUS: max-width: 300px; */
     min-height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.stars {
-    font-size: 16px;
-    margin-bottom: 15px;
+/* --- 2.1. Styling Emoji (Star-Struck) --- */
+
+.reviewsHeader {
+    text-align: center;
+    padding-top: 50px;
+    /* Padding atas agar tidak terlalu mepet dengan bagian atas section */
 }
 
-.quote {
-    font-size: 16px;
-    line-height: 1.5;
-    color: #555;
-    font-style: italic;
-    flex-grow: 1;
+.starStruckEmoji {
+    /* MEMPERBESAR UKURAN */
+    font-size: 100px;
+    /* Ukuran besar yang signifikan */
+    display: block;
+
+    /* MEMPOSISIKAN DI ANTARA JUDUL DAN CAROUSEL */
+    margin: 0 auto;
+    /* Pusatkan horizontal */
+    transform: translateY(50px);
+    /* Geser ke bawah, menempatkannya di perbatasan */
+    z-index: 10;
+    /* Pastikan emoji berada di atas container carousel */
+    position: relative;
+    /* Agar z-index bekerja */
 }
 
-.author {
-    font-size: 14px;
-    font-weight: 700;
-    color: #333;
-    margin-top: 15px;
-    margin-bottom: 5px;
+.sectionTitle {
+    font-size: 36px;
+    text-align: center;
+    margin-top: 30px;
+    /* Jarak dari emoji yang besar di atasnya */
+    margin-bottom: 30px;
+    /* Jarak ke review container */
+    /* ... styling lainnya ... */
 }
 
-.role {
-    font-size: 13px;
-    color: #777;
-    margin: 0;
+/* --- 2.2. Styling Carousel Kontainer --- */
+
+.reviewCarouselContainer {
+    width: 100%;
+    /* Jarak atas ditingkatkan agar emoji bisa 'melayang' di perbatasan */
+    margin-top: 80px;
+    padding: 0 50px;
+    /* Padding kiri-kanan untuk tampilan tepi */
+
+    display: flex;
+    overflow-x: scroll;
+    /* Mengizinkan slide */
+    scroll-snap-type: x mandatory;
+    /* Memastikan snap ke setiap slide */
+    gap: 30px;
+    /* Jarak antar kartu */
+
+    /* Memberi ruang di bawah emoji yang 'melayang' */
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    /* GANTI WARNA BACKGROUND AGAR PERBEDAAN JELAS */
+    background-color: #f7f7f7;
+    /* Background berbeda dari section di atasnya */
+}
+
+/* --- 2.3. Tata Letak 4 Kartu per Slide --- */
+/* Selector ini diterapkan pada elemen yang membungkus TestimonialCard */
+.reviewCardWrapper {
+    /* Hitungan 4 kartu: (100% / 4 kartu) dikurangi gap 30px */
+    flex: 0 0 calc(25% - 22.5px);
+    min-width: 300px;
+    /* Agar kartu tidak terlalu kecil */
+    scroll-snap-align: start;
+}
+
+
+/* --- 2.4. Mobile Responsiveness --- */
+
+@media (max-width: 1024px) {
+
+    /* 3 Kartu per slide di Tablet */
+    .reviewCardWrapper {
+        flex: 0 0 calc(33.333% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+
+    /* 2 Kartu per slide di Tablet/Mobile Besar */
+    .reviewCardWrapper {
+        flex: 0 0 calc(50% - 15px);
+    }
+
+    .starStruckEmoji {
+        font-size: 80px;
+        transform: translateY(40px);
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* 1 Kartu per slide di Mobile */
+    .reviewCardWrapper {
+        flex: 0 0 100%;
+    }
+
+    .starStruckEmoji {
+        font-size: 60px;
+        transform: translateY(30px);
+    }
 }

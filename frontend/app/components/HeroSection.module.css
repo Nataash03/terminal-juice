@@ -6,7 +6,7 @@
     align-items: center;
     min-height: calc(100vh - 80px);
     background: linear-gradient(to bottom, #FDFCE5, #F5F4D8);
-    padding: 60px 80px;
+    padding: 30px 80px 60px 80px;
     position: relative;
     overflow: hidden;
 }
@@ -64,7 +64,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 600px;
+    height: 700px;
 }
 
 .pineappleImage {
@@ -73,26 +73,35 @@
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+    transform: translateY(-100px);
 }
 
 .qualityBadge {
     position: absolute;
     bottom: 40px;
-    right: 40px;
+    right: 0px;
     text-align: center;
     z-index: 3;
+    background-color: #ffffff;
+    padding: 20px 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    bottom: 30px;
 }
 
+/* 2. PENGECEILAN UKURAN FONT PERSENTASE */
 .percentage {
-    font-size: 72px;
+    font-size: 56px;
+    /* DIKECILKAN: Dari 72px menjadi 56px */
     font-weight: 600;
     color: #1a1a1a;
     line-height: 1;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
+    /* Kurangi margin */
 }
 
 .badgeText {
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.4;
     color: #4a4a4a;
     font-weight: 400;
@@ -109,24 +118,43 @@
     }
 
     .imageWrapper {
-        height: 500px;
+        height: 550px;
+        /* Sesuaikan tinggi wrapper */
     }
 
     .pineappleImage {
-        max-width: 500px;
+        max-width: 600px;
+        transform: translateY(-100px);
+        /* Geser ke atas */
+    }
+
+    .qualityBadge {
+        bottom: 20px;
+        right: 30px;
+        padding: 18px 28px;
+    }
+
+    .percentage {
+        font-size: 52px;
+    }
+
+    .badgeText {
+        font-size: 14px;
     }
 }
 
 @media (max-width: 768px) {
     .heroContainer {
         flex-direction: column;
-        padding: 40px 30px;
+        padding: 60px 30px 40px 30px;
         min-height: auto;
+        align-items: flex-start;
     }
 
     .content {
         max-width: 100%;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
+        transform: none;
     }
 
     .mainTitle {
@@ -143,26 +171,28 @@
     }
 
     .pineappleImage {
-        max-width: 400px;
+        max-width: 80%;
+        transform: translateY(-100px);
     }
 
     .qualityBadge {
-        bottom: 20px;
-        right: 20px;
+        bottom: 30px;
+        right: 40px;
+        padding: 15px 25px;
     }
 
     .percentage {
-        font-size: 56px;
+        font-size: 44px;
     }
 
     .badgeText {
-        font-size: 14px;
+        font-size: 13px;
     }
 }
 
 @media (max-width: 480px) {
     .heroContainer {
-        padding: 30px 20px;
+        padding: 50px 20px 30px 20px;
     }
 
     .mainTitle {
@@ -170,15 +200,23 @@
     }
 
     .imageWrapper {
-        height: 300px;
+        height: 400px;
     }
 
     .pineappleImage {
-        max-width: 300px;
+        max-width: 90%;
+        transform: translateY(-80px);
+    }
+
+    .qualityBadge {
+        bottom: 30px;
+        right: 30px;
+        padding: 10px 20px;
+        border-radius: 12px;
     }
 
     .percentage {
-        font-size: 42px;
+        font-size: 36px;
     }
 
     .badgeText {

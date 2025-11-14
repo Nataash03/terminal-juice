@@ -5,12 +5,30 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
 
+// --- START SIMULASI AUTHENTIKASI (GANTI DENGAN AUTH CONTEXT ASLI NANTI) ---
+const useAuthSimulated = () => {
+    // KONDISI INI HARUS DIUBAH SECARA MANUAL UNTUK TES
+    // Ketika berhasil login, state ini akan diubah oleh Auth Context asli
+    const isLoggedIn = false;   // Ganti ke true untuk simulasi login
+    const userRole = 'buyer'; // Ganti ke 'seller' untuk simulasi seller
+    
+    return { isLoggedIn, userRole };
+};
+
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  
+  // Ambil status autentikasi dari hook simulasi (atau Auth Context asli)
+  const { isLoggedIn, userRole } = useAuthSimulated(); 
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  // Tentukan Link untuk Sign In / Profile
+  const authLink = isLoggedIn ? "/profile" : "/login";
+  const authText = isLoggedIn ? "Profile" : "Sign In / Profile";
+
 
   return (
     <header className={styles.header}>
@@ -20,23 +38,15 @@ const Navbar: React.FC = () => {
           terminal juice.
         </Link>
 
-        {/* Navigation Menu */}
+        {/* Navigation Menu (Tidak ada perubahan) */}
         <nav className={styles.nav}>
-          <Link href="/shop" className={styles.navLink}>
-            Shop All
-          </Link>
-          <Link href="/flavours" className={styles.navLink}>
-            Flavours
-          </Link>
-          <Link href="/about" className={styles.navLink}>
-            About Us
-          </Link>
-          <Link href="/mission" className={styles.navLink}>
-            Our Mission
-          </Link>
+          <Link href="/shop" className={styles.navLink}>Shop All</Link>
+          <Link href="/flavours" className={styles.navLink}>Flavours</Link>
+          <Link href="/about" className={styles.navLink}>About Us</Link>
+          <Link href="/mission" className={styles.navLink}>Our Mission</Link>
         </nav>
 
-        {/* Right Side Actions */}
+        {/* Right Side Actions (Tidak ada perubahan) */}
         <div className={styles.actions}>
           {/* Search Icon */}
           <button className={styles.iconButton} aria-label="Search">
@@ -46,7 +56,7 @@ const Navbar: React.FC = () => {
             </svg>
           </button>
 
-          {/* Cart Icon (Diubah menjadi Link) */}
+          {/* Cart Icon */}
           <Link href="/cart" className={styles.iconButton} aria-label="Cart">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -71,34 +81,31 @@ const Navbar: React.FC = () => {
       {/* Dropdown Menu */}
       {menuOpen && (
         <div className={styles.dropdownMenu}>
-          {/* Tautan ke Dashboard Seller */}
-          <Link href="/dashboard/seller" className={styles.dropdownLink} onClick={toggleMenu}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-            </svg>
-            Seller Dashboard
-          </Link>
+          
+          {/* 1. SELLER DASHBOARD (TAMPIL HANYA JIKA LOGGED IN DAN ROLE='SELLER') */}
+          {isLoggedIn && userRole === 'seller' && (
+              <Link href="/seller/dashboard" className={styles.dropdownLink} onClick={toggleMenu}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="3" width="7" height="7"/>
+                      <rect x="14" y="3" width="7" height="7"/>
+                      <rect x="14" y="14" width="7" height="7"/>
+                      <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                  Seller Dashboard
+              </Link>
+          )}
 
-          {/* Tautan Login Buyer Standar */}
-          <Link href="/login" className={styles.dropdownLink} onClick={toggleMenu}> 
+          {/* 2. SIGN IN / PROFILE (SATU OPSI NETRAL) */}
+          <Link href={authLink} className={styles.dropdownLink} onClick={toggleMenu}> 
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
               <circle cx="12" cy="7" r="4"/>
             </svg>
-            Sign In / Profile (Buyer)
+            {authText}
           </Link>
           
-          {/* Tautan Khusus Login Seller */}
-          <Link href="/seller/login" className={styles.dropdownLink} onClick={toggleMenu}> 
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 15a4 4 0 0 0 4-4V5a4 4 0 0 0-8 0v6a4 4 0 0 0 4 4z"/>
-              <path d="M21 17v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2"/>
-            </svg>
-            Login as Seller
-          </Link>
+          {/* 3. OPSI LOGIN AS SELLER DIHAPUS */}
+          {/* Baris 64-70 sudah dihapus */}
           
         </div>
       )}

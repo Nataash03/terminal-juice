@@ -1,92 +1,134 @@
-/* frontend/app/components/ProductCard.module.css */
+/* ProductCard.module.css - Disesuaikan dengan desain gambar */
 
 .productCard {
-    flex: 0 0 auto;
-    width: 280px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+    /* Gaya Container Utama (Card) */
+    width: 100%;
+    /* Agar bisa diatur oleh grid parent */
+    max-width: 300px;
+    /* Batasi lebar */
+    background-color: white;
+    border-radius: 16px;
+    /* Box-shadow lebih halus */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transition: transform 0.2s ease-in-out;
+    border: 1px solid #f0f0f0;
+    /* Garis tipis */
 }
 
 .productCard:hover {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* --- Area Gambar & Gradien --- */
 .imageContainer {
-    width: 280px;
-    height: 280px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 0.3s ease;
-}
+    /* Padding dan radius sesuai gambar */
+    padding: 25px 0 15px 0;
+    border-radius: 16px 16px 0 0;
+    position: relative;
+    min-height: 180px;
 
-.productCard:hover .imageContainer {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    /* Style untuk border yang melengkung pada gradien */
+    border-bottom: none;
+    overflow: hidden;
 }
 
 .productImage {
-    width: 85%;
-    height: 85%;
+    width: 70%;
+    height: auto;
     object-fit: contain;
+    display: block;
+    margin: 0 auto;
 }
 
+/* --- Informasi Produk --- */
 .productInfo {
+    padding: 10px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 
 .productName {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 5px 0;
+}
+
+.description {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 15px;
+    min-height: 2.4rem;
+    /* Menjaga 2 baris teks deskripsi */
+    line-height: 1.2;
+}
+
+/* --- Price & Stock Row --- */
+.priceRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
 .productPrice {
-    font-size: 18px;
-    font-weight: 600;
-    color: #4a4a4a;
-    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #e65100;
+    /* Warna Orange yang lebih berani */
 }
 
-/* Responsive Design */
+.stock {
+    background-color: #e8f5e9;
+    /* Light Green */
+    color: #388e3c;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* --- Button --- */
+.orderButton {
+    background-color: #ffc107;
+    /* Kuning terang */
+    color: #333;
+    border: none;
+    width: 80%;
+    padding: 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
+}
+
+.orderButton:hover {
+    background-color: #ffb300;
+    box-shadow: 0 6px 12px rgba(255, 193, 7, 0.5);
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 768px) {
     .productCard {
-        width: 240px;
+        max-width: 240px;
     }
 
     .imageContainer {
-        width: 240px;
-        height: 240px;
-    }
-
-    .productName {
-        font-size: 18px;
+        min-height: 160px;
     }
 
     .productPrice {
-        font-size: 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .productCard {
-        width: 200px;
-    }
-
-    .imageContainer {
-        width: 200px;
-        height: 200px;
-    }
-
-    .productName {
-        font-size: 16px;
-    }
-
-    .productPrice {
-        font-size: 15px;
+        font-size: 1rem;
     }
 }

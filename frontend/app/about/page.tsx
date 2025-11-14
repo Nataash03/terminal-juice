@@ -1,11 +1,19 @@
 // frontend/app/about/page.tsx
-// Halaman "About Us"
 
 import React from 'react';
+import Carousel from 'react-bootstrap/Carousel';
 import TestimonialCard from '../components/TestimonialCard';
 import styles from './AboutPage.module.css';
 
-const testimonialsData = [
+// 1. DEFINISI TIPE DATA UNTUK ITEM TESTIMONIAL
+interface TestimonialItem {
+  quote: string;
+  author: string;
+  role: string;
+}
+
+const testimonialsData: TestimonialItem[] = [ // Terapkan tipe data di sini
+  // Tambahkan data agar totalnya >= 8 untuk melihat 2 slide penuh
   { 
     quote: "I've tried countless juice brands, but terminal juice truly stands out. The passion fruit guava is incredible - you can taste the real fruit in every sip!", 
     author: 'Helen Mak', 
@@ -21,59 +29,96 @@ const testimonialsData = [
     author: 'Sarah Williams', 
     role: 'Yoga Instructor' 
   },
+  { 
+    quote: "The turmeric shots are a game-changer! Fantastic immunity boost and the taste is surprisingly smooth. Highly recommend!", 
+    author: 'David Lee', 
+    role: 'Freelance Designer' 
+  },
+  { 
+    quote: "The packaging is chic and the taste is even better. My new favourite way to hydrate!", 
+    author: 'Lily Adams', 
+    role: 'Marketing Specialist' 
+  },
+  { 
+    quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", 
+    author: 'Tom Johnson', 
+    role: 'Entrepreneur' 
+  },
+  { 
+    quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", 
+    author: 'Linsay L', 
+    role: 'Staff' 
+  },
+  { 
+    quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", 
+    author: 'John Doe', 
+    role: 'Entrepreneur' 
+  },
+  { 
+    quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", 
+    author: 'Jane Doe', 
+    role: 'Entrepreneur' 
+  },
 ];
 
+// 2. FUNGSI CHUNK DENGAN TIPE DATA YANG BENAR
+const chunk = (arr: TestimonialItem[], size: number): TestimonialItem[][] => {
+  return arr.reduce((acc: TestimonialItem[][], _: any, i: number) => (
+    i % size ? acc : [...acc, arr.slice(i, i + size)]
+  ), []);
+};
+
 export default function AboutPage() {
+  // 3. KELOMPOKKAN DATA MENJADI 4 KARTU PER SLIDE
+  const slides = chunk(testimonialsData, 4);
+
   return (
     <div className={styles.aboutPageContainer}>
-      
-      {/* Bagian Who We Are */}
-      <section className={styles.whoWeAreSection}>
-        <div className={styles.contentLeft}>
-          <h1 className={styles.sectionTitle}>Who we are?</h1>
-          <p className={styles.textBlock}>
-            Our team of passionate food scientists, farmers, and flavor enthusiasts work tirelessly to create juice that not only tastes amazing but also nourishes your body with real, whole-food ingredients.
-          </p>
-          <p className={styles.textBlock}>
-            Every bottle tells a story of dedication, sustainability, and a genuine love for nature's bounty. We're not just making juice — we're crafting experiences that brighten your day, one sip at a time.
-          </p>
-        </div>
-        
-        {/* Gambar Buah Beri dan Jeruk */}
-        <div className={styles.imageRight}>
-          {/* Asumsikan gambar disimpan di /public/images/about-fruits.jpg */}
-          <img src="images/who-are-we.jpg" alt="Mixed berries and oranges" />
-        </div>
-      </section>
+      {/* ... Bagian Who We Are ... */}
 
       {/* Bagian Testimonial */}
       <section className={styles.testimonialsSection}>
-        <div className={styles.testimonialHeader}>
-          <span className={styles.emoji}>🤩</span>
+        
+        {/* WRAPPER EMOJI DAN JUDUL */}
+        <div className={styles.testimonialHeaderWrapper}>
+          
+          {/* EMOJI (POSITION ABSOLUTE DI CSS) */}
+          <span className={styles.emoji}>🤩</span> 
+          
           <h2 className={styles.testimonialTitle}>
             Our costumers <span className={styles.loveHighlight}>love us</span>
           </h2>
         </div>
         
-        <div className={styles.testimonialGrid}>
-          {testimonialsData.map((t, index) => (
-            <TestimonialCard 
-              key={index}
-              quote={t.quote}
-              author={t.author}
-              role={t.role}
-            />
-          ))}
+        {/* CONTAINER CAROUSEL */}
+        <div className={styles.testimonialCarouselContainer}> 
+          <Carousel indicators={true} controls={false} interval={null}>
+            
+            {/* MAP DENGAN TIPE DATA YANG DIPERBAIKI */}
+            {slides.map((slideGroup, index) => ( // Tidak ada error karena 'index' digunakan untuk 'key'
+              // Setiap Carousel.Item adalah satu slide (berisi 4 kartu)
+              <Carousel.Item key={index}>
+                
+                {/* 3. GRID UNTUK MENEMPATKAN 4 KARTU SECARA HORIZONTAL */}
+                <div className={styles.cardGroup}> 
+                  {slideGroup.map((t, cardIndex) => ( // Tidak ada error karena 'cardIndex' digunakan untuk 'key'
+                    <div key={cardIndex} className={styles.cardWrapper}>
+                      <TestimonialCard 
+                        quote={t.quote}
+                        author={t.author}
+                        role={t.role}
+                      />
+                    </div>
+                  ))}
+                </div>
+                
+              </Carousel.Item>
+            ))}
+            
+          </Carousel>
         </div>
-
-        {/* Placeholder untuk dot slider/pagination */}
-        <div className={styles.sliderDots}>
-            <span className={styles.dotActive}></span>
-            <span className={styles.dot}></span>
-            <span className={styles.dot}></span>
-        </div>
+        
       </section>
-      
     </div>
   );
 }

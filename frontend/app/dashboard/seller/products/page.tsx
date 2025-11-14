@@ -3,6 +3,8 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link'; 
+import Image from 'next/image'; // Tambahkan Image untuk optimasi jika diperlukan (digunakan di <img>)
 import styles from '../sellerDashboard.module.css';
 
 interface Product {
@@ -38,7 +40,7 @@ export default function MyProducts() {
     },
     {
       id: 3,
-      name: 'Juice Strawberry',
+      name: 'Juice Semangka',
       category: 'Fruit Juice',
       price: 15000,
       stock: 60,
@@ -127,6 +129,7 @@ export default function MyProducts() {
               {products.map((product) => (
                 <tr key={product.id}>
                   <td>
+                    {/* Menggunakan tag img biasa, asumsikan styling sudah sesuai */}
                     <img
                       src={product.image}
                       alt={product.name}
@@ -139,7 +142,10 @@ export default function MyProducts() {
                   <td>{product.stock}</td>
                   <td>
                     <div className={styles.actionButtons}>
-                      <button className={styles.editBtn}>Edit</button>
+                      <Link href={`/dashboard/seller/products/edit?id=${product.id}`} passHref>
+                        <button className={styles.editBtn}>Edit</button>
+                      </Link>
+                      
                       <button className={styles.deleteBtn}>Delete</button>
                     </div>
                   </td>
@@ -149,7 +155,9 @@ export default function MyProducts() {
           </table>
         </div>
 
-        <button className={styles.addProductBtn}>+ Add New Product</button>
+        <Link href="/dashboard/seller/products/edit?id=${product.id}" passHref>
+          <button className={styles.addProductBtn}>+ Add New Product</button>
+        </Link>
       </main>
     </div>
   );

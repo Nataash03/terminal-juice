@@ -1,0 +1,202 @@
+/* frontend/app/components/Profile/MyOrdersList.module.css */
+
+.container {
+    padding: 16px;
+}
+
+.ordersTitle {
+    font-size: 32px;
+    /* Font weight 400 sesuai desain */
+    font-weight: 400;
+    color: #1f2937;
+    margin-bottom: 40px;
+}
+
+/* --- Filter Tabs --- */
+.filterTabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    /* Container untuk filter All/Active/Completed */
+    background-color: #f7f7f7;
+    padding: 4px;
+    border-radius: 100px;
+    /* Bentuk kapsul */
+    width: fit-content;
+}
+
+.filterButton {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-weight: 500;
+    /* Sedikit lebih ringan */
+    font-size: 14px;
+    transition: all 0.2s ease-in-out;
+    background-color: transparent;
+    color: #4b5563;
+    border: none;
+    cursor: pointer;
+}
+
+.filterButton.filterActive {
+    /* Background putih dengan shadow untuk tab aktif */
+    background-color: white;
+    color: #1f2937;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+/* --- Orders List --- */
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.orderItemCard {
+    background-color: white;
+    /* Rounded 20px - 24px */
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 24px;
+    border: 1px solid #f9f9f9;
+}
+
+/* Order Header */
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.orderNumber {
+    font-size: 16px;
+    /* Sedikit lebih kecil dari sebelumnya */
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 2px;
+}
+
+.orderDate {
+    font-size: 12px;
+    color: #9ca3af;
+    /* Gray yang lebih soft */
+}
+
+/* Status Badge */
+.statusBadge {
+    padding: 2px 8px;
+    /* Padding lebih kecil */
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 100px;
+    /* Border tipis sesuai desain */
+    border: 1px solid;
+    /* Warna disesuaikan untuk Preparin/Kuning */
+    background-color: #fffde7;
+    color: #fbc02d;
+    border-color: #fce77a;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Tambahkan lingkaran kuning kecil sebelum teks status */
+.statusBadge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #fbc02d;
+}
+
+/* Order Items */
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    /* Garis pemisah abu-abu */
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.itemRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.itemInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.itemImageWrapper {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    /* Dibuat bulat sesuai desain */
+    border-radius: 50%;
+    overflow: hidden;
+    /* Background image placeholder */
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Gambar di dalam wrapper akan menyesuaikan ukuran 40x40 */
+.itemImageWrapper img {
+    object-fit: contain;
+}
+
+
+.itemName {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.itemVariant {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.itemPrice {
+    font-weight: 600;
+    color: #e54c79;
+    /* Pink/Merah Harga */
+}
+
+/* Order Total */
+.orderTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 8px;
+    /* Padding lebih kecil */
+}
+
+.totalLabel {
+    font-size: 16px;
+    font-weight: 400;
+    /* Font yang lebih ringan */
+    color: #374151;
+}
+
+.totalAmount {
+    font-size: 18px;
+    font-weight: 600;
+    /* Font yang lebih tebal */
+    color: #e54c79;
+    /* Pink/Merah Harga */
+}
+
+.noOrders {
+    text-align: center;
+    color: #6b7280;
+    font-size: 18px;
+}

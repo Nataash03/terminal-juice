@@ -5,17 +5,30 @@
 import React, { useState } from 'react';
 import styles from './AuthForm.module.css';
 
+// --- DAFTAR WHITELIST NAMA SELLER (SIMULASI FRONTEND) ---
+const TEAM_SELLERS_NAMES = [
+  "Natasya Agustine",
+  "Patricia Natania",
+  "Jessica Winola",
+  "Lyvia Reva Ruganda",
+  "Admin 1"
+];
+// --------------------------------------------------------
+
 interface AuthFormProps {
   type: 'login' | 'register';
-  // Properti 'role' harus ada untuk membedakan Seller dan Buyer
-  role: 'buyer' | 'seller'; 
+  // HAPUS: role: 'buyer' | 'seller'; -> Kita akan tentukan role di dalam handleSubmit
+  
+  // TAMBAH: Callback function untuk mengirim hasil auth (termasuk role) ke Parent Component
+  onAuthSuccess: (userRole: 'buyer' | 'seller', userName: string) => void; 
 }
 
-const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
+// Hapus 'role' dari props
+const AuthForm: React.FC<AuthFormProps> = ({ type, onAuthSuccess }) => {
   // State untuk data form
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
+  const [fullName, setFullName] = useState(''); // Digunakan untuk penentu role (simulasi)
   const [username, setUsername] = useState('');
   
   // State untuk error validasi
@@ -35,8 +48,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
     let isValid = true;
     const newErrors = { email: '', password: '', fullName: '', username: '', general: '' };
 
-    // Validasi Full Name (Register only)
-    if (type === 'register' && fullName.trim().length < 3) {
+    // Validasi Full Name (Wajib diisi untuk menentukan role/registrasi)
+    if (fullName.trim().length < 3) {
       newErrors.fullName = 'Nama harus diisi minimal 3 karakter.';
       isValid = false;
     }
@@ -48,8 +61,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
       isValid = false;
     }
 
-    // Validasi Username
-    if (username.trim().length < 3) {
+    // Validasi Username (Register only)
+    if (type === 'register' && username.trim().length < 3) {
       newErrors.username = 'Username minimal 3 karakter.';
       isValid = false;
     }
@@ -69,6 +82,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
     e.preventDefault();
     setErrors({ email: '', password: '', fullName: '', username: '', general: '' });
     
+    // Kita pastikan fullName diisi, karena menjadi kunci simulasi role
     if (!validateForm()) {
       return;
     }
@@ -76,14 +90,24 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
     setIsLoading(true);
 
     try {
-      // Simulasi API call
+      // 1. SIMULASI API CALL
       await new Promise(resolve => setTimeout(resolve, 1500));
 
-      console.log(`[AUTH SUCCESS] Type: ${type}, Role: ${role}, Email: ${email}, Username: ${username}`);
+      // 2. LOGIKA PENENTUAN ROLE BERDASARKAN NAMA LENGKAP
+      const cleanInputName = fullName.trim().toLowerCase();
+      const isSeller = TEAM_SELLERS_NAMES
+                         .map(name => name.toLowerCase())
+                         .includes(cleanInputName);
       
-      alert(`${type === 'login' ? 'Login' : 'Registrasi'} Berhasil! Redirecting...`);
-      // Lakukan redirect berdasarkan ROLE
-      // window.location.href = role === 'seller' ? '/dashboard/seller' : '/dashboard';
+      const determinedRole: 'buyer' | 'seller' = isSeller ? 'seller' : 'buyer';
+      
+      console.log(`[AUTH SUCCESS] Type: ${type}, Determined Role: ${determinedRole}, Name: ${fullName}, Email: ${email}`);
+      
+      // 3. KIRIM DATA AUTH BERHASIL KE PARENT (TERMASUK ROLE)
+      onAuthSuccess(determinedRole, fullName);
+
+      alert(`${type === 'login' ? 'Login' : 'Registrasi'} Berhasil! Anda adalah ${determinedRole.toUpperCase()}.`);
+      // Parent component akan menangani redirect
 
     } catch (error: any) {
       setErrors(prev => ({ 
@@ -95,48 +119,36 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
     }
   };
 
-  // --- Konten Dinamis Berdasarkan TIPE dan ROLE ---
+  // --- Konten Dinamis Berdasarkan TIPE (Login atau Register) ---
   const isLogin = type === 'login';
-  const isSeller = role === 'seller';
   
-  // 1. Judul Utama
-  const title = isLogin 
-    ? (isSeller ? 'Seller Sign In' : 'Sign In') 
-    : (isSeller ? 'Seller Account Registration' : 'Create Account'); 
+  // 1. Judul Utama (NETRAL, tidak perlu sebut Seller/Buyer)
+  const title = isLogin ? 'Sign In to Your Account' : 'Create New Account'; 
 
-  // 2. Teks Subtitle
-  const subtitle = isLogin 
-    ? 'Belum punya akun?' 
-    : 'Sudah punya akun?';
+  // 2. Tautan Pengalih
+  const subtitleLink = isLogin ? 'Daftar Sekarang' : 'Sign In';
   
-  // 3. Tautan Pengalih
-  const subtitleLink = isLogin 
-    ? 'Juice Up' 
-    : 'Sign In';
-
-  // 4. Tujuan Tautan Pengalih (menggunakan rute yang sudah kita tetapkan)
-  const subtitleHref = isLogin 
-    ? (isSeller ? '/seller/register' : '/register') // Jika Login, arahkan ke Register role yang sama
-    : (isSeller ? '/seller/login' : '/login'); // Jika Register, arahkan ke Login role yang sama
-
+  // 3. Tujuan Tautan Pengalih (netral)
+  const subtitleHref = isLogin ? '/register' : '/login';
 
   return (
     <div className={styles.container}>
       {/* Illustration */}
       <div className={styles.illustration}>
         <img 
+        // Menggunakan path relatif dari folder public/
           src="/images/login-signin.png" 
-          alt="Juice Shop" 
+          alt="Juice Shop Illustration" 
           className={styles.illustrationImage}
         />
       </div>
-
-      {/* Form Card */}
+      {/* ... (Illustration & Form Card Div tetap sama) ... */}
       <div className={styles.formCard}>
         <div className={styles.formHeader}>
           <h2 className={styles.title}>{title}</h2>
           <p className={styles.subtitle}>
-            {subtitle} <a href={subtitleHref} className={styles.switchLink}>{subtitleLink}</a>
+            {isLogin ? 'Belum punya akun? ' : 'Sudah punya akun? '} 
+            <a href={subtitleHref} className={styles.switchLink}>{subtitleLink}</a>
           </p>
         </div>
 
@@ -145,30 +157,28 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
         )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Full Name (Register only) */}
-          {type === 'register' && (
-            <div className={styles.inputGroup}>
-              <label htmlFor="fullName" className={styles.label}>
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                className={`${styles.input} ${errors.fullName ? styles.inputError : ''}`}
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your full name"
-              />
-              {errors.fullName && (
-                <p className={styles.errorMessage}>{errors.fullName}</p>
-              )}
-            </div>
-          )}
-
+          {/* Full Name */}
+          <div className={styles.inputGroup}>
+            <label htmlFor="fullName" className={styles.label}>
+              Full Name 
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              className={`${styles.input} ${errors.fullName ? styles.inputError : ''}`}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Masukkan nama lengkap"
+            />
+            {errors.fullName && (
+              <p className={styles.errorMessage}>{errors.fullName}</p>
+            )}
+          </div>
+          
           {/* Email Address */}
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>
-              Email Address
+              Email Address 
             </label>
             <input
               type="email"
@@ -184,22 +194,24 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
           </div>
 
           {/* Username */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="username" className={styles.label}>
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              className={`${styles.input} ${errors.username ? styles.inputError : ''}`}
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Must be Unique"
-            />
-            {errors.username && (
-              <p className={styles.errorMessage}>{errors.username}</p>
-            )}
-          </div>
+          {type === 'register' && (
+            <div className={styles.inputGroup}>
+              <label htmlFor="username" className={styles.label}>
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                className={`${styles.input} ${errors.username ? styles.inputError : ''}`}
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Must be Unique"
+              />
+              {errors.username && (
+                <p className={styles.errorMessage}>{errors.username}</p>
+              )}
+            </div>
+          )}
 
           {/* Password */}
           <div className={styles.inputGroup}>
@@ -225,7 +237,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type, role }) => {
             className={styles.submitButton}
             disabled={isLoading}
           >
-            {isLoading ? 'Processing...' : 'Juice Up'}
+            {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
           </button>
         </form>
       </div>

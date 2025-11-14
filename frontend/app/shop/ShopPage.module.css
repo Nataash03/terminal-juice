@@ -1,188 +1,317 @@
-/* frontend/app/shop/ShopPage.module.css */
+/* ShopPage.module.css */
 
 .shopPageContainer {
-    max-width: 1400px;
+    padding: 2rem 1rem;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 80px;
-    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
 }
 
-/* --- Product Range Section --- */
+.loadingMessage,
+.errorMessage,
+.noResults {
+    padding: 50px;
+    text-align: center;
+    font-size: 1.25rem;
+    color: #4CAF50;
+    /* Green */
+    grid-column: 1 / -1;
+    /* Mengambil seluruh lebar grid */
+}
+
+.errorMessage {
+    color: #F44336;
+    /* Red */
+}
+
 .productRangeSection {
-    margin-top: 40px;
+    margin-top: 2rem;
 }
 
 .rangeHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    border-bottom: 1px solid #f0f0f0;
-    padding-bottom: 20px;
+    text-align: center;
+    margin-bottom: 2rem;
 }
 
 .rangeTitle {
-    font-size: 32px;
-    font-weight: 400;
-    color: #1a1a1a;
-    margin: 0;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
 }
 
 .discoverItalic {
     font-style: italic;
-    font-weight: 600;
-    color: #D4AF37;
+    color: #e56ebf;
 }
 
 /* --- Filter Buttons --- */
+
 .filterButtons {
     display: flex;
-    gap: 12px;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
 }
 
 .filterButton {
-    background: none;
-    border: 1px solid #e0e0e0;
-    padding: 8px 16px;
+    background-color: #f0f0f0;
+    color: #333;
+    border: none;
+    padding: 10px 20px;
     border-radius: 20px;
-    font-size: 14px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    color: #4a4a4a;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+    white-space: nowrap;
 }
 
 .filterButton:hover {
-    border-color: #FFB800;
-    color: #1a1a1a;
+    background-color: #e0e0e0;
 }
 
 .filterButton.active {
-    background-color: #FFB800;
-    border-color: #FFB800;
-    color: #1a1a1a;
+    background-color: #e56ebf;
+    /* Warna hijau aktif */
+    color: white;
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+}
+
+/* --- Sub-Filters for Other --- */
+.otherSubFilters {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.subFilterButton {
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #ccc;
+    padding: 8px 15px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.subFilterButton:hover {
+    background-color: #f5f5f5;
+}
+
+.subFilterButton.active {
+    background-color: #FFC107;
+    /* Warna kuning untuk sub-filter aktif */
+    color: #333;
+    border-color: #FFC107;
     font-weight: 600;
-    box-shadow: 0 4px 8px rgba(255, 184, 0, 0.2);
 }
 
 /* --- Product Grid --- */
+
 .productGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 30px;
-    margin: 40px 0;
-    justify-items: center;
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 1rem 0;
 }
 
-/* --- Product Card Styling --- */
+/* --- Product Card Styles --- */
+
 .productCard {
-    width: 100%;
-    max-width: 350px;
-    text-align: center;
-    transition: transform 0.3s ease;
-}
+    /* Menggunakan Custom Property untuk warna BG gambar */
+    --bg-color: #fff;
 
-.productImageWrapper {
-    width: 100%;
-    aspect-ratio: 1;
-    border-radius: 50%;
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    transition: all 0.3s ease;
-    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border: 1px solid #f0f0f0;
 }
 
-.productCard:hover .productImageWrapper {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+.productCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.productImage {
+.cardImageContainer {
+    padding: 20px 0;
+    background-color: var(--bg-color);
+    /* Menggunakan warna BG dari produk */
+    border-radius: 16px 16px 0 0;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardImage {
+    width: 75%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.cardContent {
+    padding: 15px 15px 25px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cardName {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 3px;
+    color: #333;
+}
+
+.cardDescription {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 15px;
+    height: 30px;
+    /* Menjaga konsistensi tinggi */
+    overflow: hidden;
+}
+
+.cardPriceRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
-/* --- Slider Controls (Untuk Demo/Placeholder) --- */
+.cardPrice {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #FF9800;
+    /* Orange Price */
+}
+
+.cardStock {
+    background-color: #C8E6C9;
+    /* Greenish background */
+    color: #388E3C;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cardOrderButton {
+    background-color: #FFC107;
+    /* Yellow Order Button */
+    color: #333;
+    border: none;
+    width: 80%;
+    padding: 12px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
+}
+
+.cardOrderButton:hover {
+    background-color: #FFB300;
+    box-shadow: 0 6px 12px rgba(255, 179, 0, 0.5);
+}
+
+/* --- Slider Controls --- */
+
 .sliderControls {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
-    margin-top: 40px;
+    margin-top: 3rem;
+    padding: 1rem 0;
 }
 
 .arrowButton {
-    background: #f0f0f0;
-    border: none;
-    width: 44px;
-    height: 44px;
+    background: none;
+    border: 1px solid #ddd;
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-    color: #1a1a1a;
+    transition: background-color 0.3s, border-color 0.3s;
+    color: #666;
 }
 
 .arrowButton:hover {
-    background-color: #FFB800;
-    color: #ffffff;
+    background-color: #f5f5f5;
+    border-color: #bbb;
 }
 
 .exploreMoreButton {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    padding: 12px 30px;
+    background-color: #FF9800;
+    /* Orange */
+    color: white;
     border: none;
+    padding: 12px 30px;
     border-radius: 25px;
-    font-weight: 600;
-    font-size: 16px;
+    font-size: 1rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
 }
 
 .exploreMoreButton:hover {
-    background-color: #4a4a4a;
+    background-color: #FB8C00;
 }
 
-
-/* --- Responsive Design --- */
-@media (max-width: 1024px) {
-    .shopPageContainer {
-        padding: 40px 60px;
+/* Responsiveness for mobile */
+@media (max-width: 600px) {
+    .rangeTitle {
+        font-size: 2rem;
     }
 
-    .rangeHeader {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+    .filterButtons,
+    .otherSubFilters {
+        flex-direction: row;
+        gap: 8px;
     }
-}
 
-@media (max-width: 768px) {
-    .shopPageContainer {
-        padding: 30px 30px;
+    .filterButton {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+
+    .otherSubFilters {
+        margin-top: 0.5rem;
+    }
+
+    .sliderControls {
+        gap: 10px;
+    }
+
+    .exploreMoreButton {
+        padding: 10px 20px;
     }
 
     .productGrid {
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
     }
 
-    .rangeTitle {
-        font-size: 28px;
-    }
-}
-
-@media (max-width: 480px) {
-    .shopPageContainer {
-        padding: 20px 20px;
-    }
-
-    .filterButtons {
-        flex-wrap: wrap;
+    .productCard {
+        max-width: 350px;
+        margin: 0 auto;
     }
 }
