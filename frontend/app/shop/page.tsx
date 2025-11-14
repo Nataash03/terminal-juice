@@ -1,18 +1,17 @@
-'use client';
+'use client'; 
 
 import React, { useState, useEffect } from 'react';
-import ProductCard from '../components/ProductCard';
-import ProductDetailModal from '../components/ProductDetailModal';
-import { getProducts, JuiceProduct } from '../services/product.service';
-import styles from './ShopPage.module.css';
+import ProductCard from '../components/ProductCard'; 
+import ProductDetailModal, { ProductForModal } from '../components/ProductDetailModal';
+import { getProducts, JuiceProduct } from '../services/product.service'; 
+import styles from './ShopPage.module.css'; 
 
+// Definisikan tipe untuk Filter Utama dan Sub-Filter (TIDAK DIUBAH)
 type FilterType = 'Best Seller' | 'All Menu' | 'Other';
-type SubFilterType = 'All' | 'Mineral Water' | 'Fruit' | 'Snacks';
+type SubFilterType = 'All' | 'Mineral Water' | 'Fruit' | 'Snacks'; 
 
-type ProductWithDetails = JuiceProduct & {
-  description: string;
-  stock: number;
-};
+// Tipe produk yang akan disimpan di state: ProductForModal atau null
+type SelectedProductState = ProductForModal | null;
 
 const ShopPage: React.FC = () => {
   const [products, setProducts] = useState<JuiceProduct[]>([]);
@@ -20,9 +19,12 @@ const ShopPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<FilterType>('Best Seller');
   const [activeSubFilter, setActiveSubFilter] = useState<SubFilterType>('All');
-  const [selectedProduct, setSelectedProduct] = useState<ProductWithDetails | null>(null);
+  
+  // State produk yang dipilih menggunakan tipe yang diimpor
+  const [selectedProduct, setSelectedProduct] = useState<SelectedProductState>(null);
 
   useEffect(() => {
+    // Simulasi pengambilan data produk dari service
     const fetchProducts = async () => {
       try {
         const fetchedProducts = await getProducts();
@@ -48,11 +50,25 @@ const ShopPage: React.FC = () => {
     setActiveSubFilter(subFilter);
   };
 
-  const handleProductCardClick = (product: JuiceProduct) => {
-    const fullProductDetail: ProductWithDetails = {
+  // Handler yang dipanggil saat Card diklik
+  const handleProductCardClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>, // Event untuk stopPropagation
+    product: JuiceProduct
+  ) => {
+    // Menghentikan navigasi parent jika ada
+    event.stopPropagation();
+    
+    // Objek detail produk yang dicasting ke ProductForModal
+    const fullProductDetail: ProductForModal = {
       ...product,
+      // PERBAIKAN KRUSIAL: Konversi ID dari number menjadi string
+      id: product.id.toString(), 
+      // --- Data Dummy untuk Modal ---
       description: "Jus ini adalah jus yang isinya itu ada dua buah hasil mix dari buah pisang dan buah mangga",
       stock: 45,
+      // --- Akhir Data Dummy ---
+      category: product.category, 
+      tags: product.tags,
     };
     setSelectedProduct(fullProductDetail);
   };
@@ -61,35 +77,29 @@ const ShopPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  const handleAddToCart = (product: ProductWithDetails, quantity: number) => {
+  // Handler untuk Add To Cart
+  const handleAddToCart = (product: ProductForModal, quantity: number) => {
     console.log(`[ACTION] Menambahkan ${quantity}x ${product.name} ke Keranjang!`);
     handleCloseModal();
   };
 
+  // Logika filter produk (TIDAK DIUBAH)
   const filteredProducts = products.filter((product) => {
     if (activeFilter === 'Best Seller') {
       return product.tags.includes('best_seller');
     }
-
     if (activeFilter === 'All Menu') {
       return product.category === 'Juice';
     }
-
     if (activeFilter === 'Other') {
-      if (product.category === 'Juice') {
-        return false;
-      }
-
-      if (activeSubFilter === 'All') {
-        return true;
-      }
-
+      if (product.category === 'Juice') return false;
+      if (activeSubFilter === 'All') return true;
       return product.category === activeSubFilter;
     }
-
     return true;
   });
 
+  // ... (if loading, if error) ...
   if (loading) {
     return (
       <div style={{ padding: '100px', textAlign: 'center' }}>
@@ -107,10 +117,7 @@ const ShopPage: React.FC = () => {
   }
 
   const otherSubCategories: SubFilterType[] = [
-    'All',
-    'Mineral Water',
-    'Fruit',
-    'Snacks',
+    'All', 'Mineral Water', 'Fruit', 'Snacks',
   ];
 
   return (
@@ -120,28 +127,23 @@ const ShopPage: React.FC = () => {
           <h2 className={styles.rangeTitle}>
             <span className={styles.discoverItalic}>Discover</span> our range -
           </h2>
-
+          
+          {/* ... (Filter Buttons JSX) ... */}
           <div className={styles.filterButtons}>
             <button
-              className={`${styles.filterButton} ${
-                activeFilter === 'Best Seller' ? styles.active : ''
-              }`}
+              className={`${styles.filterButton} ${activeFilter === 'Best Seller' ? styles.active : ''}`}
               onClick={() => handleFilterClick('Best Seller')}
             >
               Best Seller
             </button>
             <button
-              className={`${styles.filterButton} ${
-                activeFilter === 'All Menu' ? styles.active : ''
-              }`}
+              className={`${styles.filterButton} ${activeFilter === 'All Menu' ? styles.active : ''}`}
               onClick={() => handleFilterClick('All Menu')}
             >
               All Menu
             </button>
             <button
-              className={`${styles.filterButton} ${
-                activeFilter === 'Other' ? styles.active : ''
-              }`}
+              className={`${styles.filterButton} ${activeFilter === 'Other' ? styles.active : ''}`}
               onClick={() => handleFilterClick('Other')}
             >
               Other
@@ -153,9 +155,7 @@ const ShopPage: React.FC = () => {
               {otherSubCategories.map((subFilter) => (
                 <button
                   key={subFilter}
-                  className={`${styles.subFilterButton} ${
-                    activeSubFilter === subFilter ? styles.active : ''
-                  }`}
+                  className={`${styles.subFilterButton} ${activeSubFilter === subFilter ? styles.active : ''}`}
                   onClick={() => handleSubFilterClick(subFilter)}
                 >
                   {subFilter}
@@ -165,11 +165,13 @@ const ShopPage: React.FC = () => {
           )}
         </div>
 
+        {/* Grid Produk */}
         <div className={styles.productGrid}>
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              onClick={() => handleProductCardClick(product)}
+              // Meneruskan Event ke handler
+              onClick={(e) => handleProductCardClick(e, product)} 
               style={{ cursor: 'pointer' }}
             >
               <ProductCard
@@ -183,6 +185,7 @@ const ShopPage: React.FC = () => {
           ))}
         </div>
 
+        {/* ... (filteredProducts.length === 0 & Slider Controls JSX) ... */}
         {filteredProducts.length === 0 && (
           <div
             style={{
@@ -202,33 +205,20 @@ const ShopPage: React.FC = () => {
 
         <div className={styles.sliderControls}>
           <button className={styles.arrowButton} aria-label="Previous">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
           <button className={styles.exploreMoreButton}>Explore More</button>
           <button className={styles.arrowButton} aria-label="Next">
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>
         </div>
       </section>
 
+      {/* Komponen Modal */}
       <ProductDetailModal
         product={selectedProduct}
         onAddToCart={handleAddToCart}

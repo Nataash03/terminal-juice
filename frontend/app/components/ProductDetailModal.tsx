@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import styles from './ProductDetailModal.module.css';
 
-// Tipe produk yang harus diekspor agar cocok dengan shop/page.tsx
+// Tipe produk lengkap yang diharapkan oleh Modal.
+// ID disetel sebagai 'string' untuk mencocokkan konversi di shop/page.tsx.
 export interface ProductForModal {
-  id: string; // Mengikuti tipe dari modal
+  id: string; // Tipe ini sekarang String
   name: string;
   price: number;
   imageSrc: string;
   bgColor?: string;
   description: string;
   stock: number;
-  // Ini diperlukan agar TypeScript senang saat mencocokkan tipe penuh dari shop/page.tsx
+  // Menambahkan properti opsional dari JuiceProduct untuk sinkronisasi
   category?: string; 
   tags?: string[];
 }
@@ -18,7 +19,7 @@ export interface ProductForModal {
 type ProductModalProps = {
   product: ProductForModal | null;
   onClose: () => void;
-  // Menggunakan tipe Non-Nullable yang diekspor
+  // Prop onAddToCart mengharapkan ProductForModal yang PASTI ADA
   onAddToCart: (
     product: ProductForModal,
     quantity: number
@@ -35,7 +36,6 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
   if (!product) return null;
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // Menutup modal hanya jika mengklik area overlay
     if (e.target === e.currentTarget) {
       onClose();
     }
@@ -53,11 +53,11 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
     }
   };
 
-  // Fungsi lokal yang memanggil prop onAddToCart
+  // Fungsi lokal yang memanggil prop onAddToCart dari parent
   const handleLocalAddToCartClick = () => {
-    onAddToCart(product, quantity); // Memanggil prop onAddToCart (prop dari parent)
+    onAddToCart(product, quantity); 
     setQuantity(1);
-    // Tambahkan notifikasi jika perlu
+    // Di sini Anda bisa menambahkan notifikasi atau toast
   };
 
   return (
@@ -127,7 +127,7 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
             <div className={styles.actionButtons}>
               <button
                 className={styles.addToCartButton}
-                onClick={handleLocalAddToCartClick}
+                onClick={handleLocalAddToCartClick} // Tombol yang sudah diperbaiki
               >
                 🛒 Add to Cart
               </button>
@@ -140,5 +140,4 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
   );
 };
 
-// Pastikan baris export default ini yang terakhir
 export default ProductDetailModal;
