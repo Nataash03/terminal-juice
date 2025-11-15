@@ -1,3 +1,5 @@
+// File: models/Product.js (Revisi)
+
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
@@ -11,7 +13,8 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Product slug is required'],
     unique: true,
     lowercase: true,
-    trim: true
+    trim: true,
+    index: true // 👈 Peningkatan: Optimasi pencarian/URL
   },
   description: {
     type: String,
@@ -28,7 +31,7 @@ const productSchema = new mongoose.Schema({
     ref: 'Category',
     required: [true, 'Product category is required']
   },
-  images: [{
+  images: [{ // Array of Strings untuk URL Gambar
     type: String
   }],
   stock: {
@@ -44,4 +47,4 @@ const productSchema = new mongoose.Schema({
   timestamps: true 
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Product', productSchema, 'products'); // 👈 Peningkatan: Menjamin nama collection 'products'

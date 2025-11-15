@@ -4,7 +4,8 @@ const Product = require('../models/Product');
 exports.getAllProducts = async (req, res) => {
   try {
     const products = await Product.find()
-      .populate('category', 'name slug')
+      // 💡 TAMBAHKAN .populate('category', 'name slug') DI SINI!
+      .populate('category', 'name slug') 
       .sort({ createdAt: -1 });
     
     res.json({
@@ -145,3 +146,4 @@ exports.deleteProduct = async (req, res) => {
     });
   }
 };
+

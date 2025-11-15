@@ -1,119 +1,51 @@
+// File: controllers/categoryController.js (Pastikan semua fungsi ada)
+
 const Category = require('../models/Category');
 
-// Get all categories
+// 1. GET all categories
 exports.getAllCategories = async (req, res) => {
-  try {
-    const categories = await Category.find().sort({ createdAt: -1 });
-    res.json({
-      success: true,
-      count: categories.length,
-      data: categories
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch categories',
-      error: error.message
-    });
-  }
+    try {
+        const categories = await Category.find({});
+        res.json({ success: true, data: categories });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
 };
 
-// Get single category by ID
+// 2. GET single category by ID (Dibutuhkan oleh router.get('/:id'))
 exports.getCategoryById = async (req, res) => {
-  try {
-    const category = await Category.findById(req.params.id);
-    
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: 'Category not found'
-      });
-    }
-    
-    res.json({
-      success: true,
-      data: category
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch category',
-      error: error.message
-    });
-  }
+    // 💡 Placeholder: Kamu bisa melengkapi logikanya nanti
+    res.status(501).json({ message: 'GET by ID Not Implemented Yet' }); 
 };
 
-// Create new category
+// 3. POST create new category (Sudah kita buat sebelumnya)
 exports.createCategory = async (req, res) => {
-  try {
-    const category = new Category(req.body);
-    const savedCategory = await category.save();
-    
-    res.status(201).json({
-      success: true,
-      message: 'Category created successfully',
-      data: savedCategory
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: 'Failed to create category',
-      error: error.message
-    });
-  }
+    try {
+        const category = new Category(req.body);
+        const savedCategory = await category.save();
+        res.status(201).json({
+            success: true,
+            message: 'Category created successfully',
+            data: savedCategory
+        });
+    } catch (error) {
+        // Ini akan menangani error jika 'name' atau 'slug' kosong
+        res.status(400).json({
+            success: false,
+            message: 'Failed to create category',
+            error: error.message
+        });
+    }
 };
 
-// Update category
+// 4. PUT update category (Dibutuhkan oleh router.put('/:id'))
 exports.updateCategory = async (req, res) => {
-  try {
-    const category = await Category.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-    
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: 'Category not found'
-      });
-    }
-    
-    res.json({
-      success: true,
-      message: 'Category updated successfully',
-      data: category
-    });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: 'Failed to update category',
-      error: error.message
-    });
-  }
+    // 💡 Placeholder
+    res.status(501).json({ message: 'PUT/Update Not Implemented Yet' }); 
 };
 
-// Delete category
+// 5. DELETE category (Dibutuhkan oleh router.delete('/:id'))
 exports.deleteCategory = async (req, res) => {
-  try {
-    const category = await Category.findByIdAndDelete(req.params.id);
-    
-    if (!category) {
-      return res.status(404).json({
-        success: false,
-        message: 'Category not found'
-      });
-    }
-    
-    res.json({
-      success: true,
-      message: 'Category deleted successfully'
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Failed to delete category',
-      error: error.message
-    });
-  }
+    // 💡 Placeholder
+    res.status(501).json({ message: 'DELETE Not Implemented Yet' }); 
 };
