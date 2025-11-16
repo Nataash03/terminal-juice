@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
   };
 
   // Tentukan Link untuk Sign In / Profile
-  const authLink = isLoggedIn ? "/profile" : "/login"; // Asumsi halaman /profile ada
+  const authLink = isLoggedIn ? "/profile" : "/login"; 
   const authText = isLoggedIn ? "Profile" : "Sign In / Profile";
   
   // Handler Logout
@@ -139,14 +139,22 @@ const Navbar: React.FC = () => {
               </Link>
           )}
 
-          {/* 2. SIGN IN / PROFILE */}
-          <Link href={authLink} className={styles.dropdownLink} onClick={toggleMenu}> 
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-            {authText}
-          </Link>
+          {/* 2. KONDISI JIKA ROLE ADALAH BUYER (Hanya tampilkan Profile & Logout) */}
+          {isLoggedIn && userRole === 'buyer' && (
+          <>
+            <Link href="/profile" className={styles.dropdownLink} onClick={toggleMenu}> 
+                {/* ... SVG ... */}
+                Profile
+            </Link>
+            <button 
+                onClick={handleLogout} 
+                className={`${styles.dropdownLink} ${styles.logoutButton}`}
+            >
+                {/* ... Logout Text ... */}
+                Logout
+            </button>
+        </>
+    )}
           
           {/* 3. LOGOUT BUTTON (Tampil jika sudah login) */}
           {isLoggedIn && (

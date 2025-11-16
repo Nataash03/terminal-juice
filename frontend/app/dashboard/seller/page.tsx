@@ -1,141 +1,84 @@
-// frontend/app/dashboard/seller/page.tsx
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styles from './sellerDashboard.module.css';
+import React, { useState, useEffect } from 'react';
+// ... (imports styles dan components untuk tabel) ...
 
-interface DashboardStats {
-  totalSales: number;
-  totalOrders: number;
-  totalProducts: number;
-  growth: number;
-}
+const API_PRODUCTS_URL = 'http://localhost:5001/api/products'; 
 
-export default function SellerDashboard() {
-  const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState('dashboard');
+const SellerDashboard: React.FC = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock data untuk statistik
-  const stats: DashboardStats = {
-    totalSales: 100000000,
-    totalOrders: 50,
-    totalProducts: 55,
-    growth: 20,
-  };
+  useEffect(() => {
+    const fetchProductsForAdmin = async () => {
+      setLoading(true);
+      const token = localStorage.getItem('userToken'); // 🚨 Ambil token
 
-  const handleNavigation = (path: string, menuName: string) => {
-    setActiveMenu(menuName);
-    if (path !== '/dashboard/seller') {
-      router.push(path);
-    }
-  };
+      if (!token) {
+        setError('Akses ditolak. Silakan login sebagai Seller.');
+        setLoading(false);
+        return;
+      }
 
-  const handleLogout = () => {
-    // Implementasi logout
-    console.log('Logging out...');
-    router.push('/');
-  };
+      try {
+        const response = await fetch(API_PRODUCTS_URL, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`, // 🚨 Kirim token
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.status === 403) { // 403 Forbidden: bukan seller
+            throw new Error('Anda tidak memiliki izin akses (Bukan Seller).');
+        }
+
+        const result = await response.json();
+        setProducts(result.data || []); 
+
+      } catch (err: any) {
+        setError(err.message || 'Gagal memuat data produk.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductsForAdmin();
+  }, []);
+
+  // --- Tampilan Dashboard ---
+  if (loading) return <div className="p-10 text-center">Memuat data produk...</div>;
+  if (error) return <div className="p-10 text-center text-red-500">{error}</div>;
 
   return (
-    <div className={styles.container}>
-      {/* Sidebar */}
-      <aside className={styles.sidebar}>
-        <div className={styles.profile}>
-          <div className={styles.avatar}>
-            <span>TJ</span>
-          </div>
-        </div>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold mb-6">Seller Dashboard: Product Management</h1>
+      <p className="mb-4">Total Produk: {products.length}</p>
 
-        <nav className={styles.nav}>
-          <button
-            className={`${styles.navItem} ${
-              activeMenu === 'dashboard' ? styles.navItemActive : ''
-            }`}
-            onClick={() => handleNavigation('/dashboard/seller', 'dashboard')}
-          >
-            Dashboard
-          </button>
-
-          <button
-            className={`${styles.navItem} ${
-              activeMenu === 'products' ? styles.navItemActive : ''
-            }`}
-            onClick={() =>
-              handleNavigation('/dashboard/seller/products', 'products')
-            }
-          >
-            My Products
-          </button>
-
-          <button
-            className={`${styles.navItem} ${
-              activeMenu === 'notifications' ? styles.navItemActive : ''
-            }`}
-            onClick={() =>
-              handleNavigation('/dashboard/seller/notifications', 'notifications')
-            }
-          >
-            Notification
-          </button>
-
-          <button className={styles.navItem} onClick={handleLogout}>
-            Log Out
-          </button>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className={styles.main}>
-        <header className={styles.header}>
-          <h1 className={styles.pageTitle}>Sales Dashboard</h1>
-        </header>
-
-        {/* Stats Cards */}
-        <div className={styles.statsGrid}>
-          {/* Total Penjualan */}
-          <div className={styles.statCard}>
-            <div className={styles.statValue}>
-              Rp
-              <br />
-              {stats.totalSales.toLocaleString('id-ID')}
-            </div>
-            <div className={styles.statLabel}>Total Penjualan</div>
-          </div>
-
-          {/* Total Orders */}
-          <div className={styles.statCard}>
-            <div className={styles.statValue}>{stats.totalOrders}</div>
-            <div className={styles.statLabel}>Total Orders</div>
-          </div>
-
-          {/* Jumlah Produk */}
-          <div className={styles.statCard}>
-            <div className={styles.statValue}>{stats.totalProducts}</div>
-            <div className={styles.statLabel}>Jumlah Produk</div>
-          </div>
-
-          {/* Growth */}
-          <div className={styles.statCard}>
-            <div className={styles.statValue}>+{stats.growth}%</div>
-            <div className={styles.statLabel}>Growth</div>
-          </div>
-        </div>
-
-        {/* Top Selling Products Section */}
-        <section className={styles.topProducts}>
-          <h2 className={styles.sectionTitle}>Top selling products</h2>
-          <div className={styles.productsContent}>
-            <div className={styles.productImageWrapper}>
-              <img
-                src="/images/juice-strawberry.png"
-                alt="Top selling product"
-                className={styles.productImage}
-              />
-            </div>
-          </div>
-        </section>
-      </main>
+      {/* 🚨 Tabel Produk (Gunakan map untuk menampilkan data) */}
+      <table className="min-w-full bg-white border">
+        <thead>
+          <tr>
+            <th>Nama Produk</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((product: any) => (
+            <tr key={product._id}>
+              <td>{product.name}</td>
+              <td>Rp{product.price.toLocaleString('id-ID')}</td>
+              <td>{product.stock} pcs</td>
+              <td><button>Edit</button></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
-}
+};
+
+export default SellerDashboard;

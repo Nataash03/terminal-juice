@@ -10,6 +10,7 @@ const {
     updateProduct,
     deleteProduct
 } = require('../controllers/productController'); // 👈 Import SEMUA fungsi
+const { protect, seller } = require('../middleware/authMiddleware');
 
 // Route Utama (Semua Produk & Tambah Produk)
 router.route('/')
@@ -24,5 +25,6 @@ router.route('/:id')
 
 // Route Berdasarkan Kategori
 router.get('/category/:categoryId', getProductsByCategory); // GET /api/products/category/:categoryId
+router.post('/', protect, seller, productController.createProduct);
 
 module.exports = router;
