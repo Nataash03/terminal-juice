@@ -3,44 +3,44 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ProductCard'; 
 import ProductDetailModal, { ProductForModal } from '../components/ProductDetailModal';
-// ⚠️ Kita hapus impor service lama karena fetch dilakukan di sini
-// import { getProducts, JuiceProduct } from '../services/product.service'; 
 import styles from './ShopPage.module.css'; 
 
 // 🚨 URL API BACKEND KAMU (Pastikan server Node.js berjalan di sini)
 const API_URL = 'http://localhost:5001/api/products'; 
 
 // --- DEFINISI TIPE BARU (Berdasarkan Schema MongoDB kamu) ---
+interface PopulatedCategory {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
 interface BackendProduct {
-    _id: string; // ID unik dari MongoDB
+    _id: string;
     name: string;
     price: number;
-    category: string; // Asumsi ini adalah ObjectId Category yang dibutuhkan
-    images: string[]; // Array of image URLs
+    category: PopulatedCategory;
+    images: string[];
     slug: string;
     stock: number;
     isActive: boolean;
-    tags: string[]; // Asumsi kamu tetap butuh field tags untuk filtering
-    // ... Tambahkan field lain dari schema jika diperlukan
+    tags: string[];
+    description: string;
 }
 
-// Definisikan tipe untuk Filter Utama dan Sub-Filter (TIDAK DIUBAH)
 type FilterType = 'Best Seller' | 'All Menu' | 'Other';
 type SubFilterType = 'All' | 'Mineral Water' | 'Fruit' | 'Snacks'; 
 type SelectedProductState = ProductForModal | null;
 
 const ShopPage: React.FC = () => {
-  // Ganti tipe state products menjadi BackendProduct
   const [products, setProducts] = useState<BackendProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  // State filter tetap sama
   const [activeFilter, setActiveFilter] = useState<FilterType>('Best Seller');
   const [activeSubFilter, setActiveSubFilter] = useState<SubFilterType>('All');
   const [selectedProduct, setSelectedProduct] = useState<SelectedProductState>(null);
 
-  // 1. LOGIKA FETCH DATA DARI API BACKEND
+  
   useEffect(() => {
     const fetchProductsFromApi = async () => {
       try {
@@ -51,7 +51,6 @@ const ShopPage: React.FC = () => {
         }
 
         const result = await response.json();
-        // Asumsi API kamu mengembalikan { success: true, data: [...] }
         const fetchedProducts: BackendProduct[] = result.data || []; 
         
         setProducts(fetchedProducts);
@@ -63,7 +62,7 @@ const ShopPage: React.FC = () => {
       }
     };
     fetchProductsFromApi();
-  }, []); // Hanya dijalankan saat mount
+  }, []);
 
   const handleFilterClick = (filter: FilterType) => {
     setActiveFilter(filter);
@@ -76,27 +75,20 @@ const ShopPage: React.FC = () => {
     setActiveSubFilter(subFilter);
   };
 
-  // Handler yang dipanggil saat Card diklik
   const handleProductCardClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>, 
-    product: BackendProduct // 👈 Ganti tipe parameter
+    product: BackendProduct
   ) => {
     event.stopPropagation();
     
-    // Objek detail produk yang dicasting ke ProductForModal
     const fullProductDetail: ProductForModal = {
-      // 🚨 PERBAIKAN: Gunakan product._id, bukan product.id (dari MongoDB)
       id: product._id, 
       name: product.name,
       price: product.price,
-      // 🚨 PERBAIKAN: Ambil URL gambar pertama dari array images
       imageSrc: product.images[0] || '/images/placeholder-jus.jpg',
-      
-      // --- Data dari Backend ---
-      description: product.description, // Ambil dari backend
-      stock: product.stock,             // Ambil dari backend
-      // --- Data Lain ---
-      category: product.category, 
+      description: product.description,
+      stock: product.stock,
+      category: product.category?.name ?? 'Unknown',
       tags: product.tags,
     };
     setSelectedProduct(fullProductDetail);
@@ -106,35 +98,35 @@ const ShopPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  // Handler untuk Add To Cart
   const handleAddToCart = (product: ProductForModal, quantity: number) => {
     console.log(`[ACTION] Menambahkan ${quantity}x ${product.name} ke Keranjang!`);
     handleCloseModal();
   };
 
-  // Logika filter produk (Menggunakan data 'products' dari API)
   const filteredProducts = products.filter((product) => {
+    const categoryName = product.category && typeof product.category === 'object' 
+        ? product.category.name 
+        : String(product.category);
+    
     if (activeFilter === 'Best Seller') {
-      // Asumsi: tags adalah array di BackendProduct
       return product.tags && product.tags.includes('best_seller');
     }
+
     if (activeFilter === 'All Menu') {
-      // Asumsi: Semua jus punya kategori 'Juice'
-      return true; // Tampilkan semua produk yang terambil dari API
+      return categoryName === 'Fruit Juice';
     }
+
     if (activeFilter === 'Other') {
-      // Logika filtering kategori lanjutan (gunakan product.category dari backend)
-      if (product.category === 'Juice') return false;
-      if (activeSubFilter === 'All') return true;
-      
-      // Catatan: Jika category di backend adalah ObjectId,
-      // logika filtering ini harus dicocokkan dengan nama kategori (String) di frontend.
-      return product.category === activeSubFilter; 
+      if (activeSubFilter === 'All') {
+          return categoryName !== 'Fruit Juice';
+      }
+      if (activeSubFilter !== 'All') {
+          return categoryName === activeSubFilter; 
+      }
     }
-    return true; // Default: tampilkan semua
+    return true; 
   });
 
-  // ... (if loading, if error) ...
   if (loading) {
     return (
       <div style={{ padding: '100px', textAlign: 'center' }}>
@@ -163,7 +155,6 @@ const ShopPage: React.FC = () => {
             <span className={styles.discoverItalic}>Discover</span> our range -
           </h2>
           
-          {/* ... (Filter Buttons JSX tetap sama) ... */}
           <div className={styles.filterButtons}>
             <button
               className={`${styles.filterButton} ${activeFilter === 'Best Seller' ? styles.active : ''}`}
@@ -200,27 +191,24 @@ const ShopPage: React.FC = () => {
           )}
         </div>
 
-        {/* Grid Produk */}
         <div className={styles.productGrid}>
-          {/* 🚨 LOOP MENGGUNAKAN DATA LIVE DARI API */}
           {filteredProducts.map((product) => (
             <div
-              key={product._id} // 👈 GUNAKAN _ID DARI MONGODB
+              key={product._id}
               onClick={(e) => handleProductCardClick(e, product)} 
               style={{ cursor: 'pointer' }}
             >
               <ProductCard
-                id={product._id} // 👈 GUNAKAN _ID
+                id={product._id}
                 name={product.name}
                 price={product.price}
-                imageSrc={product.images[0]} // 👈 AMBIL URL PERTAMA DARI ARRAY
-                bgColor={'#f0f0f0'} // Asumsi warna default, kamu bisa tambahkan field bgColor di backend
+                imageSrc={product.images[0]}
+                bgColor={'#f0f0f0'}
               />
             </div>
           ))}
         </div>
 
-        {/* ... (filteredProducts.length === 0 & Slider Controls JSX) ... */}
         {filteredProducts.length === 0 && (
           <div
             style={{
@@ -230,15 +218,13 @@ const ShopPage: React.FC = () => {
               color: '#666',
             }}
           >
-            Tidak ada produk yang ditemukan di kategori "{activeFilter}
+            Tidak ada produk yang ditemukan di kategori &quot;{activeFilter}
             {activeFilter === 'Other' && activeSubFilter !== 'All'
               ? ` > ${activeSubFilter}`
-              : ''}
-            ".
+              : ''}&quot;.
           </div>
         )}
 
-        {/* ... (Slider Controls JSX) ... */}
         <div className={styles.sliderControls}>
           <button className={styles.arrowButton} aria-label="Previous">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -254,7 +240,6 @@ const ShopPage: React.FC = () => {
         </div>
       </section>
 
-      {/* Komponen Modal */}
       <ProductDetailModal
         product={selectedProduct}
         onAddToCart={handleAddToCart}

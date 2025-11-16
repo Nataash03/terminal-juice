@@ -1,32 +1,71 @@
-// frontend/app/register/page.tsx
-'use client'; // Pastikan ini ada jika menggunakan React hooks atau event handlers
+// File: app/register/page.tsx
 
-import AuthForm from '../components/AuthForm';
-import { useRouter } from 'next/navigation'; // Import hook router Next.js
+'use client';
 
-const RegisterPage = () => {
+import React, { useState } from 'react';
+import AuthForm from '../components/AuthForm'; // Asumsi path komponen AuthForm
+import { useRouter } from 'next/navigation';
+
+// URL API Backend kamu
+const REGISTER_URL = 'http://localhost:5001/api/users/register';
+
+const RegisterPage: React.FC = () => {
   const router = useRouter();
-  
-  // Handler untuk mengelola hasil registrasi yang berhasil
-  const handleRegisterSuccess = (userRole: 'buyer' | 'seller', userName: string) => {
-    // Di sini seharusnya data user disimpan ke state global (Context/Redux)
-    console.log(`User ${userName} successfully registered as ${userRole}. Redirecting...`);
-    
-    // Logika Redirect setelah Registrasi
-    if (userRole === 'seller') {
-        router.push('/seller/dashboard'); // Seller langsung ke dashboard
-    } else {
-        router.push('/profile'); // Buyer/User biasa ke halaman profile
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Handler yang akan dipanggil dari AuthForm
+  const handleRegister = async (fullName: string, email: string, password: string) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(REGISTER_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fullName, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Sign Up Sukses
+        
+        // 1. Simpan Token dan Role
+        localStorage.setItem('userToken', data.token);
+        localStorage.setItem('userRole', data.role); // 🚨 Simpan Role untuk otorisasi
+        
+        console.log(`Pendaftaran Sukses! Role: ${data.role}`);
+        
+        // 2. Arahkan pengguna berdasarkan role (opsional, tapi disarankan)
+        if (data.role === 'seller') {
+            router.push('/dashboard'); // Arahkan seller ke Dashboard
+        } else {
+            router.push('/shop'); // Arahkan buyer ke halaman utama/toko
+        }
+
+      } else {
+        // Gagal Sign Up (misal: Email sudah terdaftar)
+        setError(data.message || 'Pendaftaran Gagal. Cek data input.');
+      }
+
+    } catch (err) {
+      setError('Terjadi error koneksi ke server.');
+      console.error('Connection Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <AuthForm 
-        type="register" 
-        onAuthSuccess={handleRegisterSuccess} 
-      />
-    </div>
+    <AuthForm
+      type="register" // Tentukan tipe form
+      onSubmit={handleRegister}
+      isLoading={loading}
+      error={error}
+    />
   );
 };
 

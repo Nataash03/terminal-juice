@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const userRoutes = require('./routes/userRoutes'); // Import User Routes
 
 // 2. Inisialisasi Aplikasi Express
 const app = express();
@@ -30,6 +31,7 @@ const connectDB = async () => {
 // 5. Definisikan Route Sederhana (untuk pengujian server)
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/users', userRoutes);
 
 // 6. Jalankan Koneksi dan Server
 connectDB().then(() => {

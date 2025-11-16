@@ -1,32 +1,67 @@
-// frontend/app/login/page.tsx
-'use client'; // Pastikan ini ada jika menggunakan React hooks atau event handlers
+// File: app/login/page.tsx
 
-import AuthForm from '../components/AuthForm';
-import { useRouter } from 'next/navigation'; // Import hook router Next.js
+'use client';
 
-const LoginPage = () => {
+import React, { useState } from 'react';
+import AuthForm from '../components/AuthForm'; 
+import { useRouter } from 'next/navigation';
+
+// URL API Backend kamu
+const LOGIN_URL = 'http://localhost:5001/api/users/login';
+
+const LoginPage: React.FC = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Handler untuk mengelola hasil login yang berhasil
-  const handleLoginSuccess = (userRole: 'buyer' | 'seller', userName: string) => {
-    // Di sini seharusnya data user disimpan ke state global (Context/Redux)
-    console.log(`User ${userName} successfully logged in as ${userRole}. Redirecting...`);
+  // Handler yang akan dipanggil dari AuthForm
+  const handleLogin = async (email: string, password: string) => { 
+    setLoading(true);
+    setError(null);
 
-    // Logika Redirect setelah Login
-    if (userRole === 'seller') {
-        router.push('/seller/dashboard'); // Seller langsung ke dashboard
-    } else {
-        router.push('/'); // User biasa kembali ke halaman utama
+    try {
+      const response = await fetch(LOGIN_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Login Sukses
+        localStorage.setItem('userToken', data.token);
+        localStorage.setItem('userRole', data.role);
+
+        console.log(`Login Sukses! Role: ${data.role}`);
+        
+        if (data.role === 'seller') {
+            router.push('/dashboard');
+        } else {
+            router.push('/shop');
+        }
+        
+      } else {
+        setError(data.message || 'Login Gagal. Cek email dan password.');
+      }
+
+    } catch (err) {
+      setError('Terjadi error koneksi ke server.');
+      console.error('Connection Error:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <AuthForm 
-        type="login" 
-        onAuthSuccess={handleLoginSuccess} 
-      />
-    </div>
+    <AuthForm
+      type="login"
+      onSubmit={handleLogin}
+      isLoading={loading}
+      error={error}
+    />
   );
 };
 

@@ -1,33 +1,77 @@
-// frontend/app/components/Navbar.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
 
-// --- START SIMULASI AUTHENTIKASI (GANTI DENGAN AUTH CONTEXT ASLI NANTI) ---
-const useAuthSimulated = () => {
-    // KONDISI INI HARUS DIUBAH SECARA MANUAL UNTUK TES
-    // Ketika berhasil login, state ini akan diubah oleh Auth Context asli
-    const isLoggedIn = false;   // Ganti ke true untuk simulasi login
-    const userRole = 'buyer'; // Ganti ke 'seller' untuk simulasi seller
-    
-    return { isLoggedIn, userRole };
+// --- IMPLEMENTASI AUTHENTIKASI LIVE ---
+const useAuthLive = () => {
+    // State untuk menyimpan status login dan role
+    const [authStatus, setAuthStatus] = useState({
+        isLoggedIn: false,
+        userRole: 'buyer' as 'buyer' | 'seller',
+    });
+
+    // 🚨 useEffect untuk membaca Local Storage saat komponen dimuat
+    useEffect(() => {
+        // Karena kode ini berjalan di browser, kita bisa mengakses window/localStorage
+        const token = localStorage.getItem('userToken');
+        const role = localStorage.getItem('userRole');
+
+        if (token && role) {
+            setAuthStatus({
+                isLoggedIn: true,
+                userRole: role as 'buyer' | 'seller',
+            });
+        } else {
+            setAuthStatus({
+                isLoggedIn: false,
+                userRole: 'buyer',
+            });
+        }
+
+        // 💡 Tambahkan listener untuk event storage (optional, untuk sync antar tab)
+        const handleStorageChange = () => {
+            const newToken = localStorage.getItem('userToken');
+            const newRole = localStorage.getItem('userRole');
+            if (newToken && newRole) {
+                setAuthStatus({ isLoggedIn: true, userRole: newRole as 'buyer' | 'seller' });
+            } else {
+                setAuthStatus({ isLoggedIn: false, userRole: 'buyer' });
+            }
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+        return () => window.removeEventListener('storage', handleStorageChange);
+    }, []);
+
+    return authStatus;
 };
+// --- AKHIR IMPLEMENTASI AUTHENTIKASI LIVE ---
+
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   
-  // Ambil status autentikasi dari hook simulasi (atau Auth Context asli)
-  const { isLoggedIn, userRole } = useAuthSimulated(); 
+  // Ambil status autentikasi dari hook LIVE
+  const { isLoggedIn, userRole } = useAuthLive(); 
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
   // Tentukan Link untuk Sign In / Profile
-  const authLink = isLoggedIn ? "/profile" : "/login";
+  const authLink = isLoggedIn ? "/profile" : "/login"; // Asumsi halaman /profile ada
   const authText = isLoggedIn ? "Profile" : "Sign In / Profile";
+  
+  // Handler Logout
+  const handleLogout = () => {
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userRole');
+      setMenuOpen(false);
+      // Force reload atau redirect untuk update status
+      window.location.href = '/'; 
+  }
 
 
   return (
@@ -82,9 +126,9 @@ const Navbar: React.FC = () => {
       {menuOpen && (
         <div className={styles.dropdownMenu}>
           
-          {/* 1. SELLER DASHBOARD (TAMPIL HANYA JIKA LOGGED IN DAN ROLE='SELLER') */}
+          {/* 1. SELLER DASHBOARD: Tampil hanya jika role='seller' */}
           {isLoggedIn && userRole === 'seller' && (
-              <Link href="/seller/dashboard" className={styles.dropdownLink} onClick={toggleMenu}>
+              <Link href="/dashboard" className={styles.dropdownLink} onClick={toggleMenu}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="3" y="3" width="7" height="7"/>
                       <rect x="14" y="3" width="7" height="7"/>
@@ -95,7 +139,7 @@ const Navbar: React.FC = () => {
               </Link>
           )}
 
-          {/* 2. SIGN IN / PROFILE (SATU OPSI NETRAL) */}
+          {/* 2. SIGN IN / PROFILE */}
           <Link href={authLink} className={styles.dropdownLink} onClick={toggleMenu}> 
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
@@ -104,8 +148,20 @@ const Navbar: React.FC = () => {
             {authText}
           </Link>
           
-          {/* 3. OPSI LOGIN AS SELLER DIHAPUS */}
-          {/* Baris 64-70 sudah dihapus */}
+          {/* 3. LOGOUT BUTTON (Tampil jika sudah login) */}
+          {isLoggedIn && (
+              <button 
+                  onClick={handleLogout} 
+                  className={`${styles.dropdownLink} ${styles.logoutButton}`} // Tambahkan styling jika perlu
+              >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                      <polyline points="16 17 21 12 16 7"/>
+                      <line x1="21" y1="12" x2="9" y2="12"/>
+                  </svg>
+                  Logout
+              </button>
+          )}
           
         </div>
       )}

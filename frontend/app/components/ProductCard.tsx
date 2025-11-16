@@ -9,7 +9,7 @@ interface ProductCardProps {
   price: number;
   imageSrc: string;
   bgColor: string;
-  id: number;
+  id: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ name, price, imageSrc, bgColor }) => {
