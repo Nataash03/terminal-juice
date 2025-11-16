@@ -69,13 +69,41 @@ exports.getProductsByCategory = async (req, res) => {
   }
 };
 
-// Create new product
+// @desc    Create new product (Sign Up)
+// @route   POST /api/products
+// @access  Private (Seller only)
 exports.createProduct = async (req, res) => {
+  // Ambil semua data yang dikirim dari frontend form
+  const { name, slug, description, price, stock, images } = req.body;
+  
+  // 🚨 Validasi dasar
+  if (!name || !slug || !price) {
+    return res.status(400).json({
+      success: false,
+      message: 'Name, slug, price are required fields.'
+    });
+  }
+
   try {
-    const product = new Product(req.body);
+    // Cek apakah slug sudah ada (karena harus unique)
+    const slugExists = await Product.findOne({ slug });
+    if (slugExists) {
+        return res.status(400).json({ success: false, message: 'Product slug already exists. Please choose a different name.' });
+    }
+
+    const product = new Product({
+        name, 
+        slug, 
+        price, 
+        stock, 
+        description: description || 'No description provided.',
+        // Menggunakan array images yang dikirim dari form (URL teks)
+        images: images || ['/images/placeholder.jpg'] 
+    });
+    
     const savedProduct = await product.save();
     
-    // Populate category info after save
+    // Populate category info setelah save (penting untuk frontend)
     await savedProduct.populate('category', 'name slug');
     
     res.status(201).json({
@@ -84,41 +112,63 @@ exports.createProduct = async (req, res) => {
       data: savedProduct
     });
   } catch (error) {
+    // Menangkap error validasi Mongoose lainnya (misalnya, Category ID salah format)
     res.status(400).json({
       success: false,
-      message: 'Failed to create product',
+      message: 'Failed to create product due to validation error.',
       error: error.message
     });
   }
 };
 
-// Update product
+// Update Product
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    ).populate('category', 'name slug');
+    const product = await Product.findById(req.params.id);
     
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: 'Product not found'
-      });
+      return res.status(404).json({ success: false, message: 'Product not found' });
     }
     
-    res.json({
-      success: true,
-      message: 'Product updated successfully',
-      data: product
-    });
+    // Update jika ada nilai baru yang dikirim
+    if (req.body.name) {
+        product.name = req.body.name;
+    }
+    
+    // Jika tidak ada perubahan nama produk, JANGAN set product.slug
+    if (req.body.slug && req.body.slug !== product.slug) {
+        product.slug = req.body.slug;
+    }
+    
+    // Price dan Stock: Wajib konversi ke Number, lalu update
+    if (req.body.price !== undefined) {
+        product.price = Number(req.body.price);
+    }
+    if (req.body.stock !== undefined) {
+        product.stock = Number(req.body.stock);
+    }
+
+    if (req.body.images) product.images = req.body.images;
+    if (req.body.description) product.description = req.body.description;
+    if (req.body.category) product.category = req.body.category;
+    
+    // SIMPAN
+    const updatedProduct = await product.save();
+
+    await updatedProduct.populate('category', 'name slug');
+
+    res.json({ success: true, message: 'Product updated successfully', data: updatedProduct });
+
   } catch (error) {
-    res.status(400).json({
-      success: false,
-      message: 'Failed to update product',
-      error: error.message
-    });
+    // 🚨 Tambahkan logging untuk melihat error sebenarnya
+    console.error("Update Product Failed:", error.message); 
+    
+    // Penanganan khusus untuk Duplicate Key Error
+    if (error.code === 11000) {
+        return res.status(400).json({ success: false, message: 'Gagal update: Slug sudah digunakan produk lain.' });
+    }
+    
+    res.status(400).json({ success: false, message: 'Failed to update product (Validation Error)', error: error.message });
   }
 };
 

@@ -64,3 +64,27 @@ exports.authUser = async (req, res) => {
         res.status(401).json({ message: 'Invalid email or password' });
     }
 };
+
+// @desc    Get user profile (Hanya bisa diakses oleh user yang sudah login)
+// @route   GET /api/users/profile
+// @access  Private (membutuhkan token)
+exports.getUserProfile = async (req, res) => {
+    // Data user sudah tersedia di req.user dari middleware 'protect'
+    const user = await User.findById(req.user._id).select('-password'); 
+
+    if (user) {
+        res.json({
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            phone: user.phone || '', // Tambahkan field opsional jika ada
+            address: user.address || '', // Tambahkan field opsional jika ada
+            role: user.role,
+        });
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+};
+
+// ... (Jangan lupa export)
+// module.exports = { registerUser, authUser, getUserProfile };

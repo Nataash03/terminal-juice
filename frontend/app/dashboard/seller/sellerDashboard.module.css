@@ -1,7 +1,6 @@
 /* frontend/app/dashboard/seller/sellerDashboard.module.css */
 
 /* LAYOUT CONTAINER */
-
 .container {
     display: flex;
     min-height: 100vh;
@@ -9,7 +8,6 @@
 }
 
 /* SIDEBAR */
-
 .sidebar {
     width: 280px;
     background-color: #ffffff;
@@ -72,7 +70,6 @@
 }
 
 /* MAIN CONTENT */
-
 .main {
     flex: 1;
     padding: 40px 60px;
@@ -91,10 +88,7 @@
     font-family: Georgia, serif;
 }
 
-/* ========================================
-     STATS GRID
-     ======================================== */
-
+/* STATS GRID */
 .statsGrid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -130,10 +124,7 @@
     font-weight: 500;
 }
 
-/* ========================================
-     TOP PRODUCTS SECTION
-     ======================================== */
-
+/* TOP PRODUCTS SECTION */
 .topProducts {
     margin-top: 60px;
 }
@@ -165,10 +156,7 @@
     filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
 }
 
-/* ========================================
-     RESPONSIVE DESIGN
-     ======================================== */
-
+/* RESPONSIVE DESIGN */
 @media (max-width: 1200px) {
     .statsGrid {
         grid-template-columns: repeat(2, 1fr);
@@ -231,10 +219,7 @@
     }
 }
 
-/* ========================================
-     PRODUCTS PAGE STYLES
-     ======================================== */
-
+/* PRODUCTS PAGE STYLES */
 .tableWrapper {
     background: #ffffff;
     border-radius: 20px;
@@ -332,9 +317,7 @@
     box-shadow: 0 6px 16px rgba(233, 30, 99, 0.35);
 }
 
-/* ========================================
-     NOTIFICATIONS PAGE STYLES
-     ======================================== */
+/* NOTIFICATIONS PAGE STYLES */
 
 .notificationsList {
     display: flex;

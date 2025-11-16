@@ -128,7 +128,7 @@ const Navbar: React.FC = () => {
           
           {/* 1. SELLER DASHBOARD: Tampil hanya jika role='seller' */}
           {isLoggedIn && userRole === 'seller' && (
-              <Link href="/dashboard" className={styles.dropdownLink} onClick={toggleMenu}>
+              <Link href="/dashboard/seller" className={styles.dropdownLink} onClick={toggleMenu}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="3" y="3" width="7" height="7"/>
                       <rect x="14" y="3" width="7" height="7"/>
@@ -143,18 +143,16 @@ const Navbar: React.FC = () => {
           {isLoggedIn && userRole === 'buyer' && (
           <>
             <Link href="/profile" className={styles.dropdownLink} onClick={toggleMenu}> 
-                {/* ... SVG ... */}
-                Profile
-            </Link>
-            <button 
-                onClick={handleLogout} 
-                className={`${styles.dropdownLink} ${styles.logoutButton}`}
-            >
-                {/* ... Logout Text ... */}
-                Logout
-            </button>
-        </>
-    )}
+            {/* SVG Log In Baru */}
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            Profile
+        </Link>
+    </>
+)}
           
           {/* 3. LOGOUT BUTTON (Tampil jika sudah login) */}
           {isLoggedIn && (
@@ -170,7 +168,16 @@ const Navbar: React.FC = () => {
                   Logout
               </button>
           )}
-          
+
+          {!isLoggedIn && (
+          <Link href={authLink} className={styles.dropdownLink} onClick={toggleMenu}> 
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 0 0 0-4-4H8a4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Sign In / Profile
+        </Link>
+      )}
         </div>
       )}
     </header>
