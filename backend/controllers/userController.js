@@ -1,16 +1,9 @@
-// File: controllers/userController.js (Buat file ini)
+// File: controllers/userController.js
 
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 
-// Daftar nama yang otomatis menjadi 'seller'
-const SELLER_NAMES = [
-    "Natasya Agustine", 
-    "Patricia Natania", 
-    "Jessica Winola", 
-    "Lyvia Reva Ruganda",
-    "Admin"
-];
+// 🚫 Hapus atau pastikan tidak ada lagi SELLER_NAMES di sini.
 
 // @desc    Register a new user (Sign Up)
 // @route   POST /api/users/register
@@ -23,22 +16,19 @@ exports.registerUser = async (req, res) => {
         return res.status(400).json({ message: 'User already exists' });
     }
     
-    // 1. Tentukan Role
-    let role = 'buyer'; // Default buyer
-    if (SELLER_NAMES.includes(fullName)) {
-        role = 'seller'; // Jika nama cocok, jadikan seller
-    }
+    // 💡 PERUBAHAN UTAMA: Semua pengguna baru diinisialisasi sebagai 'buyer'
+    const role = 'buyer'; 
 
     try {
-        const user = await User.create({ fullName, email, password, role }); // 🚨 Simpan role
+        const user = await User.create({ fullName, email, password, role }); 
 
         if (user) {
             res.status(201).json({
                 _id: user._id,
                 fullName: user.fullName,
                 email: user.email,
-                role: user.role, // 🚨 Kirim role di response
-                token: generateToken(user._id, user.role), // 🚨 Generate token dengan role
+                role: user.role, 
+                token: generateToken(user._id, user.role), 
             });
         }
     } catch (error) {
@@ -57,13 +47,46 @@ exports.authUser = async (req, res) => {
             _id: user._id,
             fullName: user.fullName,
             email: user.email,
-            role: user.role, // 🚨 Kirim role
-            token: generateToken(user._id, user.role), // 🚨 Generate token dengan role
+            role: user.role, 
+            token: generateToken(user._id, user.role), 
         });
     } else {
         res.status(401).json({ message: 'Invalid email or password' });
     }
 };
+
+// 🌟 FITUR BARU: Upgrade Role ke Seller
+// @desc    Upgrade user role from 'buyer' to 'seller'
+// @route   PUT /api/users/upgrade-to-seller
+// @access  Private (membutuhkan token)
+exports.upgradeToSeller = async (req, res) => {
+    // req.user didapatkan dari middleware 'protect'
+    const user = await User.findById(req.user._id); 
+
+    if (user) {
+        // Hanya izinkan jika role saat ini adalah 'buyer'
+        if (user.role === 'buyer') {
+            user.role = 'seller'; // Ubah role
+            const updatedUser = await user.save(); // Simpan perubahan ke database
+
+            // Generate token baru dengan role 'seller'
+            res.json({
+                _id: updatedUser._id,
+                fullName: updatedUser.fullName,
+                email: updatedUser.email,
+                role: updatedUser.role, // Sekarang 'seller'
+                message: 'Role upgraded successfully to seller.',
+                token: generateToken(updatedUser._id, updatedUser.role), 
+            });
+        } else {
+            // Jika user sudah seller
+            res.status(400).json({ message: 'User is already a seller.' });
+        }
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+};
+
 
 // @desc    Get user profile (Hanya bisa diakses oleh user yang sudah login)
 // @route   GET /api/users/profile
@@ -77,8 +100,8 @@ exports.getUserProfile = async (req, res) => {
             _id: user._id,
             fullName: user.fullName,
             email: user.email,
-            phone: user.phone || '', // Tambahkan field opsional jika ada
-            address: user.address || '', // Tambahkan field opsional jika ada
+            phone: user.phone || '', 
+            address: user.address || '', 
             role: user.role,
         });
     } else {
@@ -86,5 +109,5 @@ exports.getUserProfile = async (req, res) => {
     }
 };
 
-// ... (Jangan lupa export)
-// module.exports = { registerUser, authUser, getUserProfile };
+// Pastikan semua fungsi diexport
+// module.exports = { registerUser, authUser, getUserProfile, upgradeToSeller };

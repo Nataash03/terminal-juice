@@ -20,10 +20,10 @@ const userSchema = new mongoose.Schema({
         minlength: 8,
     },
     role: {
-      type: String,
+        type: String,
       enum: ['buyer', 'seller'], // Hanya boleh dua nilai ini
       default: 'buyer', // Default role adalah user biasa
-  },
+    },
 }, { timestamps: true });
 
 // Middleware Mongoose: Hash password sebelum menyimpan (saat Sign Up)
