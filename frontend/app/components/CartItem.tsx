@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import styles from './CartItem.module.css';
 
 interface CartItemProps {
-  id: number;
+  id: string | number;
   name: string;
   imageSrc: string;
   details: string;
   initialQuantity: number;
   price: number;
   isSelected: boolean;
-  onQuantityChange: (id: number, newQuantity: number) => void;
-  onSelectChange: (id: number, selected: boolean) => void;
+  onQuantityChange: (id: string | number, newQuantity: number) => void;
+  onSelectChange: (id: string | number, isSelected: boolean) => void;
 }
 
 const CartItem: React.FC<CartItemProps> = ({ 

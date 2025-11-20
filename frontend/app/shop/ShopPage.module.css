@@ -79,10 +79,10 @@
 }
 
 /* --- Sub-Filters for Other --- */
-.otherSubFilters {
+.subFilterContainer {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 12px;
     margin-top: 1rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
@@ -284,9 +284,9 @@
     }
 
     .filterButtons,
-    .otherSubFilters {
+    .subFilterContainer {
         flex-direction: row;
-        gap: 8px;
+        gap: 12px;
     }
 
     .filterButton {

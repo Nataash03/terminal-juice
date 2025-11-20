@@ -1,164 +1,82 @@
-// frontend/app/dashboard/seller/products/page.tsx
+// app/dashboard/seller/products/page.tsx
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link'; 
-import Image from 'next/image'; // Tambahkan Image untuk optimasi jika diperlukan (digunakan di <img>)
-import styles from '../sellerDashboard.module.css';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import SellerSidebar from './../../../components/SellerSidebar';
+import styles from '../../Dashboard.module.css';
 
-interface Product {
-  id: number;
-  name: string;
-  category: string;
-  price: number;
-  stock: number;
-  image: string;
-}
+export default function ProductListPage() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default function MyProducts() {
-  const router = useRouter();
-  const [activeMenu, setActiveMenu] = useState('products');
-
-  // Mock data produk
-  const products: Product[] = [
-    {
-      id: 1,
-      name: 'Juice Mix 2 in 1',
-      category: 'Mixed Juice',
-      price: 15000,
-      stock: 50,
-      image: '/images/juice mix 2 in 1.png',
-    },
-    {
-      id: 2,
-      name: 'Juice Melon',
-      category: 'Fruit Juice',
-      price: 15000,
-      stock: 45,
-      image: '/images/juice melon.png',
-    },
-    {
-      id: 3,
-      name: 'Juice Semangka',
-      category: 'Fruit Juice',
-      price: 15000,
-      stock: 60,
-      image: '/images/juice semangka.png',
-    },
-  ];
-
-  const handleNavigation = (path: string, menuName: string) => {
-    setActiveMenu(menuName);
-    router.push(path);
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch('http://localhost:5001/api/products');
+      const data = await res.json();
+      setProducts(data.data || []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleLogout = () => {
-    console.log('Logging out...');
-    router.push('/');
+  useEffect(() => { fetchProducts(); }, []);
+
+  const handleDelete = async (id: string) => {
+    if(!confirm("Yakin mau hapus produk ini?")) return;
+    
+    try {
+      const res = await fetch(`http://localhost:5001/api/products/${id}`, {
+         method: 'DELETE'
+      });
+      if(res.ok) {
+         // Update state biar hilang langsung
+         setProducts(prev => prev.filter(p => p._id !== id));
+      }
+    } catch(err) {
+       alert("Gagal menghapus");
+    }
   };
 
   return (
     <div className={styles.container}>
-      {/* Sidebar */}
-      <aside className={styles.sidebar}>
-        <div className={styles.profile}>
-          <div className={styles.avatar}>
-            <span>TJ</span>
-          </div>
+      <SellerSidebar />
+      
+      <div className={styles.contentCard}>
+        <div className={styles.headerRow}>
+           <h2 className={styles.pageTitle}>My Products</h2>
+           <Link href="/dashboard/seller/products/create" style={{textDecoration:'none'}}>
+              <button style={{padding:'10px 20px', background:'#FF9800', color:'white', border:'none', borderRadius:'10px', cursor:'pointer', fontWeight:'bold'}}>
+                + Add New
+              </button>
+           </Link>
         </div>
 
-        <nav className={styles.nav}>
-          <button
-            className={`${styles.navItem} ${
-              activeMenu === 'dashboard' ? styles.navItemActive : ''
-            }`}
-            onClick={() => handleNavigation('/dashboard/seller', 'dashboard')}
-          >
-            Dashboard
-          </button>
-
-          <button
-            className={`${styles.navItem} ${
-              activeMenu === 'products' ? styles.navItemActive : ''
-            }`}
-            onClick={() =>
-              handleNavigation('/dashboard/seller/products', 'products')
-            }
-          >
-            My Products
-          </button>
-
-          <button
-            className={`${styles.navItem} ${
-              activeMenu === 'notifications' ? styles.navItemActive : ''
-            }`}
-            onClick={() =>
-              handleNavigation('/dashboard/seller/notifications', 'notifications')
-            }
-          >
-            Notification
-          </button>
-
-          <button className={styles.navItem} onClick={handleLogout}>
-            Log Out
-          </button>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className={styles.main}>
-        <header className={styles.header}>
-          <h1 className={styles.pageTitle}>My Products</h1>
-        </header>
-
-        {/* Products Table */}
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Product Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product.id}>
-                  <td>
-                    {/* Menggunakan tag img biasa, asumsikan styling sudah sesuai */}
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className={styles.productThumb}
-                    />
-                  </td>
-                  <td>{product.name}</td>
-                  <td>{product.category}</td>
-                  <td>Rp {product.price.toLocaleString('id-ID')}</td>
-                  <td>{product.stock}</td>
-                  <td>
-                    <div className={styles.actionButtons}>
-                      <Link href={`/dashboard/seller/products/edit?id=${product.id}`} passHref>
-                        <button className={styles.editBtn}>Edit</button>
+        {loading ? <p>Loading...</p> : (
+           <div className={styles.productGrid}>
+              {products.map((p) => (
+                <div key={p._id} className={styles.productCard}>
+                   <div className={styles.cardImage}>
+                      <img src={p.images[0] || '/images/placeholder.png'} alt={p.name} />
+                   </div>
+                   <strong>{p.name}</strong>
+                   <p style={{color:'#E91E63', fontWeight:'bold'}}>Rp {p.price.toLocaleString()}</p>
+                   
+                   <div style={{marginTop:'15px', display:'flex', gap:'10px', justifyContent:'center'}}>
+                      <Link href={`/dashboard/seller/products/edit/${p._id}`} style={{textDecoration:'none'}}>
+                         <span style={{padding:'5px 12px', border:'1px solid #4CAF50', color:'#4CAF50', borderRadius:'15px', fontSize:'0.8rem', cursor:'pointer'}}>✏️ Edit</span>
                       </Link>
-                      
-                      <button className={styles.deleteBtn}>Delete</button>
-                    </div>
-                  </td>
-                </tr>
+                      <button onClick={() => handleDelete(p._id)} style={{padding:'5px 12px', border:'1px solid #F44336', background:'white', color:'#F44336', borderRadius:'15px', fontSize:'0.8rem', cursor:'pointer'}}>
+                         🗑️ Del
+                      </button>
+                   </div>
+                </div>
               ))}
-            </tbody>
-          </table>
-        </div>
-
-        <Link href="/dashboard/seller/products/edit?id=${product.id}" passHref>
-          <button className={styles.addProductBtn}>+ Add New Product</button>
-        </Link>
-      </main>
+           </div>
+        )}
+      </div>
     </div>
   );
 }

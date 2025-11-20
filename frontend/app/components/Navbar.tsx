@@ -2,77 +2,98 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import styles from './Navbar.module.css';
 
-// --- IMPLEMENTASI AUTHENTIKASI LIVE ---
-const useAuthLive = () => {
-    // State untuk menyimpan status login dan role
-    const [authStatus, setAuthStatus] = useState({
-        isLoggedIn: false,
-        userRole: 'buyer' as 'buyer' | 'seller',
-    });
-
-    // 🚨 useEffect untuk membaca Local Storage saat komponen dimuat
-    useEffect(() => {
-        // Karena kode ini berjalan di browser, kita bisa mengakses window/localStorage
-        const token = localStorage.getItem('userToken');
-        const role = localStorage.getItem('userRole');
-
-        if (token && role) {
-            setAuthStatus({
-                isLoggedIn: true,
-                userRole: role as 'buyer' | 'seller',
-            });
-        } else {
-            setAuthStatus({
-                isLoggedIn: false,
-                userRole: 'buyer',
-            });
-        }
-
-        // 💡 Tambahkan listener untuk event storage (optional, untuk sync antar tab)
-        const handleStorageChange = () => {
-            const newToken = localStorage.getItem('userToken');
-            const newRole = localStorage.getItem('userRole');
-            if (newToken && newRole) {
-                setAuthStatus({ isLoggedIn: true, userRole: newRole as 'buyer' | 'seller' });
-            } else {
-                setAuthStatus({ isLoggedIn: false, userRole: 'buyer' });
-            }
-        };
-
-        window.addEventListener('storage', handleStorageChange);
-        return () => window.removeEventListener('storage', handleStorageChange);
-    }, []);
-
-    return authStatus;
-};
-// --- AKHIR IMPLEMENTASI AUTHENTIKASI LIVE ---
-
+// --- Tipe Data User ---
+interface UserData {
+  _id: string;
+  username: string;
+  email: string;
+  role: 'user' | 'seller';
+}
 
 const Navbar: React.FC = () => {
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   
-  // Ambil status autentikasi dari hook LIVE
-  const { isLoggedIn, userRole } = useAuthLive(); 
+  // State User
+  const [user, setUser] = useState<UserData | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // 1. Cek Login Live (Sync antar tab & saat load)
+  useEffect(() => {
+    setIsMounted(true);
+    
+    const checkUser = () => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch (e) {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+
+    // Event listener biar kalau login di tab lain, sini ikut update
+    window.addEventListener('storage', checkUser);
+    return () => window.removeEventListener('storage', checkUser);
+  }, []);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
-  // Tentukan Link untuk Sign In / Profile
-  const authLink = isLoggedIn ? "/profile" : "/login"; 
-  const authText = isLoggedIn ? "Profile" : "Sign In / Profile";
-  
-  // Handler Logout
+  // 2. Handler Logout
   const handleLogout = () => {
-      localStorage.removeItem('userToken');
-      localStorage.removeItem('userRole');
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      localStorage.removeItem('cart');
+      setUser(null);
       setMenuOpen(false);
-      // Force reload atau redirect untuk update status
-      window.location.href = '/'; 
-  }
+      window.location.href = '/login'; 
+  };
 
+  // 3. Handler Buka Toko (Upgrade to Seller)
+  const handleBecomeSeller = async () => {
+    if (!user) return;
+    if (!confirm("Apakah kamu yakin ingin membuka toko dan menjadi Seller?")) return;
+
+    try {
+      const res = await fetch('http://localhost:5001/api/users/upgrade-to-seller', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: user._id })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert("Selamat! Toko berhasil dibuka 🎉");
+        
+        // Update LocalStorage dengan data baru (role: seller)
+        const updatedUser = { ...user, role: 'seller' };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser as UserData);
+        
+        setMenuOpen(false);
+        router.push('/dashboard/seller'); 
+      } else {
+        alert("Gagal: " + data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Koneksi error.");
+    }
+  };
+
+  // Prevent hydration mismatch
+  if (!isMounted) return null;
 
   return (
     <header className={styles.header}>
@@ -82,15 +103,22 @@ const Navbar: React.FC = () => {
           terminal juice.
         </Link>
 
-        {/* Navigation Menu (Tidak ada perubahan) */}
+        {/* Navigation Menu Desktop */}
         <nav className={styles.nav}>
           <Link href="/shop" className={styles.navLink}>Shop All</Link>
           <Link href="/flavours" className={styles.navLink}>Flavours</Link>
           <Link href="/about" className={styles.navLink}>About Us</Link>
-          <Link href="/mission" className={styles.navLink}>Our Mission</Link>
+          
+          {/* Menu Desktop Pintar */}
+          {user && user.role === 'seller' && (
+             <Link href="/dashboard/seller" className={styles.navLink} style={{color:'#FF9800', fontWeight:'bold'}}>Dashboard</Link>
+          )}
+          {user && user.role === 'user' && (
+             <Link href="/dashboard" className={styles.navLink}>My Profile</Link>
+          )}
         </nav>
 
-        {/* Right Side Actions (Tidak ada perubahan) */}
+        {/* Right Side Actions */}
         <div className={styles.actions}>
           {/* Search Icon */}
           <button className={styles.iconButton} aria-label="Search">
@@ -109,7 +137,7 @@ const Navbar: React.FC = () => {
             </svg>
           </Link>
 
-          {/* Hamburger Menu (untuk Dropdown) */}
+          {/* Hamburger Menu */}
           <button 
             className={`${styles.hamburger} ${menuOpen ? styles.active : ''}`}
             onClick={toggleMenu}
@@ -122,12 +150,20 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Dropdown Menu */}
+      {/* --- DROPDOWN MENU (MOBILE) --- */}
       {menuOpen && (
         <div className={styles.dropdownMenu}>
           
-          {/* 1. SELLER DASHBOARD: Tampil hanya jika role='seller' */}
-          {isLoggedIn && userRole === 'seller' && (
+          {/* Salam Pembuka */}
+          {user && (
+             <div style={{padding: '10px 20px', fontWeight: 'bold', color: '#888', fontSize: '0.9rem'}}>
+                Hi, {user.username} ({user.role})
+             </div>
+          )}
+
+          {/* 1. MENU UNTUK SELLER */}
+          {user && user.role === 'seller' && (
+            <>
               <Link href="/dashboard/seller" className={styles.dropdownLink} onClick={toggleMenu}>
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <rect x="3" y="3" width="7" height="7"/>
@@ -137,28 +173,44 @@ const Navbar: React.FC = () => {
                   </svg>
                   Seller Dashboard
               </Link>
+              <Link href="/dashboard/seller/products" className={styles.dropdownLink} onClick={toggleMenu}>
+                  📦 My Products
+              </Link>
+            </>
           )}
 
-          {/* 2. KONDISI JIKA ROLE ADALAH BUYER (Hanya tampilkan Profile & Logout) */}
-          {isLoggedIn && userRole === 'buyer' && (
-          <>
-            <Link href="/profile" className={styles.dropdownLink} onClick={toggleMenu}> 
-            {/* SVG Log In Baru */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                <polyline points="10 17 15 12 10 7"/>
-                <line x1="15" y1="12" x2="3" y2="12"/>
-            </svg>
-            Profile
-        </Link>
-    </>
-)}
+          {/* 2. MENU UNTUK BUYER (USER BIASA) */}
+          {user && user.role === 'user' && (
+            <>
+              <Link href="/dashboard" className={styles.dropdownLink} onClick={toggleMenu}> 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 0 0 0-4-4H8a4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                My Profile / Orders
+              </Link>
+
+              {/* TOMBOL UPGRADE TO SELLER */}
+              <button 
+                 onClick={handleBecomeSeller}
+                 className={styles.dropdownLink}
+                 style={{ color: '#FF9800', fontWeight: 'bold' }}
+              >
+                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 21h18v-8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8z"></path>
+                    <path d="M12 3L2 11h20L12 3z"></path>
+                 </svg>
+                 Buka Toko (Seller)
+              </button>
+            </>
+          )}
           
-          {/* 3. LOGOUT BUTTON (Tampil jika sudah login) */}
-          {isLoggedIn && (
+          {/* 3. TOMBOL LOGOUT (Muncul kalau user login) */}
+          {user && (
               <button 
                   onClick={handleLogout} 
-                  className={`${styles.dropdownLink} ${styles.logoutButton}`} // Tambahkan styling jika perlu
+                  className={styles.dropdownLink}
+                  style={{color: 'red'}}
               >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -169,15 +221,17 @@ const Navbar: React.FC = () => {
               </button>
           )}
 
-          {!isLoggedIn && (
-          <Link href={authLink} className={styles.dropdownLink} onClick={toggleMenu}> 
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 0 0 0-4-4H8a4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-            Sign In / Profile
-        </Link>
-      )}
+          {/* 4. TOMBOL LOGIN (Muncul kalau belum login) */}
+          {!user && (
+            <Link href="/login" className={styles.dropdownLink} onClick={toggleMenu}> 
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10 17 15 12 10 7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+                Sign In
+            </Link>
+          )}
         </div>
       )}
     </header>

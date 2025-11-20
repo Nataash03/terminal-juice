@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import styles from './ProductDetailModal.module.css';
 
 // Tipe produk lengkap yang diharapkan oleh Modal.
-// ID disetel sebagai 'string' untuk mencocokkan konversi di shop/page.tsx.
 export interface ProductForModal {
-  id: string; // Tipe ini sekarang String
+  id: string;
   name: string;
   price: number;
   imageSrc: string;
   bgColor?: string;
   description: string;
   stock: number;
-  // Menambahkan properti opsional dari JuiceProduct untuk sinkronisasi
   category?: string; 
   tags?: string[];
 }
@@ -19,17 +17,16 @@ export interface ProductForModal {
 type ProductModalProps = {
   product: ProductForModal | null;
   onClose: () => void;
-  // Prop onAddToCart mengharapkan ProductForModal yang PASTI ADA
-  onAddToCart: (
-    product: ProductForModal,
-    quantity: number
-  ) => void;
+  onAddToCart: (product: ProductForModal, quantity: number) => void;
+  // ✅ Tambahkan ini agar tombol Order Now berfungsi
+  onOrderNow: (product: ProductForModal, quantity: number) => void;
 };
 
 const ProductDetailModal: React.FC<ProductModalProps> = ({
   product,
   onClose,
   onAddToCart,
+  onOrderNow, // ✅ Destructure properti ini
 }) => {
   const [quantity, setQuantity] = useState(1);
 
@@ -53,11 +50,9 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
     }
   };
 
-  // Fungsi lokal yang memanggil prop onAddToCart dari parent
   const handleLocalAddToCartClick = () => {
     onAddToCart(product, quantity); 
-    setQuantity(1);
-    // Di sini Anda bisa menambahkan notifikasi atau toast
+    setQuantity(1); 
   };
 
   return (
@@ -72,6 +67,7 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
         </button>
 
         <div className={styles.modalBody}>
+          {/* Bagian Gambar */}
           <div className={styles.imageSection}>
             <div
               className={styles.imageContainer}
@@ -85,6 +81,7 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
             </div>
           </div>
 
+          {/* Bagian Detail */}
           <div className={styles.detailSection}>
             <h2 className={styles.productName}>{product.name}</h2>
             <p className={styles.productDescription}>{product.description}</p>
@@ -96,6 +93,7 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
               <div className={styles.stockBadge}>{product.stock} pcs</div>
             </div>
 
+            {/* Kontrol Quantity */}
             <div className={styles.quantitySection}>
               <span className={styles.quantityLabel}>Quantity</span>
               <div className={styles.quantityControls}>
@@ -124,15 +122,24 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
               </div>
             </div>
 
+            {/* Tombol Aksi */}
             <div className={styles.actionButtons}>
               <button
                 className={styles.addToCartButton}
-                onClick={handleLocalAddToCartClick} // Tombol yang sudah diperbaiki
+                onClick={handleLocalAddToCartClick}
               >
                 🛒 Add to Cart
               </button>
-              <button className={styles.orderNowButton}>Order Now</button>
+              
+              {/* ✅ Tombol Order Now yang sudah benar */}
+              <button 
+                className={styles.orderNowButton}
+                onClick={() => onOrderNow(product, quantity)}
+              >
+                Order Now
+              </button>
             </div>
+
           </div>
         </div>
       </div>

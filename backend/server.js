@@ -6,6 +6,7 @@ const cors = require('cors');
 const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const userRoutes = require('./routes/userRoutes'); // Import User Routes
+const orderRoutes = require('./routes/orderRoutes');
 
 // 2. Inisialisasi Aplikasi Express
 const app = express();
@@ -13,8 +14,8 @@ const PORT = process.env.PORT || 3000;
 const MONGO_URI = process.env.MONGO_URI;
 
 // 3. Middleware (untuk saat ini, kita hanya butuh untuk parsing JSON)
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 // 4. Koneksi ke MongoDB
 const connectDB = async () => {
@@ -32,6 +33,7 @@ const connectDB = async () => {
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 
 // 6. Jalankan Koneksi dan Server
 connectDB().then(() => {

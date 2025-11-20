@@ -1,200 +1,153 @@
-// File: frontend/app/components/AuthForm.tsx
-
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './AuthForm.module.css';
 
-// 🚨 PERUBAHAN TIPE PROPS KRITIS
+// Sesuaikan port backend kamu
+const API_BASE_URL = 'http://localhost:5001/api/users'; 
+
 interface AuthFormProps {
   type: 'login' | 'register';
-  isLoading: boolean;
-  error: string | null;
-  // Callback: Mengirim SEMUA data input ke Parent Component untuk proses API
-  // Note: Hanya fullName, email, password yang wajib. username opsional.
-  onSubmit: (fullName: string, email: string, password: string, username?: string) => void; 
 }
 
-const AuthForm: React.FC<AuthFormProps> = ({ type, isLoading, error, onSubmit }) => {
-  // State untuk data form
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
+  const router = useRouter();
+  
+  // State Form (Tambah fullName)
   const [fullName, setFullName] = useState(''); 
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   
-  // State untuk error validasi internal
-  const [internalErrors, setInternalErrors] = useState({
-    email: '',
-    password: '',
-    fullName: '',
-    username: '',
-  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Validasi Form Internal (Hanya cek format/minimal panjang, bukan cek ke database)
-  const validateForm = () => {
-    let isValid = true;
-    const newErrors = { email: '', password: '', fullName: '', username: '' };
-
-    // Validasi Full Name (Wajib saat Register)
-    if (type === 'register' && fullName.trim().length < 3) {
-      newErrors.fullName = 'Nama lengkap minimal 3 karakter.';
-      isValid = false;
-    } else if (type === 'login' && fullName.trim().length > 0) {
-        // Biarkan kosong saat login, kecuali jika pengguna mengisinya tanpa sengaja
-        newErrors.fullName = 'Tidak perlu mengisi nama saat Sign In.';
-        isValid = false;
-    }
-
-    // Validasi Email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      newErrors.email = 'Format email tidak valid.';
-      isValid = false;
-    }
-
-    // Validasi Username (Register only)
-    if (type === 'register' && username.trim().length < 3) {
-      newErrors.username = 'Username minimal 3 karakter.';
-      isValid = false;
-    }
-
-    // Validasi Password
-    if (password.length < 8) {
-      newErrors.password = 'Password minimal 8 karakter.';
-      isValid = false;
-    }
-
-    setInternalErrors(newErrors);
-    return isValid;
-  };
-
-  // Handle Submit
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Hapus error umum dari parent saat submit baru
-    // Kita tidak bisa reset error state parent dari sini, jadi fokus pada internal errors.
+    setLoading(true);
+    setError(null);
 
-    if (!validateForm()) {
-      return;
+    const url = type === 'login' 
+      ? `${API_BASE_URL}/login` 
+      : `${API_BASE_URL}/register`;
+
+    // Payload disesuaikan (Tambah fullName jika register)
+    const payload = type === 'login' 
+      ? { email, password }
+      : { fullName, username, email, password }; 
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Terjadi kesalahan');
+      }
+
+      // Sukses
+      localStorage.setItem('user', JSON.stringify(data));
+      if (data.token) localStorage.setItem('token', data.token);
+
+      alert(type === 'login' ? 'Login Berhasil!' : 'Registrasi Berhasil!');
+      window.location.href = '/'; 
+
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    
-    // 🚨 KIRIM DATA KE PARENT
-    // Parent akan menangani API call, loading, dan error database
-    onSubmit(fullName, email, password, username);
   };
-
-  // --- Konten Dinamis Berdasarkan TIPE (Login atau Register) ---
-  const isLogin = type === 'login';
-  const title = isLogin ? 'Sign In to Your Account' : 'Create New Account'; 
-  const subtitleLink = isLogin ? 'Daftar Sekarang' : 'Sign In';
-  const subtitleHref = isLogin ? '/register' : '/login';
 
   return (
     <div className={styles.container}>
-      {/* Illustration */}
-      <div className={styles.illustration}>
+      <div className={styles.illustrationSide}>
         <img 
-          src="/images/login-signin.png" 
-          alt="Juice Shop Illustration" 
-          className={styles.illustrationImage}
+            src="/images/login-signin.png" 
+            alt="Juice Shop" 
+            className={styles.illustrationImage} 
         />
       </div>
-      
-      <div className={styles.formCard}>
-        <div className={styles.formHeader}>
-          <h2 className={styles.title}>{title}</h2>
-          <p className={styles.subtitle}>
-            {isLogin ? 'Belum punya akun? ' : 'Sudah punya akun? '} 
-            <a href={subtitleHref} className={styles.switchLink}>{subtitleLink}</a>
-          </p>
-        </div>
 
-        {/* 🚨 TAMPILKAN ERROR DARI API (PARENT) */}
-        {error && (
-          <div className={styles.errorGeneral}>{error}</div>
-        )}
+      <div className={styles.formSide}>
+        <h2 className={styles.title}>
+            {type === 'login' ? 'Welcome Back' : 'Create Account'}
+        </h2>
+        <p className={styles.subtitle}>
+            {type === 'login' ? 'New here? ' : 'Sudah punya akun? '}
+            <a href={type === 'login' ? '/register' : '/login'}>
+                {type === 'login' ? 'Create Account' : 'Sign in'}
+            </a>
+        </p>
+        
+        {error && <div className={styles.errorMessage}>{error}</div>}
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          
-          {/* Full Name (Hanya Wajib di Register) */}
-          <div className={styles.inputGroup} style={{ display: isLogin ? 'none' : 'block' }}>
-            <label htmlFor="fullName" className={styles.label}>Full Name</label>
-            <input
-              type="text"
-              id="fullName"
-              className={`${styles.input} ${internalErrors.fullName ? styles.inputError : ''}`}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Masukkan nama lengkap"
-              required={!isLogin}
-            />
-            {internalErrors.fullName && (
-              <p className={styles.errorMessage}>{internalErrors.fullName}</p>
+        <form onSubmit={handleSubmit}>
+            
+            {/* INPUT FULL NAME */}
+            {type === 'register' && (
+                <div className={styles.inputGroup}>
+                <label>Full Name</label>
+                <input
+                    className={styles.input}
+                    type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Enter your full name"
+                    required
+                />
+                </div>
             )}
-          </div>
-          
-          {/* Email Address */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="email" className={styles.label}>Email Address</label>
-            <input
-              type="email"
-              id="email"
-              className={`${styles.input} ${internalErrors.email ? styles.inputError : ''}`}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
-              required
-            />
-            {internalErrors.email && (
-              <p className={styles.errorMessage}>{internalErrors.email}</p>
-            )}
-          </div>
 
-          {/* Username (Hanya di Register) */}
-          {type === 'register' && (
+            {/* INPUT EMAIL */}
             <div className={styles.inputGroup}>
-              <label htmlFor="username" className={styles.label}>Username</label>
-              <input
-                type="text"
-                id="username"
-                className={`${styles.input} ${internalErrors.username ? styles.inputError : ''}`}
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Must be Unique"
-                required
-              />
-              {internalErrors.username && (
-                <p className={styles.errorMessage}>{internalErrors.username}</p>
-              )}
+                <label>Email Address</label>
+                <input
+                    className={styles.input}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email address"
+                    required
+                />
             </div>
-          )}
 
-          {/* Password */}
-          <div className={styles.inputGroup}>
-            <label htmlFor="password" className={styles.label}>Password</label>
-            <input
-              type="password"
-              id="password"
-              className={`${styles.input} ${internalErrors.password ? styles.inputError : ''}`}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Min 8 characters"
-              required
-            />
-            {internalErrors.password && (
-              <p className={styles.errorMessage}>{internalErrors.password}</p>
+            {/* INPUT USERNAME */}
+            {type === 'register' && (
+                <div className={styles.inputGroup}>
+                <label>Username</label>
+                <input
+                    className={styles.input}
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Must be Unique"
+                    required
+                />
+                </div>
             )}
-          </div>
 
-          {/* Submit Button */}
-          <button 
-            type="submit" 
-            className={styles.submitButton}
-            disabled={isLoading} // 🚨 GUNAKAN PROPS isLoading
-          >
-            {isLoading ? 'Processing...' : (isLogin ? 'Sign In' : 'Sign Up')}
-          </button>
+            {/* INPUT PASSWORD */}
+            <div className={styles.inputGroup}>
+                <label>Password</label>
+                <input
+                    className={styles.input}
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Min 8 characters"
+                    required
+                />
+            </div>
+
+            <button type="submit" className={styles.submitButton} disabled={loading}>
+                {loading ? 'Processing...' : (type === 'login' ? 'Login' : 'Juice Up')}
+            </button>
         </form>
       </div>
     </div>

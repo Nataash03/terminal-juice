@@ -1,30 +1,26 @@
-// File: routes/productRoutes.js
-
 const express = require('express');
 const router = express.Router();
 
-const productController = require('../controllers/productController');
+// Import Controller (Pastikan path-nya benar)
+const {
+  getProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct
+} = require('../controllers/productController');
 
-// Import middleware
-const { protect, seller } = require('../middleware/authMiddleware');
+// --- DEFINISI ROUTE ---
 
-// 1. ROUTE KHUSUS ADMIN (Seller Dashboard)
-router.get('/admin', protect, seller, productController.getAllProducts); 
-
-// 2. Route Berdasarkan Kategori (Spesifik)
-// 🚨 PERBAIKAN: Tambahkan productController.
-router.get('/category/:categoryId', productController.getProductsByCategory); 
-
-// 3. Route Utama (Root)
+// GET All & POST New
 router.route('/')
-    .get(productController.getAllProducts)    // GET /api/products (Public - Shop All)
-    .post(protect, seller, productController.createProduct);   // POST /api/products (Private)
+  .get(getProducts)      // <-- Ini yang tadi error "undefined"
+  .post(createProduct);
 
-// 4. Route Berdasarkan ID (Parameter - HARUS DI PALING BAWAH)
+// GET One, PUT Update, DELETE Remove
 router.route('/:id')
-    // 🚨 PERBAIKAN: Tambahkan productController.
-    .get(productController.getProductById)    // GET /api/products/:id (Public - Detail)
-    .put(protect, seller, productController.updateProduct)     // PUT /api/products/:id (Private)
-    .delete(protect, seller, productController.deleteProduct); // DELETE /api/products/:id (Private)
+  .get(getProductById)
+  .put(updateProduct)
+  .delete(deleteProduct);
 
 module.exports = router;

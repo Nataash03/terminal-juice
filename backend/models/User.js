@@ -21,8 +21,8 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-      enum: ['buyer', 'seller'], // Hanya boleh dua nilai ini
-      default: 'buyer', // Default role adalah user biasa
+      enum: ['user', 'seller'], // Hanya boleh dua nilai ini
+      default: 'user', // Default role adalah user biasa
     },
 }, { timestamps: true });
 

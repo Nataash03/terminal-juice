@@ -1,12 +1,12 @@
-// frontend/app/cart/page.tsx
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import CartItem from '../components/CartItem';
 import styles from './CartPage.module.css';
 
 interface CartItemData {
-  id: number;
+  id: string | number; // Support String (MongoDB) & Number
   name: string;
   imageSrc: string;
   details: string;
@@ -15,60 +15,63 @@ interface CartItemData {
   isSelected: boolean;
 }
 
-// Data awal keranjang belanja
-const initialCartItems: CartItemData[] = [
-  {
-    id: 1,
-    name: 'Juice Mix 2 in 1',
-    imageSrc: '/images/juice mix 2 in 1.png',
-    details: 'Regular (500ml)\nLess Ice',
-    quantity: 1,
-    price: 15000,
-    isSelected: true,
-  },
-  {
-    id: 2,
-    name: 'Juice Melon',
-    imageSrc: '/images/juice melon.png',
-    details: 'Regular (500ml)\nLess sugar',
-    quantity: 1,
-    price: 15000,
-    isSelected: true,
-  },
-  {
-    id: 3,
-    name: 'Juice Strawberry',
-    imageSrc: '/images/juice semangka.png',
-    details: 'Regular (500ml)',
-    quantity: 2,
-    price: 15000,
-    isSelected: true,
-  },
-];
-
 export default function ShoppingCartPage() {
-  const [cartItems, setCartItems] = useState<CartItemData[]>(initialCartItems);
+  const router = useRouter();
+  const [cartItems, setCartItems] = useState<CartItemData[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Handle perubahan kuantitas item
-  const handleQuantityChange = (id: number, newQuantity: number) => {
+  // 1. LOAD DATA: Ambil data dari LocalStorage
+  useEffect(() => {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      const parsedCart = JSON.parse(storedCart);
+      const formattedCart = parsedCart.map((item: any) => ({
+        id: item.id,
+        name: item.name,
+        imageSrc: item.imageSrc || '/images/placeholder-jus.jpg',
+        details: 'Regular (500ml)', // Default text
+        quantity: item.quantity,
+        price: item.price,
+        isSelected: true,
+      }));
+      setCartItems(formattedCart);
+    }
+    setIsLoaded(true);
+  }, []);
+
+  // 2. SYNC DATA: Update LocalStorage saat ada perubahan
+  useEffect(() => {
+    if (isLoaded) {
+      const simpleCart = cartItems.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+        imageSrc: item.imageSrc
+      }));
+      localStorage.setItem('cart', JSON.stringify(simpleCart));
+    }
+  }, [cartItems, isLoaded]);
+
+  const handleQuantityChange = (id: string | number, newQuantity: number) => {
+    if (newQuantity < 1) {
+       if (confirm("Hapus item ini?")) {
+         setCartItems(items => items.filter(item => item.id !== id));
+       }
+       return;
+    }
     setCartItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
+      items.map((item) => item.id === id ? { ...item, quantity: newQuantity } : item)
     );
   };
 
-  // Handle perubahan status seleksi item
-  const handleSelectChange = (id: number, selected: boolean) => {
+  const handleSelectChange = (id: string | number, selected: boolean) => {
     setCartItems((items) =>
-      items.map((item) =>
-        item.id === id ? { ...item, isSelected: selected } : item
-      )
+      items.map((item) => item.id === id ? { ...item, isSelected: selected } : item)
     );
   };
 
-  // Hitung total harga untuk item yang terpilih
   const calculateTotal = () => {
     return cartItems
       .filter((item) => item.isSelected)
@@ -78,67 +81,60 @@ export default function ShoppingCartPage() {
   const total = calculateTotal();
   const formattedTotal = `Rp ${total.toLocaleString('id-ID')}`;
 
+  const handleCheckout = () => {
+    router.push('/payment'); // Pindah ke Payment
+  };
+
+  if (!isLoaded) return null;
+
   return (
     <div className={styles.container}>
-      {/* Header Section */}
       <header className={styles.header}>
         <h1 className={styles.title}>My Shopping Bag</h1>
-
-        {/* Search Bar */}
         <div className={styles.searchBar}>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            aria-hidden="true"
-          >
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.35-4.35" />
-          </svg>
           <input
             type="text"
             placeholder="Search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={styles.searchInput}
-            aria-label="Search cart items"
           />
         </div>
       </header>
 
-      {/* Cart Items Section */}
       <main className={styles.cartContent}>
         <div className={styles.itemsList}>
-          {cartItems.map((item) => (
-            <CartItem
-              key={item.id}
-              id={item.id}
-              name={item.name}
-              imageSrc={item.imageSrc}
-              details={item.details}
-              initialQuantity={item.quantity}
-              price={item.price}
-              isSelected={item.isSelected}
-              onQuantityChange={handleQuantityChange}
-              onSelectChange={handleSelectChange}
-            />
-          ))}
+          {cartItems.length === 0 ? (
+             <div style={{textAlign: 'center', padding: '40px'}}>Cart Kosong.</div>
+          ) : (
+            cartItems
+              .filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
+              .map((item) => (
+              <CartItem
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                imageSrc={item.imageSrc}
+                details={item.details}
+                initialQuantity={item.quantity}
+                price={item.price}
+                isSelected={item.isSelected}
+                onQuantityChange={handleQuantityChange}
+                onSelectChange={handleSelectChange}
+              />
+            ))
+          )}
         </div>
       </main>
 
-      {/* Checkout Section */}
       <div className={styles.checkoutSection}>
         <button
           className={styles.checkoutButton}
           disabled={total === 0}
-          aria-label="Proceed to checkout"
+          onClick={handleCheckout}
         >
           Checkout
         </button>
-
         <span className={styles.totalLabel}>Total</span>
         <span className={styles.totalAmount}>{formattedTotal}</span>
       </div>

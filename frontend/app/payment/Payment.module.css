@@ -1,0 +1,292 @@
+/* Payment.module.css */
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    font-family: 'Inter', sans-serif;
+    background-color: #fff;
+}
+
+.pageTitle {
+    font-family: 'Playfair Display', serif;
+    /* Kalau ada font serif */
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+/* --- Progress Bar --- */
+.progressBarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    padding: 0 10px;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #666;
+    position: relative;
+    z-index: 1;
+}
+
+.circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+.circle.active,
+.circle.completed {
+    background-color: #81c784;
+    /* Hijau Muda */
+}
+
+.line {
+    flex: 1;
+    height: 2px;
+    background-color: #ccc;
+    margin: 0 10px;
+    margin-top: -20px;
+    /* Biar sejajar sama circle */
+}
+
+.lineActive {
+    background-color: #81c784;
+}
+
+/* --- Section Titles --- */
+.sectionTitle {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+/* --- Pickup Card --- */
+.pickupCard {
+    background-color: #ffebee;
+    /* Pink Pastel */
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #ffcdd2;
+}
+
+.pickupHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.pickupDetails p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.readyBadge {
+    display: inline-block;
+    background-color: #c8e6c9;
+    /* Hijau muda */
+    color: #2e7d32;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+/* --- Payment Method --- */
+.paymentMethods {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.methodCard {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.methodCard.selected {
+    border-color: #81c784;
+    border-width: 2px;
+    background-color: #f9fff9;
+}
+
+.methodIcon {
+    width: 40px;
+    height: 40px;
+    background-color: #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+.methodInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.methodInfo small {
+    color: #888;
+}
+
+.radioOuter {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.methodCard.selected .radioOuter {
+    border-color: #81c784;
+}
+
+.radioInner {
+    width: 10px;
+    height: 10px;
+    background-color: #81c784;
+    border-radius: 50%;
+}
+
+/* --- QR Section --- */
+.qrSection {
+    margin-top: 20px;
+    background-color: #e8f5e9;
+    /* Hijau background QR */
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.qrTitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.qrPlaceholder {
+    background-color: white;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+/* --- Summary Card --- */
+.summaryCard {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+.summaryTitle {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+}
+
+.orderId {
+    font-size: 0.8rem;
+    color: #999;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.itemRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.itemImage {
+    width: 50px;
+    height: 50px;
+    background-color: #ffecb3;
+    border-radius: 8px;
+    margin-right: 15px;
+}
+
+.itemDetails {
+    flex: 1;
+}
+
+.itemDetails strong {
+    display: block;
+    font-size: 0.95rem;
+}
+
+.itemDetails small {
+    color: #888;
+}
+
+.itemPrice {
+    font-weight: bold;
+    color: #e91e63;
+    /* Pink tua harga */
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.totalPrice {
+    color: #e91e63;
+}
+
+.payButton {
+    width: 100%;
+    padding: 15px;
+    background-color: #81c784;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.payButton:hover {
+    background-color: #66bb6a;
+}
+
+.payButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

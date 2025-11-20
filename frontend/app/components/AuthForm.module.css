@@ -1,252 +1,169 @@
-/* frontend/app/components/AuthForm.module.css */
+/* components/AuthForm.module.css */
 
 .container {
-    min-height: 100%;
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    background: linear-gradient(135deg, #f9f8df 0%, #f5f2d8 100%);
-    gap: 60px;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #f6fae3 0%, #e2f5c8 100%);
+    padding: 40px;
+    margin: 0;
 }
 
-/* Illustration */
-.illustration {
+.illustrationSide {
     flex: 1;
-    max-width: 600px;
-    height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 
 .illustrationImage {
-
+    width: 100%;
+    max-width: 700px;
     height: auto;
-    max-width: 150%;
     object-fit: contain;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.1));
-    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
 }
 
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-/* Form Card */
-.formCard {
-    flex: 0 0 480px;
-    width: 480px;
-    background: linear-gradient(135deg, #FFE5F0 0%, #FFD4E8 50%, #E8D4FF 100%);
-    padding: 50px 40px;
-    border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-}
-
-.formHeader {
-    margin-bottom: 32px;
+.formSide {
+    flex: 0.8;
+    max-width: 450px;
+    justify-content: center;
+    background: linear-gradient(180deg, #ffebee 0%, #f8bbd0 100%);
+    padding: 40px;
+    border-radius: 25px;
+    box-shadow: 0 20px 40px rgba(233, 30, 99, 0.15);
+    color: #333;
 }
 
 .title {
-    font-size: 36px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin: 0 0 12px 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    margin-bottom: 5px;
+    color: #333;
 }
 
 .subtitle {
-    font-size: 15px;
-    color: #4a4a4a;
-    margin: 0;
+    font-size: 1rem;
+    margin-bottom: 30px;
+    color: #555;
 }
 
-.switchLink {
-    color: #FF8C00;
+.subtitle a {
+    color: #FF9800;
+    font-weight: bold;
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    margin-left: 5px;
+    transition: color 0.2s;
 }
 
-.switchLink:hover {
-    color: #FF7700;
-    text-decoration: underline;
+.subtitle a:hover {
+    color: #E65100;
 }
 
-/* Form */
-.form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
+/* INPUT FIELDS */
 .inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    margin-bottom: 15px;
 }
 
-.label {
-    font-size: 15px;
+.inputGroup label {
+    display: block;
+    margin-bottom: 8px;
     font-weight: 500;
-    color: #1a1a1a;
-    margin: 0;
+    font-size: 0.95rem;
+    color: #444;
 }
 
 .input {
     width: 100%;
     padding: 14px 18px;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    background-color: rgba(255, 255, 255, 0.8);
+    border: 2px solid transparent;
     border-radius: 12px;
-    font-size: 15px;
-    color: #1a1a1a;
+    background-color: white;
+    font-size: 1rem;
     outline: none;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
     transition: all 0.3s ease;
 }
 
 .input:focus {
-    border-color: #FFB800;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.1);
+    border-color: #FF9800;
+    /* Saat diklik border jadi orange */
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.1);
 }
 
 .input::placeholder {
-    color: #999;
+    color: #aaa;
     font-style: italic;
+    font-size: 0.9rem;
 }
 
-.inputError {
-    border-color: #ff4444;
-}
-
-.inputError:focus {
-    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
-}
-
-/* Error Messages */
-.errorMessage {
-    font-size: 13px;
-    color: #ff4444;
-    margin: 0;
-    font-weight: 500;
-}
-
-.errorGeneral {
-    padding: 12px 16px;
-    background-color: rgba(255, 68, 68, 0.1);
-    border: 1px solid #ff4444;
-    border-radius: 8px;
-    color: #ff4444;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-/* Submit Button */
+/* BUTTON JUICE UP */
 .submitButton {
     width: 100%;
-    padding: 16px;
-    background-color: #FFB800;
-    color: #1a1a1a;
+    padding: 15px;
+    background: linear-gradient(to right, #FFC107, #FF9800);
+    color: white;
     border: none;
     border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
+    font-weight: bold;
+    font-size: 1.1rem;
     cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 8px;
-    box-shadow: 0 4px 12px rgba(255, 184, 0, 0.3);
+    margin-top: 25px;
+    box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.submitButton:hover:not(:disabled) {
-    background-color: #FFA500;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(255, 184, 0, 0.4);
-}
-
-.submitButton:active:not(:disabled) {
-    transform: translateY(0);
+.submitButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(255, 152, 0, 0.4);
 }
 
 .submitButton:disabled {
-    opacity: 0.6;
+    background: #ccc;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-    .container {
-        gap: 40px;
-    }
-
-    .illustration {
-        max-width: 450px;
-    }
-
-    .formCard {
-        max-width: 420px;
-        padding: 40px 35px;
-    }
+/* Error Message */
+.errorMessage {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid #ef9a9a;
 }
 
-@media (max-width: 768px) {
+/* Responsif */
+@media (max-width: 968px) {
     .container {
         flex-direction: column;
-        gap: 30px;
-        padding: 30px 20px;
+        gap: 40px;
+        margin: 30px 20px;
+        width: auto;
     }
 
-    .illustration {
-        max-width: 280px;
+    .illustrationSide {
+        justify-content: center;
+        flex: none;
+        /* Reset flex */
     }
 
-    .formCard {
+    .illustrationImage {
+        max-width: 80%;
+        /* Gambar di HP jangan terlalu besar */
+    }
+
+    .formSide {
+        flex: none;
         width: 100%;
         max-width: 100%;
-        padding: 35px 30px;
-    }
-
-    .title {
-        font-size: 32px;
-    }
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 20px 15px;
-    }
-
-    .illustration {
-        max-width: 220px;
-    }
-
-    .formCard {
-        padding: 30px 24px;
-        border-radius: 20px;
-    }
-
-    .title {
-        font-size: 28px;
-    }
-
-    .subtitle {
-        font-size: 14px;
-    }
-
-    .input {
-        padding: 12px 16px;
-        font-size: 14px;
-    }
-
-    .submitButton {
-        padding: 14px;
-        font-size: 15px;
+        padding: 30px 25px;
     }
 }

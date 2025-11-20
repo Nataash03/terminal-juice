@@ -1,14 +1,23 @@
 'use client'; 
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; 
 import ProductCard from '../components/ProductCard'; 
 import ProductDetailModal, { ProductForModal } from '../components/ProductDetailModal';
 import styles from './ShopPage.module.css'; 
 
-// 🚨 URL API BACKEND KAMU (Pastikan server Node.js berjalan di sini)
+// 🚨 URL API BACKEND KAMU
 const API_URL = 'http://localhost:5001/api/products'; 
 
-// --- DEFINISI TIPE BARU (Berdasarkan Schema MongoDB kamu) ---
+// --- DEFINISI TIPE ---
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  imageSrc: string;
+}
+
 interface PopulatedCategory {
   _id: string;
   name: string;
@@ -33,36 +42,57 @@ type SubFilterType = 'All' | 'Mineral Water' | 'Fruit' | 'Snacks';
 type SelectedProductState = ProductForModal | null;
 
 const ShopPage: React.FC = () => {
+  const router = useRouter(); 
+
   const [products, setProducts] = useState<BackendProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
   const [activeFilter, setActiveFilter] = useState<FilterType>('Best Seller');
   const [activeSubFilter, setActiveSubFilter] = useState<SubFilterType>('All');
-  const [selectedProduct, setSelectedProduct] = useState<SelectedProductState>(null);
-
   
+  const [selectedProduct, setSelectedProduct] = useState<SelectedProductState>(null);
+  
+  // State untuk Cart & Loading Flag
+  const [cart, setCart] = useState<CartItem[]>([]); 
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
+
+  // 1. useEffect FETCH DATA & LOAD CART (Digabung biar rapi)
   useEffect(() => {
-    const fetchProductsFromApi = async () => {
+    const initPage = async () => {
+      // A. Fetch Products
       try {
         const response = await fetch(API_URL);
-        
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
+        if (!response.ok) throw new Error('Network response was not ok');
         const result = await response.json();
-        const fetchedProducts: BackendProduct[] = result.data || []; 
-        
-        setProducts(fetchedProducts);
+        setProducts(result.data || []); 
       } catch (err) {
-        setError('Failed to fetch products from backend. Check API URL or CORS.');
+        setError('Failed to fetch products from backend.');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
-    fetchProductsFromApi();
+
+    // Jalankan Fetch
+    initPage();
+
+    // B. Load Cart dari LocalStorage
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
+
+    // C. Tandai bahwa loading selesai
+    setIsCartLoaded(true); 
   }, []);
+
+  // 2. useEffect SIMPAN CART (Hanya jalan setelah cart selesai dimuat)
+  useEffect(() => {
+    if (isCartLoaded) {
+      localStorage.setItem('cart', JSON.stringify(cart));
+    }
+  }, [cart, isCartLoaded]);
 
   const handleFilterClick = (filter: FilterType) => {
     setActiveFilter(filter);
@@ -80,7 +110,6 @@ const ShopPage: React.FC = () => {
     product: BackendProduct
   ) => {
     event.stopPropagation();
-    
     const fullProductDetail: ProductForModal = {
       id: product._id, 
       name: product.name,
@@ -98,9 +127,44 @@ const ShopPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
+  // Logic Add To Cart (TOMBOL KUNING)
   const handleAddToCart = (product: ProductForModal, quantity: number) => {
-    console.log(`[ACTION] Menambahkan ${quantity}x ${product.name} ke Keranjang!`);
+    setCart((prevCart) => {
+      const existingItemIndex = prevCart.findIndex((item) => item.id === product.id);
+      
+      let updatedCart;
+      if (existingItemIndex >= 0) {
+        updatedCart = [...prevCart];
+        updatedCart[existingItemIndex].quantity += quantity;
+      } else {
+        const newItem: CartItem = {
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity: quantity,
+          imageSrc: product.imageSrc
+        };
+        updatedCart = [...prevCart, newItem];
+      }
+      return updatedCart;
+    });
     handleCloseModal();
+  };
+
+  // Logic Order Now (TOMBOL ORANGE)
+  const handleOrderNow = (product: ProductForModal, quantity: number) => {
+  handleAddToCart(product, quantity);
+  
+  setTimeout(() => {
+    router.push('/payment'); 
+  }, 100);
+};
+
+  // Navigasi Tombol Floating
+  const handleGoToCheckout = () => {
+    if (cart?.length > 0) {
+      router.push('/cart');
+    }
   };
 
   const filteredProducts = products.filter((product) => {
@@ -108,44 +172,20 @@ const ShopPage: React.FC = () => {
         ? product.category.name 
         : String(product.category);
     
-    if (activeFilter === 'Best Seller') {
-      return product.tags && product.tags.includes('best_seller');
-    }
-
-    if (activeFilter === 'All Menu') {
-      return categoryName === 'Fruit Juice';
-    }
-
+    if (activeFilter === 'Best Seller') return product.tags && product.tags.includes('best_seller');
+    if (activeFilter === 'All Menu') return categoryName === 'Fruit Juice';
     if (activeFilter === 'Other') {
-      if (activeSubFilter === 'All') {
-          return categoryName !== 'Fruit Juice';
-      }
-      if (activeSubFilter !== 'All') {
-          return categoryName === activeSubFilter; 
-      }
+      if (activeSubFilter === 'All') return categoryName !== 'Fruit Juice';
+      return categoryName === activeSubFilter;
     }
     return true; 
   });
 
-  if (loading) {
-    return (
-      <div style={{ padding: '100px', textAlign: 'center' }}>
-        Loading products...
-      </div>
-    );
-  }
+  if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>Loading products...</div>;
+  if (error) return <div style={{ padding: '100px', textAlign: 'center', color: 'red' }}>{error}</div>;
 
-  if (error) {
-    return (
-      <div style={{ padding: '100px', textAlign: 'center', color: 'red' }}>
-        {error}
-      </div>
-    );
-  }
-
-  const otherSubCategories: SubFilterType[] = [
-    'All', 'Mineral Water', 'Fruit', 'Snacks',
-  ];
+  const otherSubCategories: SubFilterType[] = ['All', 'Mineral Water', 'Fruit', 'Snacks'];
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <div className={styles.shopPageContainer}>
@@ -210,41 +250,60 @@ const ShopPage: React.FC = () => {
         </div>
 
         {filteredProducts.length === 0 && (
-          <div
-            style={{
-              textAlign: 'center',
-              marginTop: '40px',
-              fontSize: '1.2em',
-              color: '#666',
-            }}
-          >
-            Tidak ada produk yang ditemukan di kategori &quot;{activeFilter}
-            {activeFilter === 'Other' && activeSubFilter !== 'All'
-              ? ` > ${activeSubFilter}`
-              : ''}&quot;.
+          <div style={{ textAlign: 'center', marginTop: '40px', fontSize: '1.2em', color: '#666' }}>
+            Tidak ada produk ditemukan.
           </div>
         )}
 
         <div className={styles.sliderControls}>
-          <button className={styles.arrowButton} aria-label="Previous">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
+          <button className={styles.arrowButton}>&lt;</button>
           <button className={styles.exploreMoreButton}>Explore More</button>
-          <button className={styles.arrowButton} aria-label="Next">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
+          <button className={styles.arrowButton}>&gt;</button>
         </div>
       </section>
 
       <ProductDetailModal
         product={selectedProduct}
         onAddToCart={handleAddToCart}
+        onOrderNow={handleOrderNow} 
         onClose={handleCloseModal}
       />
+
+      {/* TOMBOL CHECKOUT MELAYANG */}
+      {totalItems > 0 && (
+        <div 
+            onClick={handleGoToCheckout}
+            style={{
+                position: 'fixed',
+                bottom: '30px',
+                right: '30px',
+                backgroundColor: '#4CAF50',
+                color: 'white',
+                padding: '15px 25px',
+                borderRadius: '50px',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '1.1rem',
+                zIndex: 1000,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                transition: 'transform 0.2s'
+            }}
+        >
+            <span>🛒 Checkout</span>
+            <span style={{ 
+                backgroundColor: 'white', 
+                color: '#4CAF50', 
+                borderRadius: '50%', 
+                padding: '2px 8px', 
+                fontSize: '0.9rem' 
+            }}>
+                {totalItems}
+            </span>
+        </div>
+      )}
     </div>
   );
 };
