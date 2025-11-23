@@ -1,5 +1,3 @@
-/* frontend/app/components/HeroSection.module.css */
-
 .mainHeroSection {
     display: flex;
     justify-content: space-between;
@@ -89,14 +87,12 @@
     bottom: 30px;
 }
 
-/* Font Persentase */
 .percentage {
     font-size: 56px;
     font-weight: 600;
     color: #1a1a1a;
     line-height: 1;
     margin-bottom: 4px;
-    /* Kurangi margin */
 }
 
 .badgeText {
@@ -106,7 +102,6 @@
     font-weight: 400;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
     .mainHeroSection {
         padding: 40px 60px;
@@ -118,13 +113,11 @@
 
     .imageWrapper {
         height: 550px;
-        /* Sesuaikan tinggi wrapper */
     }
 
     .pineappleImage {
         max-width: 600px;
         transform: translateY(-100px);
-        /* Geser ke atas */
     }
 
     .qualityBadge {

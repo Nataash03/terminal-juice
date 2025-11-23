@@ -3,9 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie'; 
-import styles from './Payment.module.css'; // Pastikan CSS Module terimport
+import styles from './Payment.module.css'; 
 
-// Ambil URL dari Environment Variable
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 interface CartItem {
@@ -23,7 +22,6 @@ const PaymentPage = () => {
   const [loading, setLoading] = useState(false);
   const [orderNotes, setOrderNotes] = useState('');
 
-  // Load Cart dari LocalStorage
   useEffect(() => {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) setCartItems(JSON.parse(storedCart));

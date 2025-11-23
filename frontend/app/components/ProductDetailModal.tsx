@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import styles from './ProductDetailModal.module.css';
 
-// Tipe produk lengkap yang diharapkan oleh Modal.
 export interface ProductForModal {
   id: string;
   name: string;
@@ -18,7 +17,6 @@ type ProductModalProps = {
   product: ProductForModal | null;
   onClose: () => void;
   onAddToCart: (product: ProductForModal, quantity: number) => void;
-  // ✅ Tambahkan ini agar tombol Order Now berfungsi
   onOrderNow: (product: ProductForModal, quantity: number) => void;
 };
 
@@ -26,7 +24,7 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
   product,
   onClose,
   onAddToCart,
-  onOrderNow, // ✅ Destructure properti ini
+  onOrderNow, 
 }) => {
   const [quantity, setQuantity] = useState(1);
 
@@ -131,7 +129,6 @@ const ProductDetailModal: React.FC<ProductModalProps> = ({
                 🛒 Add to Cart
               </button>
               
-              {/* ✅ Tombol Order Now yang sudah benar */}
               <button 
                 className={styles.orderNowButton}
                 onClick={() => onOrderNow(product, quantity)}

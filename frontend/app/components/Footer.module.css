@@ -4,7 +4,6 @@
     padding: 60px 0 0;
     margin-top: 80px;
     font-family: sans-serif;
-    /* Pastikan font default terpakai */
 }
 
 .container {
@@ -16,7 +15,6 @@
     gap: 60px;
 }
 
-/* Brand Section */
 .brandSection {
     max-width: 350px;
 }
@@ -36,7 +34,6 @@
     margin: 0 0 24px 0;
 }
 
-/* --- SOCIAL ICONS --- */
 .socialIcons {
     display: flex;
     gap: 16px;
@@ -56,40 +53,33 @@
     text-decoration: none;
 }
 
-/* FIX: Sizing SVG di dalam container (dari fix sebelumnya) */
 .socialIcon svg {
     width: 60%;
     height: 60%;
     display: block;
 }
 
-/* Generic Hover Effect (Di nonaktifkan agar custom color jalan) */
 .socialIcon:hover {
     transform: translateY(-3px);
 }
 
-/* 1. GITHUB Hover */
 .socialIcon:nth-child(1):hover {
     background-color: #ffffff;
     color: #000000;
 }
 
-/* 2. WHATSAPP Hover */
 .socialIcon:nth-child(2):hover {
     background-color: #25D366;
     color: #ffffff;
     border-color: #25D366;
 }
 
-/* 3. INSTAGRAM Hover */
 .socialIcon:nth-child(3):hover {
     background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
     color: #ffffff;
     border-color: transparent;
 }
 
-
-/* Links Sections */
 .linksSection {
     display: flex;
     flex-direction: column;
@@ -112,11 +102,9 @@
 }
 
 .linksList li {
-    /* FIX: Kursor pointer agar menu Support interaktif (pemicu Modal) */
     cursor: pointer;
     transition: color 0.2s;
     color: #b0b0b0;
-    /* Warna normal link */
 }
 
 .linksList li:hover {
@@ -125,7 +113,6 @@
 
 .linksList a {
     color: #b0b0b0;
-    /* Warna normal link */
     text-decoration: none;
     transition: color 0.2s;
 }
@@ -134,7 +121,6 @@
     color: #FFB800;
 }
 
-/* Newsletter Section */
 .newsletterSection {
     display: flex;
     flex-direction: column;
@@ -191,7 +177,6 @@
     transform: scale(1.05);
 }
 
-/* Bottom Bar */
 .bottomBar {
     border-top: 1px solid #404040;
     padding: 24px 80px;
@@ -222,7 +207,6 @@
     color: #FFB800;
 }
 
-/* Responsive Design (Biarkan sama) */
 @media (max-width: 1024px) {
     .container {
         padding: 0 60px 50px;
@@ -298,7 +282,6 @@
         text-align: center;
     }
 
-    /* FIX 4: Typography adjustment */
     .brandName {
         font-size: 24px;
     }

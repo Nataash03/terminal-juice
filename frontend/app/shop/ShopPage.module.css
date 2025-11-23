@@ -1,7 +1,5 @@
-/* ShopPage.module.css */
-
 .shopPageContainer {
-    padding: 2rem 1rem;
+    padding: 2rem 20px;
     max-width: 1200px;
     margin: 0 auto;
     font-family: 'Inter', sans-serif;
@@ -14,14 +12,12 @@
     text-align: center;
     font-size: 1.25rem;
     color: #4CAF50;
-    /* Green */
+    width: 100%;
     grid-column: 1 / -1;
-    /* Mengambil seluruh lebar grid */
 }
 
 .errorMessage {
     color: #F44336;
-    /* Red */
 }
 
 .productRangeSection {
@@ -45,14 +41,15 @@
     color: #e56ebf;
 }
 
-/* --- Filter Buttons --- */
-
-.filterButtons {
+/* Filter Buttons */
+.filterButtons,
+.subFilterContainer {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-bottom: 1rem;
     flex-wrap: wrap;
+    padding: 0 10px;
 }
 
 .filterButton {
@@ -73,19 +70,16 @@
 
 .filterButton.active {
     background-color: #e56ebf;
-    /* Warna hijau aktif */
     color: white;
-    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.4);
+    box-shadow: 0 4px 10px rgba(229, 110, 191, 0.4);
 }
 
-/* --- Sub-Filters for Other --- */
+/* Sub-Filters */
 .subFilterContainer {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    flex-wrap: wrap;
+    gap: 8px;
+    /* Dikecilkan */
 }
 
 .subFilterButton {
@@ -97,22 +91,17 @@
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s, color 0.3s;
-}
-
-.subFilterButton:hover {
-    background-color: #f5f5f5;
+    white-space: nowrap;
 }
 
 .subFilterButton.active {
-    background-color: #FFC107;
-    /* Warna kuning untuk sub-filter aktif */
-    color: #333;
-    border-color: #FFC107;
+    background-color: #e56ebf;
+    color: white;
+    border-color: #e56ebf;
     font-weight: 600;
 }
 
-/* --- Product Grid --- */
-
+/* Product Grid */
 .productGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -120,12 +109,9 @@
     padding: 1rem 0;
 }
 
-/* --- Product Card Styles --- */
-
+/* Product Card Styles */
 .productCard {
-    /* Menggunakan Custom Property untuk warna BG gambar */
     --bg-color: #fff;
-
     background-color: white;
     border-radius: 16px;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
@@ -142,95 +128,11 @@
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
 }
 
-.cardImageContainer {
-    padding: 20px 0;
-    background-color: var(--bg-color);
-    /* Menggunakan warna BG dari produk */
-    border-radius: 16px 16px 0 0;
-    min-height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cardImage {
-    width: 75%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-}
-
-.cardContent {
-    padding: 15px 15px 25px 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.cardName {
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 3px;
-    color: #333;
-}
-
-.cardDescription {
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 15px;
-    height: 30px;
-    /* Menjaga konsistensi tinggi */
-    overflow: hidden;
-}
-
-.cardPriceRow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 15px;
-    width: 100%;
-}
-
 .cardPrice {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #FF9800;
-    /* Orange Price */
-}
-
-.cardStock {
-    background-color: #C8E6C9;
-    /* Greenish background */
-    color: #388E3C;
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.cardOrderButton {
-    background-color: #FFC107;
-    /* Yellow Order Button */
-    color: #333;
-    border: none;
-    width: 80%;
-    padding: 12px;
-    border-radius: 25px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
-}
-
-.cardOrderButton:hover {
-    background-color: #FFB300;
-    box-shadow: 0 6px 12px rgba(255, 179, 0, 0.5);
+    color: #d63384;
 }
 
 /* --- Slider Controls --- */
-
 .sliderControls {
     display: flex;
     justify-content: center;
@@ -240,78 +142,46 @@
     padding: 1rem 0;
 }
 
-.arrowButton {
-    background: none;
-    border: 1px solid #ddd;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s, border-color 0.3s;
-    color: #666;
-}
-
-.arrowButton:hover {
-    background-color: #f5f5f5;
-    border-color: #bbb;
-}
-
 .exploreMoreButton {
     background-color: #FF9800;
-    /* Orange */
     color: white;
     border: none;
     padding: 12px 30px;
     border-radius: 25px;
-    font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.3s, box-shadow 0.3s;
     box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
 }
 
-.exploreMoreButton:hover {
-    background-color: #FB8C00;
-}
-
-/* Responsiveness for mobile */
+/* Responsif */
 @media (max-width: 600px) {
+    .shopPageContainer {
+        padding: 1.5rem 15px;
+    }
+
     .rangeTitle {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .filterButtons,
     .subFilterContainer {
-        flex-direction: row;
-        gap: 12px;
+        padding: 0;
+        gap: 8px;
     }
 
-    .filterButton {
-        padding: 8px 15px;
-        font-size: 0.9rem;
+    .productGrid {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
 
-    .otherSubFilters {
-        margin-top: 0.5rem;
-    }
-
-    .sliderControls {
-        gap: 10px;
+    .productCard {
+        max-width: 400px;
+        margin: 0 auto;
     }
 
     .exploreMoreButton {
         padding: 10px 20px;
-    }
-
-    .productGrid {
-        grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-    }
-
-    .productCard {
-        max-width: 350px;
-        margin: 0 auto;
+        font-size: 0.9rem;
     }
 }

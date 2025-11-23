@@ -1,4 +1,3 @@
-// frontend/app/mission/page.tsx
 import React from 'react';
 import styles from './MissionPage.module.css';
 

@@ -6,11 +6,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    // --- PERBAIKAN: Menambahkan field Username ---
     username: {
         type: String,
         required: true,
-        unique: true, // Username juga harus unik
+        unique: true, 
         trim: true
     },
     email: {
@@ -29,7 +28,6 @@ const userSchema = new mongoose.Schema({
         enum: ['user', 'seller'],
         default: 'user',
     },
-    // Tambahan opsional untuk profil lengkap nanti
     phone: { type: String, default: '' },
     address: { type: String, default: '' }
 }, { timestamps: true });

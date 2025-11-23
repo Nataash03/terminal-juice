@@ -27,15 +27,14 @@ const registerUser = async (req, res) => {
     // Create User
     const user = await User.create({
       fullName,
-      username, // Sekarang ini akan tersimpan karena Schema sudah diperbaiki
+      username, 
       email,
-      password, // Password akan di-hash otomatis oleh middleware di User.js
+      password, 
     });
 
     if (user) {
-      // --- PERBAIKAN FORMAT RESPON ---
       res.status(201).json({
-        success: true, // PENTING untuk frontend
+        success: true, 
         user: {
           _id: user.id,
           fullName: user.fullName,
@@ -61,9 +60,8 @@ const authUser = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-      // --- PERBAIKAN FORMAT RESPON ---
       res.json({
-        success: true, // PENTING untuk frontend
+        success: true, 
         user: {
           _id: user.id,
           fullName: user.fullName,
@@ -102,15 +100,13 @@ const getUserProfile = async (req, res) => {
 };
 
 // @desc    Upgrade to Seller
-// @desc    Upgrade to Seller
 const upgradeToSeller = async (req, res) => {
   try {
-    const { secretCode } = req.body; // Ambil kode rahasia dari frontend
+    const { secretCode } = req.body; 
     const userId = req.user ? req.user._id : req.body.userId;
     
     // Cek Kode Rahasia
     if (secretCode !== process.env.SELLER_UPGRADE_CODE) {
-        // Jika kode salah, langsung tolak dengan status 403 (Forbidden)
         return res.status(403).json({ success: false, message: 'Kode verifikasi Seller salah.' });
     }
     

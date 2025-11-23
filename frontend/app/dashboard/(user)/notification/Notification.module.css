@@ -28,13 +28,11 @@
 
 .activeFilter {
     background: #ffb6c1;
-    /* Pink */
     color: white;
     border-color: #ffb6c1;
     font-weight: bold;
 }
 
-/* --- NOTIFICATION CARD --- */
 .list {
     display: flex;
     flex-direction: column;
@@ -57,7 +55,6 @@
     transform: translateY(-2px);
 }
 
-/* Modifier: Kartu Spesial (Pink Gradient) untuk status 'Ready' */
 .cardHighlight {
     background: linear-gradient(90deg, #ffe4e1 0%, #ffe4d6 100%);
     border: 1px solid #ffccbc;
@@ -69,7 +66,6 @@
     gap: 20px;
 }
 
-/* Icon Bulat */
 .iconCircle {
     width: 60px;
     height: 60px;
@@ -81,25 +77,20 @@
     background: #f9f9f9;
 }
 
-/* Warna Icon Spesifik */
 .iconReady {
     background: #e0f2f1;
     color: #009688;
 }
 
-/* Hijau tosca muda */
 .iconProcess {
     background: #fffde7;
     color: #fbc02d;
 }
 
-/* Kuning */
 .iconSuccess {
     background: #e8f5e9;
     color: #4caf50;
 }
-
-/* Hijau */
 
 .textContent h3 {
     font-family: 'Playfair Display', serif;

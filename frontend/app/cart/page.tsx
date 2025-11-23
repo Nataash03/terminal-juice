@@ -6,7 +6,7 @@ import CartItem from '../components/CartItem';
 import styles from './CartPage.module.css';
 
 interface CartItemData {
-  id: string | number; // Support String (MongoDB) & Number
+  id: string | number; 
   name: string;
   imageSrc: string;
   details: string;
@@ -21,7 +21,6 @@ export default function ShoppingCartPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // 1. LOAD DATA: Ambil data dari LocalStorage
   useEffect(() => {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
@@ -30,7 +29,7 @@ export default function ShoppingCartPage() {
         id: item.id,
         name: item.name,
         imageSrc: item.imageSrc || '/images/placeholder-jus.jpg',
-        details: 'Regular (500ml)', // Default text
+        details: 'Regular (500ml)', 
         quantity: item.quantity,
         price: item.price,
         isSelected: true,
@@ -40,7 +39,6 @@ export default function ShoppingCartPage() {
     setIsLoaded(true);
   }, []);
 
-  // 2. SYNC DATA: Update LocalStorage saat ada perubahan
   useEffect(() => {
     if (isLoaded) {
       const simpleCart = cartItems.map(item => ({
@@ -82,7 +80,7 @@ export default function ShoppingCartPage() {
   const formattedTotal = `Rp ${total.toLocaleString('id-ID')}`;
 
   const handleCheckout = () => {
-    router.push('/payment'); // Pindah ke Payment
+    router.push('/payment'); 
   };
 
   if (!isLoaded) return null;

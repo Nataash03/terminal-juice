@@ -13,15 +13,15 @@ interface TestimonialItem {
 }
 
 const testimonialsData: TestimonialItem[] = [
-  { quote: "I've tried countless juice brands, but terminal juice truly stands out. The passion fruit guava is incredible - you can taste the real fruit in every sip!", author: 'Helen Mak', role: 'Fitness Enthusiast' },
-  { quote: "As a health coach, I recommend alldae to all my clients. The natural ingredients and amazing taste make it easy to stay hydrated and healthy.", author: 'Marcus Chen', role: 'Health Coach' },
-  { quote: "Great pick me up! The ginger yuzu flavor is perfect after my morning yoga sessions. Love that there are no artificial additives!", author: 'Sarah Williams', role: 'Yoga Instructor' },
-  { quote: "The turmeric shots are a game-changer! Fantastic immunity boost and the taste is surprisingly smooth. Highly recommend!", author: 'David Lee', role: 'Freelance Designer' },
-  { quote: "The packaging is chic and the taste is even better. My new favourite way to hydrate!", author: 'Lily Adams', role: 'Marketing Specialist' },
-  { quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", author: 'Tom Johnson', role: 'Entrepreneur' },
-  { quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", author: 'Linsay L', role: 'Staff' },
-  { quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", author: 'John Doe', role: 'Entrepreneur' },
-  { quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", author: 'Jane Doe', role: 'Entrepreneur' },
+  { quote: "I've tried countless juice brands, but terminal juice truly stands out. The passion fruit guava is incredible - you can taste the real fruit in every sip!", author: 'Angel', role: 'Economic Bussiness Student' },
+  { quote: "As a health enthusiat, I recommend it. The natural ingredients and amazing taste make it easy to stay hydrated and healthy.", author: 'Marcus', role: 'Engineering Student' },
+  { quote: "Great pick me up! The ginger yuzu flavor is perfect after my morning class. Love that there are no artificial additives!", author: 'Sarah', role: 'IT Staff' },
+  { quote: "The avocado are a game-changer! Fantastic immunity boost and the taste is surprisingly smooth. Highly recommend!", author: 'David', role: 'Arts and Design Student' },
+  { quote: "The packaging is ok and the taste is even better. My new favourite way to hydrate!", author: 'Eva', role: 'Marketing Team' },
+  { quote: "Best juice for detox, hands down! The flavors are unique and authentic. A must-buy.", author: 'Eka', role: 'Law Student' },
+  { quote: "Absolutely the perfect juice for a fresh detox! Rasanya natural dan super enak. Worth every sip!", author: 'Lily', role: 'IT Student' },
+  { quote: "Top-tier detox juice! Flavor-nya rich dan alami banget. Pasti bakal beli lagi!", author: 'Zahra', role: 'Medical Student' },
+  { quote: "One of the best detox juices I’ve tried! Seger, authentic, dan bikin nagih. Definitely recommended!", author: 'Gilbert', role: 'Pyschology Student' },
 ];
 
 // 2. CHUNK UTILITY (4 kartu per slide)

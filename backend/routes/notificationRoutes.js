@@ -17,7 +17,7 @@ router.get('/', protect, async (req, res) => {
   }
 });
 
-// POST /api/notifications (Buat testing/nambah notif manual via Postman)
+// POST /api/notifications
 router.post('/', protect, async (req, res) => {
   try {
     const { title, message, type } = req.body;

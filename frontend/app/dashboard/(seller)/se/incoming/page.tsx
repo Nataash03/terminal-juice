@@ -31,11 +31,10 @@ export default function IncomingOrdersPage() {
     }
   };
 
-  // 2. Fungsi Update Status (Jantungnya Fitur Ini)
+  // 2. Fungsi Update Status 
   const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     const token = Cookies.get('token');
     
-    // Optimistic UI: Update tampilan dulu biar cepet
     const prevOrders = [...orders];
     setOrders(orders.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
 
@@ -51,9 +50,7 @@ export default function IncomingOrdersPage() {
 
       const data = await res.json();
       if (data.success) {
-        // Sukses! (Tidak perlu alert biar flow cepat, status visual sudah berubah)
       } else {
-        // Kalau gagal, balikin ke state awal
         setOrders(prevOrders);
         alert("Gagal update status: " + data.message);
       }
@@ -111,7 +108,6 @@ export default function IncomingOrdersPage() {
             {/* ACTION BUTTONS */}
             <div className={styles.actions}>
               
-              {/* Jika status Pending/Paid -> Tampilkan Tombol "Mark as Ready" */}
               {(order.status === 'Pending' || order.status === 'Paid') && (
                 <button 
                     className={`${styles.btnAction} ${styles.btnReady}`}
@@ -121,7 +117,6 @@ export default function IncomingOrdersPage() {
                 </button>
               )}
 
-              {/* Jika status Ready -> Tampilkan Tombol "Complete Order" */}
               {order.status === 'Ready' && (
                 <button 
                     className={`${styles.btnAction} ${styles.btnComplete}`}
@@ -131,7 +126,6 @@ export default function IncomingOrdersPage() {
                 </button>
               )}
 
-              {/* Jika Completed -> Disable */}
               {order.status === 'Completed' && (
                 <button className={`${styles.btnAction} ${styles.btnDisabled}`} disabled>
                     Finished

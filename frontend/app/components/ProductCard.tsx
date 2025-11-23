@@ -1,4 +1,3 @@
-// frontend/app/components/ProductCard.tsx
 'use client';
 
 import React from 'react';

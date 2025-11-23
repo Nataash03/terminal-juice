@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
-const { protect } = require('../middleware/authMiddleware'); // Import Satpam
+const { protect } = require('../middleware/authMiddleware'); 
 
 const router = express.Router();
 
@@ -14,7 +14,6 @@ cloudinary.config({
 });
 
 // 2. Setup Multer (Gunakan MemoryStorage)
-// Kita simpan file di RAM sementara, bukan di Harddisk, supaya aman saat deploy (Vercel/Render)
 const upload = multer({
   storage: multer.memoryStorage(),
   fileFilter: function (req, file, cb) {
@@ -22,12 +21,10 @@ const upload = multer({
   },
 });
 
-// Helper: Validasi Tipe File (Cuma boleh Gambar)
+// Helper: Validasi Tipe File 
 function checkFileType(file, cb) {
   const filetypes = /jpg|jpeg|png|webp/;
-  // Cek ekstensi file
   const extname = filetypes.test(file.originalname.toLowerCase().split('.').pop());
-  // Cek tipe mime
   const mimetype = filetypes.test(file.mimetype);
 
   if (extname && mimetype) {
@@ -42,7 +39,7 @@ const uploadFromBuffer = (buffer) => {
   return new Promise((resolve, reject) => {
     let cld_upload_stream = cloudinary.uploader.upload_stream(
       {
-        folder: "terminal-juice", // Nama folder di Cloudinary (Bebas ganti)
+        folder: "terminal-juice", 
       },
       (error, result) => {
         if (result) {
@@ -58,7 +55,6 @@ const uploadFromBuffer = (buffer) => {
 };
 
 // 4. Endpoint Utama (POST /api/upload)
-// Dilindungi oleh 'protect', jadi harus login dulu baru bisa upload
 router.post('/', protect, upload.single('image'), async (req, res) => {
   try {
     if (!req.file) {
@@ -72,7 +68,7 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
     res.json({
       success: true,
       message: 'Image uploaded to Cloudinary!',
-      filePath: result.secure_url, // URL HTTPS yang aman
+      filePath: result.secure_url, 
     });
 
   } catch (error) {

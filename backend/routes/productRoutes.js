@@ -1,17 +1,13 @@
-// backend/routes/productRoutes.js
-
 const express = require('express');
 const router = express.Router();
 
-// --- PERBAIKAN IMPORT DISINI ---
-// Kita asumsikan productController mengekspor semua fungsi
 const { 
   getProducts, 
   getProductById, 
   createProduct, 
   updateProduct, 
   deleteProduct,
-  cleanupOldProducts // WAJIB DIIMPORT AGAR DIKENALI
+  cleanupOldProducts 
 } = require('../controllers/productController'); 
 // --------------------------------
 

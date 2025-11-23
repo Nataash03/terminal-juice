@@ -1,3 +1,4 @@
+/* Total Sales dan Order */
 .title {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
@@ -20,4 +21,103 @@
 .value {
     font-size: 1.8rem;
     font-weight: bold;
+}
+
+/* Top Selling Style */
+.productList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.productRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 5px 0;
+}
+
+.prodImg {
+    width: 50px;
+    height: 60px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #eee;
+}
+
+.progressContainer {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.95rem;
+}
+
+.progressBar {
+    height: 8px;
+    background: #eee;
+    border-radius: 4px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: #d0f0c0;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+@media (max-width: 768px) {
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    /* FIX: Stat Cards (Collapse menjadi satu kolom) */
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .value {
+        font-size: 1.5rem;
+    }
+
+    /* Top Selling List (Sedikit penyesuaian untuk HP) */
+    .productList {
+        gap: 15px;
+    }
+
+    .prodImg {
+        width: 40px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* Penyesuaian font untuk layar sangat kecil */
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .value {
+        font-size: 1.3rem;
+    }
+
+    .label {
+        font-size: 0.8rem;
+    }
+
+    .prodImg {
+        width: 35px;
+        height: 45px;
+    }
 }

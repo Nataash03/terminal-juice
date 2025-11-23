@@ -1,5 +1,3 @@
-// frontend/app/components/TestimonialCard.tsx
-
 import React from 'react';
 import styles from './TestimonialCard.module.css';
 

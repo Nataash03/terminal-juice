@@ -3,7 +3,7 @@ import styles from './FlavoursPage.module.css';
 import { getProducts, JuiceProduct } from '../services/product.service';
 import JuiceSliderItem from '../components/JuiceSliderItem'; 
 
-// Data untuk Manfaat (Benefits)
+// Data untuk Benefits
 const benefitsData = [
   { name: 'Antioxidants', imagePath: '/images/antioxidants.webp', color: '#ffc0cb' }, // Pink
   { name: 'Electrolytes', imagePath: '/images/electrolytes.png', color: '#b0e0e6' }, // Blue
@@ -16,7 +16,6 @@ export default async function FlavoursPage() {
   // Ambil data produk dari service
   const products: JuiceProduct[] = await getProducts(); 
 
-  // Konten Banner Section tetap menggunakan slide pertama saja untuk saat ini
   const currentSlide = {
     title: (
       <>
@@ -33,14 +32,11 @@ export default async function FlavoursPage() {
     ),
     buttonText: 'Shop Now →',
     buttonLink: '/shop',
-    imageSrc: '/images/juice-bottle-pink.png',
-    imageAlt: 'Fresh juice',
   };
 
 
   return (
     <div className={styles.flavoursPageContainer}>
-      {/* Banner Section - Tetap Sama */}
       <section className={styles.flavourBanner}>
         <div className={styles.bannerContent}>
           <h1 className={styles.bannerTitle}>
@@ -54,16 +50,7 @@ export default async function FlavoursPage() {
           </a>
         </div>
         
-        {/* Konten Visual Banner - Tetap Sama */}
         <div className={styles.bannerVisual}>
-          {/* Aset 1: Background Splash (Lapisan Belakang) */}
-        <img 
-            src="/images/splash.png" 
-            alt="Pink Watercolor Splash Background" 
-            className={`${styles.assetBase} ${styles.splashLayer}`}
-        />
-
-        {/* Aset 2: Gambar Utama (Botol & Buah) */}
         <img 
             src="/images/flavours.png" 
             alt="Main Juice Visual" 
@@ -72,7 +59,6 @@ export default async function FlavoursPage() {
         </div>
       </section>
 
-      {/* Benefits Section - Tetap Sama */}
       <section className={styles.benefitsSection}>
         <h2 className={styles.benefitsTitle}>
           Huge Benefits{' '}

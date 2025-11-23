@@ -3,30 +3,30 @@ const router = express.Router();
 const Order = require('../models/Order');
 const Notification = require('../models/Notification'); 
 const { protect } = require('../middleware/authMiddleware');
+const Product = require('../models/Product');
 
 // 1. POST /api/orders (Membuat Order Baru + Kirim Notifikasi Awal)
 router.post('/', protect, async (req, res) => {
   try {
-    // --- REVISI DI SINI: Ambil field 'notes' dari body ---
     const { items, totalAmount, paymentMethod, notes } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ success: false, message: 'Keranjang kosong' });
     }
 
-    // A. Simpan Order ke Database
+    // Simpan Order ke Database
     const newOrder = new Order({
       user: req.user._id, 
       items,
       totalAmount,
       paymentMethod,
-      notes, // <-- FIELD BARU DISIMPAN DI SINI
+      notes, 
       status: paymentMethod === 'QRIS' ? 'Paid' : 'Pending'
     });
 
     const savedOrder = await newOrder.save();
 
-    // B. OTOMATIS BUAT NOTIFIKASI
+    // OTOMATIS BUAT NOTIFIKASI
     if (req.user._id) {
         // Notif Payment Successful
         await Notification.create({
@@ -77,7 +77,6 @@ router.put('/:id/status', protect, async (req, res) => {
       const { status } = req.body;
       const orderId = req.params.id;
 
-      // Gunakan findByIdAndUpdate untuk bypass validasi pada data lama
       const updatedOrder = await Order.findByIdAndUpdate(
           orderId, 
           { status: status }, 
@@ -120,6 +119,99 @@ router.put('/:id/status', protect, async (req, res) => {
   } catch (error) {
       console.error('Error updating status:', error);
       res.status(500).json({ success: false, message: 'Gagal update status: ' + error.message });
+  }
+});
+
+// 4. GET /api/orders/stats (Mengambil Statistik Penjualan Real-Time)
+router.get('/stats', protect, async (req, res) => {
+  try {
+      if (req.user.role !== 'seller') {
+          return res.status(403).json({ success: false, message: 'Akses ditolak.' });
+      }
+
+      // Hitung Total Sales 
+      const totalSalesResult = await Order.aggregate([
+          { 
+              $match: { 
+                  status: { $nin: ['Cancelled'] } 
+              } 
+          }, 
+          {
+              $group: {
+                  _id: null,
+                  totalSales: { $sum: "$totalAmount" }
+              }
+          }
+      ]);
+
+      // Hitung Total Orders 
+      const totalOrders = await Order.countDocuments({});
+
+      const totalProducts = await Product.countDocuments({});
+
+      const totalSales = totalSalesResult.length > 0 ? totalSalesResult[0].totalSales : 0;
+
+      res.json({
+          success: true,
+          data: {
+              totalSales: totalSales,
+              totalOrders: totalOrders,
+              totalProducts: totalProducts
+          }
+      });
+
+  } catch (error) {
+      console.error('Stats Error:', error);
+      res.status(500).json({ success: false, message: 'Gagal mengambil data statistik.' });
+  }
+});
+
+// 5. GET /api/orders/top-selling (Mengambil Produk Terlaris berdasarkan Quantity)
+router.get('/top-selling', protect, async (req, res) => {
+  try {
+      if (req.user.role !== 'seller') {
+          return res.status(403).json({ success: false, message: 'Akses ditolak.' });
+      }
+
+      const topProducts = await Order.aggregate([
+          { $unwind: "$items" },
+          {
+              $group: {
+                  _id: "$items.id", 
+                  totalQuantitySold: { $sum: "$items.quantity" }
+              }
+          },
+          
+          { $sort: { totalQuantitySold: -1 } },
+          
+          { $limit: 3 },
+          
+          {
+              $lookup: {
+                  from: "products", 
+                  localField: "_id",
+                  foreignField: "category", 
+                  as: "productDetails"
+              }
+          },
+          
+          { $unwind: "$productDetails" },
+          {
+              $project: {
+                  _id: 0,
+                  productId: "$_id",
+                  name: "$productDetails.name",
+                  image: { $arrayElemAt: ["$productDetails.images", 0] }, 
+                  totalSold: "$totalQuantitySold"
+              }
+          }
+      ]);
+
+      res.json({ success: true, data: topProducts });
+
+  } catch (error) {
+      console.error('Top Selling Error:', error);
+      res.status(500).json({ success: false, message: 'Gagal mengambil data produk terlaris.' });
   }
 });
 

@@ -1,4 +1,3 @@
-// frontend/app/page.tsx
 import HeroSection from './components/HeroSection';
 
 const HomePage = () => {

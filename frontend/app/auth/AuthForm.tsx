@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie'; 
 import styles from './AuthForm.module.css';
 
-// Pastikan path gambar ilustrasi benar
 const illustrationSrc = '/images/login-signin.png'; 
 
 // Ambil URL dari env
@@ -14,12 +13,10 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 const AuthForm = () => {
   const router = useRouter();
   
-  // State Toggle: true = Login, false = Register
   const [isLogin, setIsLogin] = useState(false); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  // Form Data
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -38,7 +35,6 @@ const AuthForm = () => {
     setLoading(true);
     setError('');
 
-    // Tentukan URL Backend
     const endpoint = isLogin 
       ? `${baseUrl}/api/users/login`
       : `${baseUrl}/api/users/register`;
@@ -53,25 +49,20 @@ const AuthForm = () => {
       const data = await res.json();
 
       if (data.success) {
-        // 1. Simpan Token & Role ke Cookies (PENTING untuk Middleware)
-        // Expires 1 hari
         Cookies.set('token', data.token, { expires: 1 });
         Cookies.set('user_role', data.user.role, { expires: 1 });
 
-        // 2. Simpan User ke LocalStorage (Untuk keperluan UI Navbar client-side)
         localStorage.setItem('user', JSON.stringify(data.user));
 
-        // 3. Trigger update Navbar (biar berubah jadi profile tanpa refresh)
         window.dispatchEvent(new Event('storage'));
 
-        // 4. ROLE ROUTING (Redirect sesuai jabatan)
         if (data.user.role === 'seller') {
-            router.push('/dashboard/se'); // Arahkan ke Dashboard Seller
+            router.push('/dashboard/se'); 
         } else {
-            router.push('/dashboard'); // Arahkan ke Dashboard User
+            router.push('/dashboard'); 
         }
         
-        router.refresh(); // Refresh agar middleware mengenali cookie baru
+        router.refresh(); 
       } else {
         setError(data.message || 'Terjadi kesalahan.');
       }
@@ -88,7 +79,6 @@ const AuthForm = () => {
       
       {/* KIRI: Ilustrasi */}
       <div className={styles.illustrationSide}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
           src={illustrationSrc} 
           alt="Juice Shop Illustration" 
@@ -107,7 +97,7 @@ const AuthForm = () => {
             className={styles.toggleLink} 
             onClick={() => {
               setIsLogin(!isLogin);
-              setError(''); // Reset error saat ganti mode
+              setError(''); 
             }}
           >
             {isLogin ? ' Sign up' : ' Sign in'}
@@ -118,7 +108,6 @@ const AuthForm = () => {
 
         <form onSubmit={handleSubmit}>
           
-          {/* Field Khusus REGISTER (Disembunyikan saat Login) */}
           {!isLogin && (
             <>
               <div className={styles.inputGroup}>
@@ -149,7 +138,7 @@ const AuthForm = () => {
             </>
           )}
 
-          {/* Email (Selalu Muncul) */}
+          {/* Email */}
           <div className={styles.inputGroup}>
             <label className={styles.label}>Email Address</label>
             <input 
@@ -163,7 +152,7 @@ const AuthForm = () => {
             />
           </div>
 
-          {/* Password (Selalu Muncul) */}
+          {/* Password */}
           <div className={styles.inputGroup}>
             <label className={styles.label}>Password</label>
             <input 

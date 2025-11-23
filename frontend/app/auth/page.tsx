@@ -10,7 +10,6 @@ export default function AuthPage() {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
-        // Background Hijau Muda Cerah (Sesuai Screenshot 2)
         backgroundColor: '#F7FDE6' 
       }}
     >

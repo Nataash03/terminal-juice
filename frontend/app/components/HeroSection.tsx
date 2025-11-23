@@ -1,4 +1,3 @@
-// frontend/app/components/HeroSection.tsx
 import React from 'react';
 import styles from './HeroSection.module.css';
 
@@ -20,7 +19,7 @@ const HeroSection: React.FC = () => {
         </a>
       </div>
 
-      {/* Bagian Kanan: Gambar */}
+      {/* Gambar */}
       <div className={styles.imageWrapper}>
         <img 
           src="/images/splash-screen.png" 

@@ -8,31 +8,13 @@ import styles from './ShopPage.module.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  imageSrc: string;
-}
-
-interface PopulatedCategory {
-  _id: string;
-  name: string;
-  slug: string;
-}
+// --- DEFINISI TIPE ---
+interface CartItem { id: string; name: string; price: number; quantity: number; imageSrc: string; }
+interface PopulatedCategory { _id: string; name: string; slug: string; }
 
 interface BackendProduct {
-    _id: string;
-    name: string;
-    price: number;
-    category: PopulatedCategory;
-    images: string[];
-    slug: string;
-    stock: number;
-    isActive: boolean;
-    tags: string[];
-    description: string;
+    _id: string; name: string; price: number; category: PopulatedCategory; images: string[];
+    slug: string; stock: number; isActive: boolean; tags: string[]; description: string;
 }
 
 type FilterType = 'Best Seller' | 'All Menu' | 'Other';
@@ -55,16 +37,13 @@ const ShopPage: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]); 
   const [isCartLoaded, setIsCartLoaded] = useState(false);
 
-  // 1. useEffect FETCH DATA & LOAD CART
+  // FETCH DATA & LOAD CART
   useEffect(() => {
     const initPage = async () => {
-      // A. Fetch Products
       try {
         const response = await fetch(`${baseUrl}/api/products`);
-        
         if (!response.ok) throw new Error('Network response was not ok');
         const result = await response.json();
-        
         setProducts(result.data || []); 
       } catch (err) {
         setError('Failed to fetch products from backend.');
@@ -73,21 +52,14 @@ const ShopPage: React.FC = () => {
         setLoading(false);
       }
     };
-
-    // Jalankan Fetch
     initPage();
 
-    // B. Load Cart dari LocalStorage
     const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
-    }
-
-    // C. Tandai bahwa loading selesai
+    if (storedCart) setCart(JSON.parse(storedCart));
     setIsCartLoaded(true); 
   }, []);
 
-  // 2. useEffect SIMPAN CART
+  // SIMPAN CART
   useEffect(() => {
     if (isCartLoaded) {
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -96,9 +68,7 @@ const ShopPage: React.FC = () => {
 
   const handleFilterClick = (filter: FilterType) => {
     setActiveFilter(filter);
-    if (filter !== 'Other') {
-      setActiveSubFilter('All');
-    }
+    if (filter !== 'Other') setActiveSubFilter('All');
   };
 
   const handleSubFilterClick = (subFilter: SubFilterType) => {
@@ -112,7 +82,7 @@ const ShopPage: React.FC = () => {
     event.stopPropagation();
     const fullProductDetail: ProductForModal = {
       id: product._id, 
-      name: product.name,
+      name: product.name, 
       price: product.price,
       imageSrc: (product.images && product.images.length > 0) ? product.images[0] : '/images/placeholder-jus.jpg',
       description: product.description,
@@ -123,26 +93,16 @@ const ShopPage: React.FC = () => {
     setSelectedProduct(fullProductDetail);
   };
 
-  const handleCloseModal = () => {
-    setSelectedProduct(null);
-  };
+  const handleCloseModal = () => { setSelectedProduct(null); };
 
   const handleAddToCart = (product: ProductForModal, quantity: number) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex((item) => item.id === product.id);
-      
       let updatedCart;
       if (existingItemIndex >= 0) {
-        updatedCart = [...prevCart];
-        updatedCart[existingItemIndex].quantity += quantity;
+        updatedCart = [...prevCart]; updatedCart[existingItemIndex].quantity += quantity;
       } else {
-        const newItem: CartItem = {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          quantity: quantity,
-          imageSrc: product.imageSrc
-        };
+        const newItem: CartItem = { id: product.id, name: product.name, price: product.price, quantity: quantity, imageSrc: product.imageSrc };
         updatedCart = [...prevCart, newItem];
       }
       return updatedCart;
@@ -150,38 +110,61 @@ const ShopPage: React.FC = () => {
     handleCloseModal();
   };
 
-  // Logic Order Now
   const handleOrderNow = (product: ProductForModal, quantity: number) => {
     handleAddToCart(product, quantity);
-    setTimeout(() => {
-      router.push('/payment'); 
-    }, 100);
+    setTimeout(() => { router.push('/payment'); }, 100);
   };
 
   const handleGoToCheckout = () => {
-    if (cart?.length > 0) {
-      router.push('/cart');
-    }
+    if (cart?.length > 0) { router.push('/cart'); }
   };
 
   const filteredProducts = products.filter((product) => {
-    const categoryName = product.category && typeof product.category === 'object' 
-        ? product.category.name 
-        : String(product.category);
+    const categoryName = product.category?.name?.toUpperCase(); 
     
-    if (activeFilter === 'Best Seller') return product.tags && product.tags.includes('best_seller');
-    if (activeFilter === 'All Menu') return categoryName === 'Fruit Juice';
-    if (activeFilter === 'Other') {
-      if (activeSubFilter === 'All') return categoryName !== 'Fruit Juice';
-      return categoryName === activeSubFilter;
+    if (!categoryName) return false; 
+    
+    // 1. Definisikan Produk Utama (Jus)
+    const isMainJuice = categoryName === 'FRUIT JUICE';
+
+    // 2. Filter Best Seller 
+    if (activeFilter === 'Best Seller') {
+      return product.tags && product.tags.includes('best_seller');
     }
+    
+    // 3. ALL MENU CHECK (Hanya tampilkan produk JUS utama)
+    if (activeFilter === 'All Menu') {
+      return isMainJuice; 
+    }
+    
+    // 4. OTHER CHECK (Hanya tampilkan produk NON-JUS)
+    if (activeFilter === 'Other') {
+      
+      // Jika subfilter 'All' (dari Other) diklik, tampilkan SEMUA yang BUKAN JUS UTAMA
+      if (activeSubFilter === 'All') return !isMainJuice; 
+      
+      // Jika subfilter spesifik diklik - gunakan EXACT match
+      if (activeSubFilter === 'Mineral Water') {
+        return categoryName === 'MINERAL WATER';
+      }
+      
+      if (activeSubFilter === 'Fruit') {
+        return categoryName === 'FRUIT';
+      }
+      
+      if (activeSubFilter === 'Snacks') {
+        return categoryName === 'SNACKS';
+      }
+      
+      return false; 
+    }
+    
     return true; 
   });
 
-  if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>Loading products...</div>;
-  if (error) return <div style={{ padding: '100px', textAlign: 'center', color: 'red' }}>{error}</div>;
+  if (loading) return <div className={styles.loadingMessage}>Loading products...</div>;
+  if (error) return <div className={styles.errorMessage}>{error}</div>;
 
-  // Data Sub-Filter Statis Asli Anda
   const otherSubCategories: SubFilterType[] = ['All', 'Mineral Water', 'Fruit', 'Snacks'];
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -230,36 +213,45 @@ const ShopPage: React.FC = () => {
           )}
         </div>
 
+        {/* STRUKTUR GRID & EMPTY STATE */}
         <div className={styles.productGrid}>
-          {filteredProducts.map((product) => (
-            <div
-              key={product._id}
-              onClick={(e) => handleProductCardClick(e, product)} 
-              style={{ cursor: 'pointer' }}
-            >
-              <ProductCard
-                id={product._id}
-                name={product.name}
-                price={product.price}
-                // Safety check untuk images
-                imageSrc={(product.images && product.images.length > 0) ? product.images[0] : '/images/placeholder-jus.jpg'}
-                bgColor={'#f0f0f0'}
-              />
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div
+                key={product._id}
+                onClick={(e) => handleProductCardClick(e, product)} 
+                className={styles.clickableCard}
+              >
+                <ProductCard
+                  id={product._id}
+                  name={product.name}
+                  price={product.price}
+                  imageSrc={(product.images && product.images.length > 0) ? product.images[0] : '/images/placeholder-jus.jpg'}
+                  bgColor={'#f0f0f0'}
+                />
+              </div>
+            ))
+          ) : (
+            <div className={styles.emptyStateMessage}> 
+              Tidak ada produk ditemukan.
+              <p className={styles.emptyStateSubtext}>Coba ganti filter kategori!</p>
             </div>
-          ))}
+          )}
         </div>
-
-        {filteredProducts.length === 0 && (
-          <div style={{ textAlign: 'center', marginTop: '40px', fontSize: '1.2em', color: '#666' }}>
-            Tidak ada produk ditemukan.
+        
+        {/* SLIDER CONTROLS */}
+        {filteredProducts.length > 0 && (
+          <div className={styles.sliderControls}>
+            
+            <button 
+                className={styles.exploreMoreButton}
+                onClick={() => handleFilterClick('All Menu')}
+            >
+                Explore More
+            </button>
+            
           </div>
         )}
-
-        <div className={styles.sliderControls}>
-          <button className={styles.arrowButton}>&lt;</button>
-          <button className={styles.exploreMoreButton}>Explore More</button>
-          <button className={styles.arrowButton}>&gt;</button>
-        </div>
       </section>
 
       <ProductDetailModal
@@ -272,34 +264,11 @@ const ShopPage: React.FC = () => {
       {/* TOMBOL CHECKOUT MELAYANG */}
       {totalItems > 0 && (
         <div 
-            onClick={handleGoToCheckout} 
-            style={{
-                position: 'fixed',
-                bottom: '30px',
-                right: '30px',
-                backgroundColor: '#4CAF50',
-                color: 'white',
-                padding: '15px 25px',
-                borderRadius: '50px',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-                cursor: 'pointer',
-                fontWeight: 'bold',
-                fontSize: '1.1rem',
-                zIndex: 1000,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                transition: 'transform 0.2s'
-            }}
+            onClick={handleGoToCheckout}
+            className={styles.floatingCheckoutButton} 
         >
             <span>🛒 Checkout</span>
-            <span style={{ 
-                backgroundColor: 'white', 
-                color: '#4CAF50', 
-                borderRadius: '50%', 
-                padding: '2px 8px', 
-                fontSize: '0.9rem' 
-            }}>
+            <span className={styles.cartItemCount}>
                 {totalItems}
             </span>
         </div>

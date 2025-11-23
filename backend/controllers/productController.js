@@ -1,12 +1,12 @@
 const Product = require('../models/Product');
 const { determineCategory } = require('../config/categoryMap'); 
+const slugify = require('slugify'); 
 
 // @desc    Ambil semua produk
 // @route   GET /api/products
 const getProducts = async (req, res) => {
   try {
-    // Gunakan populate untuk mengambil detail kategori (nama, slug, dll)
-    const products = await Product.find({}).populate('category');
+    const products = await Product.find({ isActive: true }).populate('category').populate('seller');
     res.json({ success: true, data: products });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -17,14 +17,19 @@ const getProducts = async (req, res) => {
 // @route   GET /api/products/:id
 const getProductById = async (req, res) => {
   try {
-    // Gunakan populate juga untuk detail produk
-    const product = await Product.findById(req.params.id).populate('category');
+    const product = await Product.findById(req.params.id)
+                                .populate('category')
+                                .populate('seller'); 
+
     if (product) {
       res.json({ success: true, data: product });
     } else {
       res.status(404).json({ success: false, message: 'Produk tidak ditemukan' });
     }
   } catch (error) {
+    if (error.name === 'CastError') {
+        return res.status(400).json({ success: false, message: 'ID Produk tidak valid.' });
+    }
     res.status(500).json({ success: false, message: error.message });
   }
 };
@@ -40,7 +45,10 @@ const createProduct = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Nama, harga, dan stok wajib diisi.' });
     }
 
-    // 2. Tentukan Kategori ID Otomatis
+    // 2. Buat Slug Otomatis
+    const productSlug = slugify(name, { lower: true, strict: true });
+
+    // 3. Tentukan Kategori ID Otomatis
     const categoryId = determineCategory(name); 
 
     const product = new Product({
@@ -49,9 +57,10 @@ const createProduct = async (req, res) => {
       price,
       stock,
       images, 
-      category: categoryId, // ID KATEGORI OTOMATIS
-      seller: req.user._id,  // SIMPAN ID SELLER DARI TOKEN
-      isActive: true, // Default aktif
+      category: categoryId, // KATEGORI OTOMATIS
+      seller: req.user._id,  // WAJIB: ID SELLER
+      isActive: true, 
+      slug: productSlug, // WAJIB: SLUG
     });
 
     const createdProduct = await product.save();
@@ -68,11 +77,18 @@ const updateProduct = async (req, res) => {
   try {
     const { name, description, price, stock, images } = req.body;
     
+    // Siapkan objek update, hanya update yang ada di body
+    const updateFields = { name, description, price, stock, images };
+    
+    if (name) {
+        updateFields.slug = slugify(name, { lower: true, strict: true });
+    }
+    
     // Gunakan findByIdAndUpdate untuk kemudahan dan menghindari error validasi
     const product = await Product.findByIdAndUpdate(
         req.params.id, 
-        { name, description, price, stock, images },
-        { new: true, runValidators: true } // Return data baru & jalankan validasi
+        updateFields, // Gunakan objek update yang sudah diolah
+        { new: true, runValidators: true } 
     );
 
     if (product) {
@@ -81,7 +97,8 @@ const updateProduct = async (req, res) => {
       res.status(404).json({ success: false, message: 'Produk tidak ditemukan' });
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Product Update Error:', error);
+    res.status(500).json({ success: false, message: 'Gagal mengupdate produk: ' + error.message });
   }
 };
 
@@ -89,7 +106,6 @@ const updateProduct = async (req, res) => {
 // @route   DELETE /api/products/:id
 const deleteProduct = async (req, res) => {
   try {
-    // Menggunakan deleteOne untuk memastikan penghapusan
     const result = await Product.deleteOne({ _id: req.params.id });
 
     if (result.deletedCount > 0) {
@@ -102,7 +118,6 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-
 // Export semua fungsi
 module.exports = {
   getProducts,
@@ -110,5 +125,4 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
-  cleanupOldProducts // <--- TAMBAHKAN INI DI EXPORT
 };

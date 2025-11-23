@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Receipt.module.css';
 
-// Path ke gambar yang ada di folder public
 const checkIconSrc = '/images/checklist.png';
 
 interface OrderData {
@@ -29,7 +28,7 @@ const ReceiptPage = () => {
     if (data) {
       setOrder(JSON.parse(data));
     } else {
-      // Kalau gak ada data (user iseng buka link langsung), balikin ke home
+      // Kalau gak ada data, balikin ke home
       router.push('/');
     }
   }, [router]);
@@ -57,7 +56,7 @@ const ReceiptPage = () => {
         <h1 className={styles.title}>Payment Success!</h1>
         <p className={styles.subtitle}>Thank you for your order</p>
 
-        {/* Box Detail (Warna Abu Soft) */}
+        {/* Box Detail */}
         <div className={styles.detailsBox}>
             
             {/* Baris Info */}
