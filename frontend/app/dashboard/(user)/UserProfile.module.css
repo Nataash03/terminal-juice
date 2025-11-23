@@ -1,0 +1,35 @@
+.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 30px;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.fullWidth {
+    grid-column: 1 / -1;
+}
+
+.input {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+.saveBtn {
+    grid-column: 1 / -1;
+    width: 200px;
+    margin: 30px auto 0;
+    padding: 12px;
+    background: linear-gradient(90deg, #ffe4e1 0%, #ffb6c1 100%);
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+}

@@ -2,9 +2,12 @@
 import React from 'react';
 import styles from './HeroSection.module.css';
 
+
 const HeroSection: React.FC = () => {
   return (
-    <section className={styles.heroContainer}>
+    <section className={styles.mainHeroSection}>
+      
+      {/* Bagian Kiri: Teks */}
       <div className={styles.content}>
         <h1 className={styles.mainTitle}>
           Savour <span className={styles.highlightItalic}>the juicy essence</span> of fruit in every sip.
@@ -12,11 +15,12 @@ const HeroSection: React.FC = () => {
         <p className={styles.tagline}>
           Taste nature's best in every drop with real fruit and vibrant flavour
         </p>
-        <a href="/shop" className={styles.sipFreshButton}>
+        <a href="/flavours" className={styles.sipFreshButton}>
           Sip Fresh →
         </a>
       </div>
 
+      {/* Bagian Kanan: Gambar */}
       <div className={styles.imageWrapper}>
         <img 
           src="/images/splash-screen.png" 
@@ -30,6 +34,7 @@ const HeroSection: React.FC = () => {
           </div>
         </div>
       </div>
+      
     </section>
   );
 };

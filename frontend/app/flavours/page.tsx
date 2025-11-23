@@ -1,14 +1,10 @@
-// frontend/app/flavours/page.tsx
 import React from 'react';
 import styles from './FlavoursPage.module.css';
 import { getProducts, JuiceProduct } from '../services/product.service';
-// Hapus import ProductCard karena kita hanya menggunakan JuiceSliderItem
-// import ProductCard from '../components/ProductCard'; 
-import JuiceSliderItem from '../components/JuiceSliderItem'; // <-- Pertahankan ini
+import JuiceSliderItem from '../components/JuiceSliderItem'; 
 
 // Data untuk Manfaat (Benefits)
 const benefitsData = [
-  // Asumsi: Anda memiliki gambar di public/images/benefits/
   { name: 'Antioxidants', imagePath: '/images/antioxidants.webp', color: '#ffc0cb' }, // Pink
   { name: 'Electrolytes', imagePath: '/images/electrolytes.png', color: '#b0e0e6' }, // Blue
   { name: 'Prebiotic', imagePath: '/images/prebiotic.png', color: '#c0f0c0' },    // Green
@@ -60,18 +56,19 @@ export default async function FlavoursPage() {
         
         {/* Konten Visual Banner - Tetap Sama */}
         <div className={styles.bannerVisual}>
-          <img 
-            src="/images/juice-bottle-design.png" 
-            alt="Juice product design elements" 
-            className={styles.bannerImage}
-            style={{ 
-              maxWidth: '600px',
-              position: 'absolute',
-              right: '-100px',
-              top: '-50px',
-              transform: 'scale(1.2)'
-            }}
-          />
+          {/* Aset 1: Background Splash (Lapisan Belakang) */}
+        <img 
+            src="/images/splash.png" 
+            alt="Pink Watercolor Splash Background" 
+            className={`${styles.assetBase} ${styles.splashLayer}`}
+        />
+
+        {/* Aset 2: Gambar Utama (Botol & Buah) */}
+        <img 
+            src="/images/flavours.png" 
+            alt="Main Juice Visual" 
+            className={`${styles.assetBase} ${styles.mainVisual}`}
+        />
         </div>
       </section>
 
@@ -110,10 +107,7 @@ export default async function FlavoursPage() {
         </div>
       </section>
 
-      {/* Product Catalogue / Juice Slider (REVISI) */}
-      {/* Menggunakan JuiceSliderItem untuk menampilkan daftar produk di section ini */}
       <section className={styles.juiceSliderSection}>
-        {/* Menggunakan judul yang Anda sebutkan: All Our Delicious Juices */}
         <h2 className={styles.catalogueTitle}>All Our Delicious Juices</h2> 
         
         {/* Container untuk Horizontal Scroll */}
@@ -130,7 +124,6 @@ export default async function FlavoursPage() {
         </div>
       </section>
       
-      {/* HAPUS: Section Product Catalogue (Grid Kartu Penuh) yang ada sebelumnya */}
     </div>
   );
 }

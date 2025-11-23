@@ -1,12 +1,11 @@
 /* frontend/app/flavours/FlavoursPage.module.css */
 
-
-
 /* Banner Section */
 .flavourBanner {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 60px 80px;
+    /* Tambah padding kiri agar teks lebih aman */
+    padding: 60px 80px 60px 120px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -15,12 +14,14 @@
     margin-top: 40px;
     position: relative;
     overflow: hidden;
+    height: 450px;
+    /* FIX: Tinggi tetap */
 }
 
 .bannerContent {
     flex: 1;
     max-width: 500px;
-    z-index: 2;
+    z-index: 20;
 }
 
 .bannerTitle {
@@ -69,19 +70,39 @@
 }
 
 .bannerVisual {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex: 1.5;
     position: relative;
+    height: 100%;
+    overflow: hidden;
+    justify-content: flex-end;
 }
 
-.bannerImage {
-    width: 100%;
-    max-width: 400px;
+.assetBase {
+    position: absolute;
     height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+}
+
+/* Layer 1: Splash Background */
+.splashLayer {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    z-index: 1;
+    opacity: 0.6;
+}
+
+/* Layer 2: Visual Utama */
+.mainVisual {
+    width: 90%;
+    max-width: 500px;
+    top: 50%;
+    right: 5%;
+    z-index: 10;
+    transform: translate(0, -50%) scale(0.9);
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.2));
 }
 
 /* Benefits Section */

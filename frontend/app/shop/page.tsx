@@ -6,10 +6,8 @@ import ProductCard from '../components/ProductCard';
 import ProductDetailModal, { ProductForModal } from '../components/ProductDetailModal';
 import styles from './ShopPage.module.css'; 
 
-// 🚨 URL API BACKEND KAMU
-const API_URL = 'http://localhost:5001/api/products'; 
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
-// --- DEFINISI TIPE ---
 interface CartItem {
   id: string;
   name: string;
@@ -57,14 +55,16 @@ const ShopPage: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]); 
   const [isCartLoaded, setIsCartLoaded] = useState(false);
 
-  // 1. useEffect FETCH DATA & LOAD CART (Digabung biar rapi)
+  // 1. useEffect FETCH DATA & LOAD CART
   useEffect(() => {
     const initPage = async () => {
       // A. Fetch Products
       try {
-        const response = await fetch(API_URL);
+        const response = await fetch(`${baseUrl}/api/products`);
+        
         if (!response.ok) throw new Error('Network response was not ok');
         const result = await response.json();
+        
         setProducts(result.data || []); 
       } catch (err) {
         setError('Failed to fetch products from backend.');
@@ -87,7 +87,7 @@ const ShopPage: React.FC = () => {
     setIsCartLoaded(true); 
   }, []);
 
-  // 2. useEffect SIMPAN CART (Hanya jalan setelah cart selesai dimuat)
+  // 2. useEffect SIMPAN CART
   useEffect(() => {
     if (isCartLoaded) {
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -114,7 +114,7 @@ const ShopPage: React.FC = () => {
       id: product._id, 
       name: product.name,
       price: product.price,
-      imageSrc: product.images[0] || '/images/placeholder-jus.jpg',
+      imageSrc: (product.images && product.images.length > 0) ? product.images[0] : '/images/placeholder-jus.jpg',
       description: product.description,
       stock: product.stock,
       category: product.category?.name ?? 'Unknown',
@@ -127,7 +127,6 @@ const ShopPage: React.FC = () => {
     setSelectedProduct(null);
   };
 
-  // Logic Add To Cart (TOMBOL KUNING)
   const handleAddToCart = (product: ProductForModal, quantity: number) => {
     setCart((prevCart) => {
       const existingItemIndex = prevCart.findIndex((item) => item.id === product.id);
@@ -151,16 +150,14 @@ const ShopPage: React.FC = () => {
     handleCloseModal();
   };
 
-  // Logic Order Now (TOMBOL ORANGE)
+  // Logic Order Now
   const handleOrderNow = (product: ProductForModal, quantity: number) => {
-  handleAddToCart(product, quantity);
-  
-  setTimeout(() => {
-    router.push('/payment'); 
-  }, 100);
-};
+    handleAddToCart(product, quantity);
+    setTimeout(() => {
+      router.push('/payment'); 
+    }, 100);
+  };
 
-  // Navigasi Tombol Floating
   const handleGoToCheckout = () => {
     if (cart?.length > 0) {
       router.push('/cart');
@@ -184,6 +181,7 @@ const ShopPage: React.FC = () => {
   if (loading) return <div style={{ padding: '100px', textAlign: 'center' }}>Loading products...</div>;
   if (error) return <div style={{ padding: '100px', textAlign: 'center', color: 'red' }}>{error}</div>;
 
+  // Data Sub-Filter Statis Asli Anda
   const otherSubCategories: SubFilterType[] = ['All', 'Mineral Water', 'Fruit', 'Snacks'];
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -216,6 +214,7 @@ const ShopPage: React.FC = () => {
             </button>
           </div>
 
+          {/* Submenu Kategori Statis Asli */}
           {activeFilter === 'Other' && (
             <div className={styles.submenuContainer}>
               {otherSubCategories.map((subFilter) => (
@@ -242,7 +241,8 @@ const ShopPage: React.FC = () => {
                 id={product._id}
                 name={product.name}
                 price={product.price}
-                imageSrc={product.images[0]}
+                // Safety check untuk images
+                imageSrc={(product.images && product.images.length > 0) ? product.images[0] : '/images/placeholder-jus.jpg'}
                 bgColor={'#f0f0f0'}
               />
             </div>
@@ -272,7 +272,7 @@ const ShopPage: React.FC = () => {
       {/* TOMBOL CHECKOUT MELAYANG */}
       {totalItems > 0 && (
         <div 
-            onClick={handleGoToCheckout}
+            onClick={handleGoToCheckout} 
             style={{
                 position: 'fixed',
                 bottom: '30px',

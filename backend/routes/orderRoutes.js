@@ -1,38 +1,125 @@
 const express = require('express');
 const router = express.Router();
-const Order = require('../models/Order'); 
+const Order = require('../models/Order');
+const Notification = require('../models/Notification'); 
+const { protect } = require('../middleware/authMiddleware');
 
-// POST /api/orders (Nanti prefix '/api/orders' diatur di server.js)
-router.post('/', async (req, res) => {
+// 1. POST /api/orders (Membuat Order Baru + Kirim Notifikasi Awal)
+router.post('/', protect, async (req, res) => {
   try {
-    const { items, totalAmount, paymentMethod } = req.body;
+    // --- REVISI DI SINI: Ambil field 'notes' dari body ---
+    const { items, totalAmount, paymentMethod, notes } = req.body;
 
-    // Validasi
     if (!items || items.length === 0) {
       return res.status(400).json({ success: false, message: 'Keranjang kosong' });
     }
 
+    // A. Simpan Order ke Database
     const newOrder = new Order({
+      user: req.user._id, 
       items,
       totalAmount,
       paymentMethod,
+      notes, // <-- FIELD BARU DISIMPAN DI SINI
       status: paymentMethod === 'QRIS' ? 'Paid' : 'Pending'
     });
 
     const savedOrder = await newOrder.save();
 
-    res.status(201).json({ 
-      success: true, 
-      message: 'Order berhasil dibuat!', 
-      data: savedOrder 
-    });
+    // B. OTOMATIS BUAT NOTIFIKASI
+    if (req.user._id) {
+        // Notif Payment Successful
+        await Notification.create({
+            user: req.user._id,
+            title: 'Payment Successful', 
+            message: `Payment of Rp ${totalAmount.toLocaleString('id-ID')} for order #${savedOrder._id.toString().slice(-6).toUpperCase()} has been received.`,
+            type: 'success',
+            isRead: false
+        });
+
+        // Notif Order Process
+        await Notification.create({
+            user: req.user._id,
+            title: 'Your Order is being processed', 
+            message: `Order #${savedOrder._id.toString().slice(-6).toUpperCase()} is in the kitchen.`,
+            type: 'process',
+            isRead: false
+        });
+    }
+
+    res.status(201).json({ success: true, message: 'Order berhasil dibuat!', data: savedOrder });
 
   } catch (error) {
     console.error('Error creating order:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Gagal membuat order: ' + error.message 
-    });
+    res.status(500).json({ success: false, message: 'Gagal membuat order: ' + error.message });
+  }
+});
+
+// 2. GET /api/orders (Mengambil Riwayat Order User Login)
+router.get('/', protect, async (req, res) => {
+  try {
+    let query = { user: req.user._id };
+    if (req.user.role === 'seller') {
+        // Seller melihat semua order yang valid (punya user ID)
+        query = {}; 
+    }
+    const orders = await Order.find(query).sort({ createdAt: -1 });
+    res.json({ success: true, data: orders });
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ success: false, message: 'Gagal ambil data' });
+  }
+});
+
+// 3. PUT /api/orders/:id/status (Seller Update Status Order)
+router.put('/:id/status', protect, async (req, res) => {
+  try {
+      const { status } = req.body;
+      const orderId = req.params.id;
+
+      // Gunakan findByIdAndUpdate untuk bypass validasi pada data lama
+      const updatedOrder = await Order.findByIdAndUpdate(
+          orderId, 
+          { status: status }, 
+          { new: true }
+      );
+
+      if (!updatedOrder) {
+          return res.status(404).json({ success: false, message: 'Order tidak ditemukan' });
+      }
+
+      // LOGIKA NOTIFIKASI
+      if (updatedOrder.user) { 
+          if (status === 'Ready') {
+              await Notification.create({
+                  user: updatedOrder.user, 
+                  title: 'Your Order is Ready! 🥤',
+                  message: `Order #${updatedOrder._id.toString().slice(-6).toUpperCase()} is ready!`,
+                  type: 'ready',
+                  isRead: false
+              });
+          }
+
+          if (status === 'Completed') {
+               await Notification.create({
+                  user: updatedOrder.user,
+                  title: 'Order Completed',
+                  message: `Thank you for purchasing Order #${updatedOrder._id.toString().slice(-6).toUpperCase()}.`,
+                  type: 'success',
+                  isRead: false
+              });
+          }
+      } 
+
+      res.json({
+          success: true,
+          message: `Status updated to ${status}`,
+          data: updatedOrder
+      });
+
+  } catch (error) {
+      console.error('Error updating status:', error);
+      res.status(500).json({ success: false, message: 'Gagal update status: ' + error.message });
   }
 });
 

@@ -1,0 +1,159 @@
+/* Header */
+.header {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #1a1a1a;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Grid Layout Card */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed #eee;
+}
+
+.orderId {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.time {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 2px;
+}
+
+/* Status Badge */
+.badge {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.badgePending {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1px solid #ffe0b2;
+}
+
+.badgePaid {
+    background: #e3f2fd;
+    color: #0d47a1;
+    border: 1px solid #bbdefb;
+}
+
+/* QRIS */
+.badgeReady {
+    background: #fce4ec;
+    color: #c2185b;
+    border: 1px solid #f8bbd0;
+}
+
+/* Pink */
+.badgeCompleted {
+    background: #e8f5e9;
+    color: #1b5e20;
+    border: 1px solid #c8e6c9;
+}
+
+/* Items List */
+.items {
+    margin-bottom: 20px;
+}
+
+.itemRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #d63384;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Action Buttons */
+.actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btnAction {
+    flex: 1;
+    padding: 12px;
+    border-radius: 50px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: transform 0.1s;
+}
+
+.btnAction:active {
+    transform: scale(0.98);
+}
+
+/* Tombol Pink (Mark as Ready) */
+.btnReady {
+    background: linear-gradient(90deg, #ffe4e1 0%, #ffb6c1 100%);
+    color: #000;
+    box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+}
+
+/* Tombol Hijau (Complete) */
+.btnComplete {
+    background: #d1fae5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+}
+
+/* Tombol Abu (Disabled) */
+.btnDisabled {
+    background: #f5f5f5;
+    color: #aaa;
+    cursor: not-allowed;
+}

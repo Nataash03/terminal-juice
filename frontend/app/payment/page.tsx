@@ -1,8 +1,12 @@
-'use client';
+'use client'; 
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './Payment.module.css';
+import Cookies from 'js-cookie'; 
+import styles from './Payment.module.css'; // Pastikan CSS Module terimport
+
+// Ambil URL dari Environment Variable
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
 interface CartItem {
   id: string;
@@ -17,11 +21,15 @@ const PaymentPage = () => {
   const [paymentMethod, setPaymentMethod] = useState<'QRIS' | 'Cash'>('QRIS');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [orderNotes, setOrderNotes] = useState('');
 
   // Load Cart dari LocalStorage
   useEffect(() => {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) setCartItems(JSON.parse(storedCart));
+    
+    const token = Cookies.get('token');
+    if (!token) router.push('/auth');
   }, []);
 
   // Hitung Total
@@ -30,33 +38,35 @@ const PaymentPage = () => {
   // Logic Bayar
   const handlePayNow = async () => {
     setLoading(true);
+    const token = Cookies.get('token'); 
+
     try {
-      const response = await fetch('http://localhost:5001/api/orders', {
+      const response = await fetch(`${baseUrl}/api/orders`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` 
+        },
         body: JSON.stringify({
           items: cartItems,
           totalAmount,
-          paymentMethod
+          paymentMethod,
+          notes: orderNotes 
         })
       });
 
       const result = await response.json();
+      
       if (result.success) {
-        // 1. Simpan data order yang sukses ke LocalStorage buat ditampilkan di Struk
         localStorage.setItem('lastOrder', JSON.stringify(result.data));
-        
-        // 2. Bersihkan keranjang belanja
         localStorage.removeItem('cart'); 
-        
-        // 3. Lempar ke halaman Struk
         router.push('/receipt'); 
       } else {
-        alert('Gagal: ' + result.message);
+        alert('Gagal: ' + (result.message || 'Terjadi kesalahan saat memproses order.'));
       }
     } catch (error) {
       console.error(error);
-      alert('Error koneksi backend. Cek apakah server jalan di port 5001?');
+      alert('Gagal menghubungi server. Pastikan backend berjalan.');
     } finally {
       setLoading(false);
     }
@@ -96,6 +106,16 @@ const PaymentPage = () => {
         </div>
       </div>
 
+      {/* Notes */}
+      <div className={styles.sectionTitle} style={{marginTop: '40px'}}>Special Requests</div>
+      <textarea
+        placeholder="Contoh: Tolong jusnya tanpa es, atau ditunggu di TSpace.."
+        value={orderNotes}
+        onChange={(e) => setOrderNotes(e.target.value)}
+        rows={3}
+        className={styles.notesTextarea} 
+      />
+
       {/* Order Summary */}
       <div className={styles.summaryCard}>
         <h3>Order Summary</h3>
@@ -103,27 +123,22 @@ const PaymentPage = () => {
         {cartItems.map((item) => (
             <div 
                 key={item.id} 
-                className={styles.itemRow}
-                style={{ 
-                    display: 'flex', 
-                    justifyContent: 'space-between', 
-                    marginBottom: '10px',
-                    alignItems: 'center'
-                }}
+                className={styles.itemRow} 
             >
-               <span>{item.quantity}x {item.name}</span>
-               <span style={{ fontWeight: 'bold' }}>
-                 Rp.{(item.price * item.quantity).toLocaleString('id-ID')}
-               </span>
+                <span>{item.quantity} x {item.name}</span>
+                <span className={styles.totalPrice} style={{ textAlign: 'right' }}></span>
+                <span style={{ fontWeight: 'bold' }}>
+                  Rp. {(item.price * item.quantity).toLocaleString('id-ID')}
+                </span>
             </div>
         ))}
         
         <hr style={{ margin: '20px 0', border: '0', borderTop: '1px solid #eee' }}/>
         
         <div className={styles.totalRow}>
-          <span>Total</span>
-          <span className={styles.totalPrice}>
-            Rp.{totalAmount.toLocaleString('id-ID')}
+          <span>Total </span> 
+          <span className={styles.totalPrice} style={{ textAlign: 'right' }}>
+            {`Rp. ${totalAmount.toLocaleString('id-ID')}`}
           </span>
         </div>
 

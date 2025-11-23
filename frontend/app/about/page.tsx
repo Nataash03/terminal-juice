@@ -93,14 +93,14 @@ export default function AboutPage() {
         <div className={styles.whoLeft}>
           <h1>Who we are?</h1>
           <p>
-          We’re a team of four students coding our way through this UAS project. Our website isn’t <strong>ju(ice)st</strong> functional—it’s crafted with <strong>creativity, teamwork, and a splash of fun!</strong>
+          We’re a team of four students coding our way through this project. Our website isn’t <strong>ju(ice)st</strong> functional—it’s crafted with <strong>creativity, teamwork, and a splash of fun!</strong>
           </p>
           <p>
             Every bottle tells a story of dedication, sustainability, and a genuine love for nature's bounty. We're not just making juice - we're crafting experiences that brighten your day, one sip at a time.
           </p>
         </div>
         <div className={styles.whoRight}>
-          <img src="/images/who-are-we.jpg" alt="Fruits" className={styles.whoImg} />
+          <img src="/images/who-are-we.png" alt="Fruits" className={styles.whoImg} />
         </div>
       </section>
 

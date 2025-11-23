@@ -1,0 +1,141 @@
+/* Header Section */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.filterGroup {
+    display: flex;
+    gap: 10px;
+}
+
+.filterBtn {
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.activeFilter {
+    background: linear-gradient(90deg, #ffe4e1 0%, #ffb6c1 100%);
+    color: #000;
+    border-color: #ffb6c1;
+    font-weight: bold;
+}
+
+/* Order Card */
+.card {
+    border: 1px solid #eee;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.orderInfo strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.date {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.badge {
+    background: #fffacd;
+    /* Kuning muda untuk status Preparing */
+    color: #856404;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    height: fit-content;
+    border: 1px solid #ffeeba;
+}
+
+.completedBadge {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+/* Items List */
+.itemRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.itemDetail {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.itemPlaceholder {
+    width: 50px;
+    height: 50px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.itemName {
+    font-weight: 600;
+    color: #333;
+}
+
+.itemQty {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.itemPrice {
+    font-weight: bold;
+    color: #d63384;
+    /* Pink tua */
+}
+
+/* Footer Total */
+.cardFooter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #f5f5f5;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.totalPrice {
+    color: #d63384;
+}

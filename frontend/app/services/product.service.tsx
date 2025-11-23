@@ -1,5 +1,3 @@
-// Product Service (Mock Data)
-
 export interface JuiceProduct {
     id: number;
     name: string;

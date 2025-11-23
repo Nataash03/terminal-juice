@@ -1,26 +1,30 @@
+// backend/routes/productRoutes.js
+
 const express = require('express');
 const router = express.Router();
 
-// Import Controller (Pastikan path-nya benar)
-const {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct
-} = require('../controllers/productController');
+// --- PERBAIKAN IMPORT DISINI ---
+// Kita asumsikan productController mengekspor semua fungsi
+const { 
+  getProducts, 
+  getProductById, 
+  createProduct, 
+  updateProduct, 
+  deleteProduct,
+  cleanupOldProducts // WAJIB DIIMPORT AGAR DIKENALI
+} = require('../controllers/productController'); 
+// --------------------------------
 
-// --- DEFINISI ROUTE ---
+const { protect } = require('../middleware/authMiddleware');
 
-// GET All & POST New
-router.route('/')
-  .get(getProducts)      // <-- Ini yang tadi error "undefined"
-  .post(createProduct);
+// Route Public
+router.get('/', getProducts);
+router.get('/:id', getProductById);
 
-// GET One, PUT Update, DELETE Remove
-router.route('/:id')
-  .get(getProductById)
-  .put(updateProduct)
-  .delete(deleteProduct);
+// Route Private (Seller/CRUD)
+router.post('/', protect, createProduct);
+router.put('/:id', protect, updateProduct);
+router.delete('/:id', protect, deleteProduct);
+
 
 module.exports = router;

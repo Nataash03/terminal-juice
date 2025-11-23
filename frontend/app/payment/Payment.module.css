@@ -1,17 +1,15 @@
-/* Payment.module.css */
-
 .container {
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 2rem 1rem;
     font-family: 'Inter', sans-serif;
-    background-color: #fff;
+    background: linear-gradient(135deg, #FFE5D9 0%, #FFF0F5 50%, #E6F3FF 100%);
+    border-radius: 30px;
 }
 
 .pageTitle {
     font-family: 'Playfair Display', serif;
-    /* Kalau ada font serif */
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     margin-bottom: 2rem;
     color: #333;
 }
@@ -23,6 +21,7 @@
     justify-content: space-between;
     margin-bottom: 3rem;
     padding: 0 10px;
+    position: relative;
 }
 
 .step {
@@ -31,36 +30,34 @@
     align-items: center;
     gap: 5px;
     font-size: 0.8rem;
-    color: #666;
+    color: #666666;
     position: relative;
-    z-index: 1;
+    z-index: 2;
 }
 
 .circle {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    /* Dikecilkan */
+    height: 20px;
     border-radius: 50%;
-    background-color: #ccc;
+    background-color: #fff;
+    border: 2px solid #ccc;
 }
 
 .circle.active,
 .circle.completed {
-    background-color: #81c784;
-    /* Hijau Muda */
+    background-color: #d63384;
+    border-color: #d63384;
 }
 
 .line {
     flex: 1;
     height: 2px;
-    background-color: #ccc;
+    background-color: #cccccc;
     margin: 0 10px;
-    margin-top: -20px;
-    /* Biar sejajar sama circle */
+    margin-top: 0;
 }
 
-.lineActive {
-    background-color: #81c784;
-}
 
 /* --- Section Titles --- */
 .sectionTitle {
@@ -69,48 +66,16 @@
     font-weight: bold;
     font-style: italic;
     margin-bottom: 1rem;
-    margin-top: 2rem;
+    margin-top: 2.5rem;
 }
 
-/* --- Pickup Card --- */
-.pickupCard {
-    background-color: #ffebee;
-    /* Pink Pastel */
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #ffcdd2;
-}
 
-.pickupHeader {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-}
-
-.pickupDetails p {
-    margin: 5px 0;
-    font-size: 0.9rem;
-    color: #555;
-}
-
-.readyBadge {
-    display: inline-block;
-    background-color: #c8e6c9;
-    /* Hijau muda */
-    color: #2e7d32;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    margin-top: 10px;
-    font-weight: 600;
-}
-
-/* --- Payment Method --- */
+/* --- Payment Method Cards --- */
 .paymentMethods {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
+    /* Dikecilkan */
 }
 
 .methodCard {
@@ -118,43 +83,30 @@
     align-items: center;
     padding: 15px;
     border: 1px solid #ddd;
-    border-radius: 12px;
+    border-radius: 15px;
+    background-color: white;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .methodCard.selected {
-    border-color: #81c784;
+    border-color: #d63384;
     border-width: 2px;
-    background-color: #f9fff9;
-}
-
-.methodIcon {
-    width: 40px;
-    height: 40px;
-    background-color: #eee;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.7rem;
-    margin-right: 15px;
-    font-weight: bold;
+    background: linear-gradient(90deg, #ffe4e1 0%, #ffc0cb 100%);
+    box-shadow: 0 4px 15px rgba(255, 182, 193, 0.5);
 }
 
 .methodInfo {
     flex: 1;
     display: flex;
     flex-direction: column;
-}
-
-.methodInfo small {
-    color: #888;
+    font-weight: 500;
 }
 
 .radioOuter {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border: 2px solid #ccc;
     border-radius: 50%;
     display: flex;
@@ -163,46 +115,41 @@
 }
 
 .methodCard.selected .radioOuter {
-    border-color: #81c784;
+    border-color: #d63384;
 }
 
 .radioInner {
     width: 10px;
     height: 10px;
-    background-color: #81c784;
+    background-color: #d63384;
     border-radius: 50%;
 }
 
-/* --- QR Section --- */
-.qrSection {
-    margin-top: 20px;
-    background-color: #e8f5e9;
-    /* Hijau background QR */
-    padding: 30px;
-    border-radius: 12px;
-    text-align: center;
-}
 
-.qrTitle {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
+/* --- Notes Textarea --- */
+.notesTextarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #ddd;
     margin-bottom: 20px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    font-size: 0.9rem;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.qrPlaceholder {
-    background-color: white;
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-    border-radius: 8px;
+.notesTextarea:focus {
+    border-color: #ffb6c1;
 }
 
 /* --- Summary Card --- */
 .summaryCard {
     margin-top: 30px;
-    padding: 20px;
-    border: 1px solid #eee;
-    border-radius: 12px;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -210,83 +157,81 @@
     font-family: 'Playfair Display', serif;
     font-style: italic;
     font-size: 1.5rem;
-    margin-bottom: 5px;
-}
-
-.orderId {
-    font-size: 0.8rem;
-    color: #999;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .itemRow {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #f9f9f9;
 }
 
-.itemImage {
-    width: 50px;
-    height: 50px;
-    background-color: #ffecb3;
-    border-radius: 8px;
-    margin-right: 15px;
-}
-
-.itemDetails {
-    flex: 1;
-}
-
-.itemDetails strong {
-    display: block;
-    font-size: 0.95rem;
-}
-
-.itemDetails small {
-    color: #888;
-}
-
-.itemPrice {
-    font-weight: bold;
-    color: #e91e63;
-    /* Pink tua harga */
-}
-
-.totalRow {
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
+.itemPrice,
 .totalPrice {
     color: #e91e63;
 }
 
+.totalRow {
+    font-size: 1.3rem;
+    margin-top: 20px;
+    margin-bottom: 0;
+    justify-content: space-between;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #ffc0cb;
+}
+
 .payButton {
     width: 100%;
+    margin-top: 30px;
     padding: 15px;
-    background-color: #81c784;
+    background-color: #d63384;
     color: white;
     border: none;
     border-radius: 30px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
 
 .payButton:hover {
-    background-color: #66bb6a;
+    background-color: #b82c5f;
 }
 
-.payButton:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+@media (max-width: 600px) {
+    .container {
+        max-width: 65%;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+    }
+
+    .pageTitle {
+        font-size: 2rem;
+        /* Judul sedikit dikecilkan */
+        text-align: center;
+    }
+
+    .progressBarContainer {
+        padding: 0 5px;
+        margin-bottom: 2rem;
+    }
+
+    .line {
+        left: 25px;
+        right: 25px;
+    }
+
+    .step span {
+        font-size: 0.75rem;
+    }
+
+    .summaryCard {
+        padding: 25px 20px;
+    }
+
+    .totalRow {
+        font-size: 1.1rem;
+    }
 }

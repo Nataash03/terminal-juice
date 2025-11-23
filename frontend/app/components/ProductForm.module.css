@@ -1,87 +1,127 @@
-/* components/ProductForm.module.css */
-.wrapper {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr;
-    gap: 40px;
+.card {
+    background: white;
+    border-radius: 30px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
 }
 
-.imagePreviewBox {
-    background-color: #ffebee;
-    border: 2px dashed #ffcdd2;
+.title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+.contentWrapper {
+    display: flex;
+    gap: 50px;
+    align-items: flex-start;
+}
+
+.leftColumn {
+    flex: 1;
+    width: 100%;
+}
+
+.imagePreviewContainer {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: linear-gradient(180deg, #ffe4e1 0%, #ffb6c1 100%);
     border-radius: 20px;
-    min-height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    text-align: center;
-    color: #d81b60;
+    overflow: hidden;
 }
 
 .previewImg {
-    max-width: 100%;
-    max-height: 300px;
+    width: 80%;
+    height: 80%;
     object-fit: contain;
     filter: drop-shadow(0 10px 10px rgba(0, 0, 0, 0.1));
 }
 
-.formContent {
+.placeholderText {
+    color: #d63384;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.5;
+}
+
+.rightColumn {
+    flex: 1.5;
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.inputGroup label {
+.label {
     display: block;
     font-weight: 600;
     margin-bottom: 8px;
     color: #333;
+    font-family: 'Playfair Display', serif;
 }
 
-.input,
+.input {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 50px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.3s;
+}
+
+.input:focus {
+    border-color: #ffb6c1;
+}
+
 .textarea {
     width: 100%;
-    padding: 12px 15px;
+    padding: 15px 20px;
+    border-radius: 20px;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    font-family: inherit;
     font-size: 1rem;
     outline: none;
 }
 
-.input:focus,
-.textarea:focus {
-    border-color: #FF9800;
-    box-shadow: 0 0 0 3px rgba(255, 152, 0, 0.1);
-}
-
-.btnGroup {
-    margin-top: 20px;
+.buttonGroup {
     display: flex;
-    gap: 15px;
+    gap: 20px;
+    justify-content: flex-end;
+    margin-top: 20px;
 }
 
 .saveBtn {
-    background: #dcedc8;
-    color: #33691e;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 25px;
+    background: #d0f0c0;
+    color: #556b2f;
+    border: 1px solid #bcefac;
+    padding: 10px 30px;
+    border-radius: 50px;
     font-weight: bold;
+    font-style: italic;
     cursor: pointer;
 }
 
 .cancelBtn {
-    background: #ffcdd2;
-    color: #b71c1c;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 25px;
-    font-weight: bold;
+    background: #ffe4e1;
+    color: #d63384;
+    border: 1px solid #ffb6c1;
+    padding: 10px 30px;
+    border-radius: 50px;
+    font-style: italic;
     cursor: pointer;
 }
 
 @media (max-width: 768px) {
-    .wrapper {
-        grid-template-columns: 1fr;
+    .contentWrapper {
+        flex-direction: column;
     }
 }

@@ -1,11 +1,14 @@
-// frontend/app/layout.tsx
 import './globals.css';
+import type { Metadata } from "next";
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-export const metadata = {
-  title: 'Terminal Juice - Fresh & Natural Flavours',
-  description: 'Savour the juicy essence of fruit in every sip.',
+export const metadata: Metadata = {
+  title: "Terminal Juice - Fresh & Natural",
+  description: "Best Juice Shop in The World",
+  icons: {
+    icon: '/terminal-juice.png', 
+  },
 };
 
 export default function RootLayout({

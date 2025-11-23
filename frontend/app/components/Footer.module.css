@@ -1,10 +1,10 @@
-/* frontend/app/components/Footer.module.css */
-
 .footer {
     background-color: #2a2a2a;
     color: #ffffff;
     padding: 60px 0 0;
     margin-top: 80px;
+    font-family: sans-serif;
+    /* Pastikan font default terpakai */
 }
 
 .container {
@@ -36,6 +36,7 @@
     margin: 0 0 24px 0;
 }
 
+/* --- SOCIAL ICONS --- */
 .socialIcons {
     display: flex;
     gap: 16px;
@@ -50,14 +51,43 @@
     align-items: center;
     justify-content: center;
     color: #ffffff;
+    border: 1px solid #555;
     transition: all 0.3s ease;
     text-decoration: none;
 }
 
-.socialIcon:hover {
-    background-color: #FFB800;
-    transform: translateY(-2px);
+/* FIX: Sizing SVG di dalam container (dari fix sebelumnya) */
+.socialIcon svg {
+    width: 60%;
+    height: 60%;
+    display: block;
 }
+
+/* Generic Hover Effect (Di nonaktifkan agar custom color jalan) */
+.socialIcon:hover {
+    transform: translateY(-3px);
+}
+
+/* 1. GITHUB Hover */
+.socialIcon:nth-child(1):hover {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* 2. WHATSAPP Hover */
+.socialIcon:nth-child(2):hover {
+    background-color: #25D366;
+    color: #ffffff;
+    border-color: #25D366;
+}
+
+/* 3. INSTAGRAM Hover */
+.socialIcon:nth-child(3):hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    color: #ffffff;
+    border-color: transparent;
+}
+
 
 /* Links Sections */
 .linksSection {
@@ -81,14 +111,26 @@
     gap: 12px;
 }
 
-.linksList li a {
+.linksList li {
+    /* FIX: Kursor pointer agar menu Support interaktif (pemicu Modal) */
+    cursor: pointer;
+    transition: color 0.2s;
     color: #b0b0b0;
-    text-decoration: none;
-    font-size: 15px;
-    transition: color 0.3s ease;
+    /* Warna normal link */
 }
 
-.linksList li a:hover {
+.linksList li:hover {
+    color: #FFB800;
+}
+
+.linksList a {
+    color: #b0b0b0;
+    /* Warna normal link */
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.linksList a:hover {
     color: #FFB800;
 }
 
@@ -180,7 +222,7 @@
     color: #FFB800;
 }
 
-/* Responsive Design */
+/* Responsive Design (Biarkan sama) */
 @media (max-width: 1024px) {
     .container {
         padding: 0 60px 50px;
@@ -232,27 +274,36 @@
         padding: 0 20px 30px;
     }
 
-    .brandName {
-        font-size: 24px;
+    .newsletterForm {
+        flex-direction: column;
+        gap: 12px;
     }
 
-    .brandTagline {
-        font-size: 14px;
-    }
-
-    .linksTitle {
-        font-size: 16px;
+    .submitButton {
+        width: 100%;
+        height: auto;
+        padding: 12px 0;
     }
 
     .bottomBar {
         padding: 16px 20px;
     }
 
-    .copyright {
-        font-size: 13px;
+    .legalLinks {
+        flex-direction: column;
+        gap: 8px;
     }
 
-    .legalLinks a {
-        font-size: 13px;
+    .copyright {
+        text-align: center;
+    }
+
+    /* FIX 4: Typography adjustment */
+    .brandName {
+        font-size: 24px;
+    }
+
+    .linksTitle {
+        font-size: 16px;
     }
 }

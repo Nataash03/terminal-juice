@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styles from './Receipt.module.css';
 
+// Path ke gambar yang ada di folder public
+const checkIconSrc = '/images/checklist.png';
+
 interface OrderData {
   _id: string;
   items: {
@@ -33,56 +36,67 @@ const ReceiptPage = () => {
 
   if (!order) return null;
 
+  // Format Tanggal & Waktu
+  const dateObj = new Date(order.createdAt);
+  const dateString = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  const timeString = dateObj.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
   return (
     <div className={styles.container}>
-      <div className={styles.receiptCard}>
-        {/* Header Struk */}
-        <div className={styles.header}>
-          <div className={styles.checkIcon}>✅</div>
-          <h2 className={styles.title}>Payment Success!</h2>
-          <p className={styles.subtitle}>Thank you for your order</p>
+      <div className={styles.card}>
+        
+        {/* Header Struk dengan Custom Image */}
+        <div className={styles.iconWrapper}>
+             <img 
+                src={checkIconSrc} 
+                alt="Payment Success" 
+                className={styles.checkIcon} 
+             />
         </div>
 
-        <hr className={styles.dashedLine} />
+        <h1 className={styles.title}>Payment Success!</h1>
+        <p className={styles.subtitle}>Thank you for your order</p>
 
-        {/* Detail Info */}
-        <div className={styles.infoRow}>
-          <span>Order ID</span>
-          <span className={styles.bold}>#{order._id.slice(-6).toUpperCase()}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span>Date</span>
-          <span>{new Date(order.createdAt).toLocaleDateString('id-ID')}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span>Time</span>
-          <span>{new Date(order.createdAt).toLocaleTimeString('id-ID')}</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span>Payment</span>
-          <span className={styles.paymentTag}>{order.paymentMethod}</span>
-        </div>
-
-        <hr className={styles.dashedLine} />
-
-        {/* List Barang */}
-        <div className={styles.itemsContainer}>
-          {order.items.map((item, index) => (
-            <div key={index} className={styles.itemRow}>
-              <span>{item.quantity}x {item.name}</span>
-              <span>Rp.{(item.price * item.quantity).toLocaleString('id-ID')}</span>
+        {/* Box Detail (Warna Abu Soft) */}
+        <div className={styles.detailsBox}>
+            
+            {/* Baris Info */}
+            <div className={styles.row}>
+                <span className={styles.label}>Order ID</span>
+                <span className={styles.value}>#{order._id.slice(-6).toUpperCase()}</span>
             </div>
-          ))}
-        </div>
+            <div className={styles.row}>
+                <span className={styles.label}>Date</span>
+                <span className={styles.value}>{dateString}</span>
+            </div>
+            <div className={styles.row}>
+                <span className={styles.label}>Time</span>
+                <span className={styles.value}>{timeString} WIB</span>
+            </div>
+            <div className={styles.row}>
+                <span className={styles.label}>Payment</span>
+                <span className={styles.paymentBadge}>{order.paymentMethod}</span>
+            </div>
 
-        <hr className={styles.solidLine} />
+            <div className={styles.divider}></div>
 
-        {/* Total */}
-        <div className={styles.totalRow}>
-          <span>TOTAL PAID</span>
-          <span className={styles.totalAmount}>
-            Rp.{order.totalAmount.toLocaleString('id-ID')}
-          </span>
+            {/* List Barang */}
+            <div className={styles.itemsList}>
+                {order.items.map((item, index) => (
+                    <div key={index} className={styles.itemRow}>
+                    <span>{item.quantity}x {item.name}</span>
+                    <span>Rp. {(item.price * item.quantity).toLocaleString('id-ID')}</span>
+                    </div>
+                ))}
+            </div>
+
+            {/* Total */}
+            <div className={styles.totalRow}>
+                <span className={styles.totalLabel}>TOTAL PAID</span>
+                <span className={styles.totalAmount}>
+                    Rp. {order.totalAmount.toLocaleString('id-ID')}
+                </span>
+            </div>
         </div>
 
         {/* Tombol Balik */}

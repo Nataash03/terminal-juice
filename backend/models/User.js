@@ -1,5 +1,3 @@
-// File: models/User.js
-
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
@@ -8,10 +6,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    // --- PERBAIKAN: Menambahkan field Username ---
+    username: {
+        type: String,
+        required: true,
+        unique: true, // Username juga harus unik
+        trim: true
+    },
     email: {
         type: String,
         required: true,
-        unique: true, // Email harus unik
+        unique: true,
         lowercase: true,
     },
     password: {
@@ -21,12 +26,15 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-      enum: ['user', 'seller'], // Hanya boleh dua nilai ini
-      default: 'user', // Default role adalah user biasa
+        enum: ['user', 'seller'],
+        default: 'user',
     },
+    // Tambahan opsional untuk profil lengkap nanti
+    phone: { type: String, default: '' },
+    address: { type: String, default: '' }
 }, { timestamps: true });
 
-// Middleware Mongoose: Hash password sebelum menyimpan (saat Sign Up)
+// Middleware Hash Password
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         next();
@@ -36,7 +44,6 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-// Method untuk membandingkan password (saat Login)
 userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
