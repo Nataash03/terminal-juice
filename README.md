@@ -1,3 +1,9 @@
 # terminal-juice
 
-Repo ini dibuat untuk backup dan uji coba UAS frontend fullstack. Jadi kode disini akan dibuat real time sesuai instruksi UAS juga untuk membantu pengerjaan jika di repo UAS nya bermasalah.
+Kelompok 5 - UAS Frontend (FullStack)
+Anggota Kelompok :
+
+Natasya Agustine - 535240001
+Patricia Natania - 535240009
+Jessica Winola - 535240026
+Lyvia Reva Ruganda - 535240028
