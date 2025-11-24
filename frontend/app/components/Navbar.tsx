@@ -36,7 +36,6 @@ const Navbar: React.FC = () => {
     setIsMounted(true);
     
     const checkUser = () => {
-      // Kita cek cookie token dulu untuk memastikan sesi valid
       const token = Cookies.get('token');
       const storedUser = localStorage.getItem('user'); // Kita pakai localStorage hanya untuk display nama/email
 

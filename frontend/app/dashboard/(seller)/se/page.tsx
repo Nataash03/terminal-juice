@@ -19,7 +19,7 @@ export default function SellerDashboard() {
   const [loading, setLoading] = useState(true);
   const [topProducts, setTopProducts] = useState<TopProduct[]>([]);
   
-  // --- STATE BARU UNTUK SYNC BEST SELLER ---
+  // State untuk Sync Best Seller
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState('');
 
@@ -60,7 +60,7 @@ export default function SellerDashboard() {
     fetchStats();
   }, []);
   
-  // --- HANDLER SYNC BEST SELLER ---
+  // Handler Sync Best Seller
   const handleSyncBestSeller = async () => {
     const token = Cookies.get('token');
     if (!token) {
