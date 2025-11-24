@@ -1,11 +1,9 @@
-// frontend/app/components/Profile/MyOrdersList.tsx
 'use client'; 
 
 import React, { useState } from 'react';
 import Image from 'next/image';
 import styles from './MyOrdersList.module.css'; 
 
-// Data mock untuk produk
 interface OrderItem {
     id: number;
     name: string;
@@ -15,7 +13,6 @@ interface OrderItem {
     imageSrc: string;
 }
 
-// Data mock untuk pesanan
 interface Order {
     id: number;
     orderNumber: string;
@@ -44,13 +41,12 @@ const mockOrders: Order[] = [
         orderNumber: 'Order #TJ-2024-002',
         date: 'November 5, 2025',
         time: '16:50',
-        status: 'Preparing', // Menggunakan status yang sama dengan gambar
+        status: 'Preparing', 
         items: [
             { id: 201, name: 'Juice Mix 2 in 1', variant: 'Regular (500ml)', quantity: 1, price: 15000, imageSrc: '/images/juice-placeholder.png' },
         ],
         total: 15000,
     },
-    // ... bisa tambahkan data lain dengan status 'Active' atau 'Completed'
 ];
 
 
@@ -119,7 +115,6 @@ export default function MyOrdersList() {
                                     <div key={item.id} className={styles.itemRow}>
                                         <div className={styles.itemInfo}>
                                             <div className={styles.itemImageWrapper}>
-                                                {/* Asumsi Anda memiliki placeholder image di /public/images/juice-placeholder.png */}
                                                 <Image src={item.imageSrc} alt={item.name} width={40} height={40} />
                                             </div>
                                             <div className={styles.itemDetails}>

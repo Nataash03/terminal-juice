@@ -1,5 +1,3 @@
-// File: controllers/categoryController.js (Pastikan semua fungsi ada)
-
 const Category = require('../models/Category');
 
 // 1. GET all categories

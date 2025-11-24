@@ -16,6 +16,7 @@
     align-items: center;
 }
 
+/* Logo */
 .logo {
     font-size: 24px;
     font-style: italic;
@@ -29,6 +30,7 @@
     color: #D4AF37;
 }
 
+/* Navigation */
 .nav {
     display: flex;
     gap: 40px;
@@ -63,6 +65,7 @@
     width: 100%;
 }
 
+/* Actions */
 .actions {
     display: flex;
     align-items: center;
@@ -85,8 +88,9 @@
     color: #D4AF37;
 }
 
+/* Hamburger Menu */
 .hamburger {
-    display: none;
+    display: flex;
     flex-direction: column;
     gap: 5px;
     background: none;
@@ -112,6 +116,7 @@
     background-color: #D4AF37;
 }
 
+/* Hamburger Animation when Active */
 .hamburger.active span:nth-child(1) {
     transform: rotate(45deg) translate(7px, 7px);
 }
@@ -124,6 +129,7 @@
     transform: rotate(-45deg) translate(7px, -7px);
 }
 
+/* Dropdown Menu */
 .dropdownMenu {
     position: absolute;
     top: 100%;
@@ -135,8 +141,6 @@
     min-width: 200px;
     padding: 8px;
     animation: slideDown 0.3s ease;
-    display: flex;
-    flex-direction: column;
 }
 
 @keyframes slideDown {
@@ -173,9 +177,14 @@
     flex-shrink: 0;
 }
 
+/* Responsive Design */
 @media (max-width: 1024px) {
     .container {
         padding: 20px 60px;
+    }
+
+    .nav {
+        gap: 30px;
     }
 
     .dropdownMenu {
@@ -192,12 +201,7 @@
         display: none;
     }
 
-    .hamburger {
-        display: flex ! important;
-    }
-
     .dropdownMenu {
-        display: flex ! important;
         right: 30px;
         left: 30px;
         width: auto;
@@ -217,16 +221,7 @@
         gap: 12px;
     }
 
-    .nav {
-        display: none;
-    }
-
-    .hamburger {
-        display: flex ! important;
-    }
-
     .dropdownMenu {
-        display: flex ! important;
         right: 20px;
         left: 20px;
     }

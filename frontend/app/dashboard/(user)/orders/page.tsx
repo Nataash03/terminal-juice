@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-// Import CSS Module yang tadi kamu buat
 import styles from './UserOrders.module.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
@@ -28,7 +27,7 @@ interface Order {
 export default function UserOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState('All'); // State untuk filter tab
+  const [filter, setFilter] = useState('All'); 
 
   useEffect(() => {
     fetchOrders();
@@ -53,7 +52,7 @@ export default function UserOrdersPage() {
       const data = await res.json();
       
       if (data.success) {
-        setOrders(data.data || []); // Asumsi response: { success: true, data: [...] }
+        setOrders(data.data || []); 
       } else {
         console.error("Gagal ambil order:", data.message);
       }
@@ -144,7 +143,6 @@ export default function UserOrdersPage() {
                         <div className={styles.itemDetail}>
                           {/* Gambar Item */}
                           {item.imageSrc ? (
-                             // eslint-disable-next-line @next/next/no-img-element
                              <img 
                                 src={item.imageSrc} 
                                 alt={item.name} 

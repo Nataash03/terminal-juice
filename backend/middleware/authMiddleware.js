@@ -4,13 +4,11 @@ const User = require('../models/User');
 const protect = async (req, res, next) => {
   let token;
 
-  // Cek apakah ada header Authorization dengan format "Bearer <token>"
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith('Bearer')
   ) {
     try {
-      // Ambil tokennya saja (buang kata 'Bearer')
       token = req.headers.authorization.split(' ')[1];
 
       // Decode token

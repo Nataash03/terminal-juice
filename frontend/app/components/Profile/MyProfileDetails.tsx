@@ -1,32 +1,25 @@
-// File: frontend/app/components/Profile/MyProfileDetails.tsx
-
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import styles from './MyProfileDetails.module.css'; 
 
-// --- DEFINISI TIPE USER ---
 interface UserProfile {
     fullName: string;
     email: string;
     phone?: string;
     address?: string;
-    // Tambahkan field lain dari backend jika perlu
 }
 
 interface MyProfileDetailsProps {
-    // 🚨 Menerima data user yang sudah di-fetch dari profile/page.tsx
     userData: UserProfile; 
 }
 
 const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
-    // State untuk data yang sedang diedit (diinisialisasi dari prop)
     const [formData, setFormData] = useState(userData);
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
 
-    // Effect untuk update formData jika userData (prop) berubah (misalnya, setelah fetch ulang)
     useEffect(() => {
         setFormData(userData);
     }, [userData]);
@@ -35,13 +28,12 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
-            ...prev!, // Gunakan non-null assertion atau pengecekan
+            ...prev!, 
             [name]: value,
         }));
     };
 
     const handleSave = async () => {
-        // 🚨 LOGIKA UPDATE PROFIL BACKEND (PATCH)
         setIsSaving(true);
         setSaveError(null);
         const token = localStorage.getItem('userToken');
@@ -64,8 +56,6 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
 
             if (response.ok) {
                 alert("Perubahan berhasil disimpan!");
-                // Panggil re-fetch dari parent jika kamu ingin data langsung segar
-                // Tapi untuk saat ini, kita hanya keluar dari mode edit
                 setIsEditing(false); 
             } else {
                 throw new Error(result.message || "Gagal menyimpan perubahan.");
@@ -86,7 +76,7 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
 
             <div className="grid grid-cols-2 gap-4">
                 
-                {/* 🚨 DATA LIVE: Full Name */}
+                {/* Full Name */}
                 <div className="detail-item">
                     <p>Full Name</p>
                     <input 
@@ -100,20 +90,20 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
                 <br>
                 </br>
 
-                {/* 🚨 DATA LIVE: Email Address */}
+                {/* Email Address */}
                 <div className="detail-item">
                     <p>Email Address</p>
                     <input 
                         name="email"
                         value={formData.email} 
-                        readOnly // Email read-only
+                        readOnly 
                         className={styles.formInput}
                     />
                 </div>
                 <br>
                 </br>
                 
-                {/* 🚨 DATA LIVE: Phone Number */}
+                {/* Phone Number */}
                 <div className="detail-item">
                     <p>Phone Number</p>
                     <input 
@@ -127,7 +117,7 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
                 <br>
                 </br>
                 
-                {/* 🚨 DATA LIVE: Address */}
+                {/* Address */}
                 <div className="detail-item">
                     <p>Address</p>
                     <input 
@@ -142,21 +132,20 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
                 </br>
             </div>
 
-            {/* --- Tombol Edit/Save --- */}
+            {/* Tombol Edit/Save */}
             <div className="button-group mt-6">
                 {!isEditing ? (
-                    // 🚨 TOMBOL EDIT
                     <button 
-                className={styles.editButton} // 🚨 Gunakan class yang benar
+                className={styles.editButton} 
                 onClick={() => setIsEditing(true)}
             >
                 Edit
             </button>
         ) : (
-            <div className={styles.submitWrapper}> {/* Gunakan wrapper untuk flex-end */}
+            <div className={styles.submitWrapper}> 
                 {/* TOMBOL SAVE CHANGES */}
                     <button 
-                    className={styles.submitButton} // 🚨 Gunakan class submit
+                    className={styles.submitButton} 
                     onClick={handleSave} 
                     disabled={isSaving}
                 >
@@ -164,7 +153,7 @@ const MyProfileDetails: React.FC<MyProfileDetailsProps> = ({ userData }) => {
                 </button>
                 {/* TOMBOL BATAL */}
                 <button 
-                    className={styles.cancelButton} // 🚨 Gunakan class cancel
+                    className={styles.cancelButton} 
                     onClick={() => setIsEditing(false)}
                     disabled={isSaving}
                 >
