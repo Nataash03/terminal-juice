@@ -49,7 +49,7 @@ const PaymentPage = () => {
           items: cartItems,
           totalAmount,
           paymentMethod,
-          notes: orderNotes 
+          note: orderNotes
         })
       });
 

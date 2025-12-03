@@ -14,6 +14,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const subscribeRoutes = require('./routes/subscribeRoutes');
 const { setupBestSellerScheduler } = require('./utils/scheduler');
 const { manualUpdateBestSellers } = require('./services/bestSellerService');
+const reviewRoutes = require('./routes/reviewRoutes'); 
 
 // 3. Inisialisasi
 const app = express();
@@ -32,6 +33,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/subscribe', subscribeRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // Route Best Seller 
 app.post('/api/admin/update-best-sellers', manualUpdateBestSellers);
@@ -49,10 +51,9 @@ const connectDB = async () => {
 
 // 7. Jalankan Koneksi dan Server
 connectDB().then(() => {
-  // Setup scheduler SETELAH koneksi DB berhasil
   setupBestSellerScheduler();
   
   app.listen(PORT, () => {
-    console.log(`🚀 Server berjalan di http://localhost:${PORT}`); // FIX: pakai () bukan ``
+    console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
   });
 });

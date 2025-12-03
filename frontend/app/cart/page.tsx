@@ -49,13 +49,19 @@ export default function ShoppingCartPage() {
         imageSrc: item.imageSrc
       }));
       localStorage.setItem('cart', JSON.stringify(simpleCart));
+      
+      window.dispatchEvent(new Event('storage'));
     }
   }, [cartItems, isLoaded]);
+
+  const handleDeleteItem = (id: string | number) => {
+    setCartItems(items => items.filter(item => item.id !== id));
+  };
 
   const handleQuantityChange = (id: string | number, newQuantity: number) => {
     if (newQuantity < 1) {
        if (confirm("Hapus item ini?")) {
-         setCartItems(items => items.filter(item => item.id !== id));
+         handleDeleteItem(id);
        }
        return;
     }
@@ -103,7 +109,15 @@ export default function ShoppingCartPage() {
       <main className={styles.cartContent}>
         <div className={styles.itemsList}>
           {cartItems.length === 0 ? (
-             <div style={{textAlign: 'center', padding: '40px'}}>Cart Kosong.</div>
+             <div style={{textAlign: 'center', padding: '40px', color: '#666'}}>
+                Keranjang belanjamu kosong. <br/> 
+                <span 
+                    onClick={() => router.push('/shop')} 
+                    style={{color: '#d63384', cursor: 'pointer', textDecoration: 'underline'}}
+                >
+                    Belanja sekarang yuk!
+                </span>
+             </div>
           ) : (
             cartItems
               .filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -119,6 +133,7 @@ export default function ShoppingCartPage() {
                 isSelected={item.isSelected}
                 onQuantityChange={handleQuantityChange}
                 onSelectChange={handleSelectChange}
+                onDelete={handleDeleteItem} 
               />
             ))
           )}

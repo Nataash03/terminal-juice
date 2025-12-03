@@ -8,7 +8,6 @@ import styles from './ShopPage.module.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
-// --- DEFINISI TIPE ---
 interface CartItem { id: string; name: string; price: number; quantity: number; imageSrc: string; }
 interface PopulatedCategory { _id: string; name: string; slug: string; }
 
@@ -33,11 +32,9 @@ const ShopPage: React.FC = () => {
   
   const [selectedProduct, setSelectedProduct] = useState<SelectedProductState>(null);
   
-  // State untuk Cart & Loading Flag
   const [cart, setCart] = useState<CartItem[]>([]); 
   const [isCartLoaded, setIsCartLoaded] = useState(false);
 
-  // FETCH DATA & LOAD CART
   useEffect(() => {
     const initPage = async () => {
       try {
@@ -59,7 +56,6 @@ const ShopPage: React.FC = () => {
     setIsCartLoaded(true); 
   }, []);
 
-  // SIMPAN CART
   useEffect(() => {
     if (isCartLoaded) {
       localStorage.setItem('cart', JSON.stringify(cart));
@@ -260,19 +256,6 @@ const ShopPage: React.FC = () => {
         onOrderNow={handleOrderNow} 
         onClose={handleCloseModal}
       />
-
-      {/* TOMBOL CHECKOUT MELAYANG */}
-      {totalItems > 0 && (
-        <div 
-            onClick={handleGoToCheckout}
-            className={styles.floatingCheckoutButton} 
-        >
-            <span>🛒 Checkout</span>
-            <span className={styles.cartItemCount}>
-                {totalItems}
-            </span>
-        </div>
-      )}
     </div>
   );
 };

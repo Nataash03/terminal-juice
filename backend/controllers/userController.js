@@ -99,6 +99,50 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+// @desc    Update user profile
+// @route   PUT /api/users/profile
+// @access  Private
+const updateUserProfile = async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    // Update data basic
+    user.username = req.body.username || user.username;
+    user.fullName = req.body.fullName || user.fullName; // Ambil mana aja yang dikirim
+    user.email = req.body.email || user.email;
+
+    // Update Address & Phone (PENTING BIAR KESIMPEN)
+    if (req.body.address) {
+        user.address = req.body.address;
+    }
+    if (req.body.phone) {
+        user.phone = req.body.phone;
+    }
+
+    // Update Password kalau diisi
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    // Kirim balikan data terbaru ke frontend
+    res.json({
+      _id: updatedUser._id,
+      username: updatedUser.username,
+      fullName: updatedUser.fullName,
+      email: updatedUser.email,
+      role: updatedUser.role,
+      address: updatedUser.address, // Pastikan address dikirim balik
+      phone: updatedUser.phone,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+};
+
 // @desc    Upgrade to Seller
 const upgradeToSeller = async (req, res) => {
   try {
@@ -134,5 +178,6 @@ module.exports = {
   registerUser,
   authUser,
   getUserProfile,
-  upgradeToSeller,
+  updateUserProfile,
+  upgradeToSeller
 };

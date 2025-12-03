@@ -5,12 +5,11 @@ import styles from './Notification.module.css';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
 
-// Tipe Data Notifikasi
 interface Notification {
   _id: string;
   title: string;
   message: string;
-  type: 'ready' | 'process' | 'success' | 'info' | 'cancelled'; // Tambah tipe yang mungkin
+  type: 'ready' | 'process' | 'success' | 'info' | 'cancelled'; 
   createdAt: string;
   isRead: boolean;
 }
@@ -18,7 +17,6 @@ interface Notification {
 export default function NotificationPage() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
-  // State untuk menampung filter yang aktif: 'All', 'Active', 'Completed'
   const [activeFilter, setActiveFilter] = useState('All'); 
 
   useEffect(() => {
@@ -27,7 +25,6 @@ export default function NotificationPage() {
 
   const fetchNotifications = async () => {
     const token = Cookies.get('token');
-    // Jika token hilang, gunakan dummy data untuk demo agar tampilan tidak kosong
     if (!token) {
         setNotifications([
             { _id: '1', title: 'Your Order is Ready!', message: 'Order #TJ-2024-001 is ready go pick it up in terminal juice!', type: 'ready', createdAt: '', isRead: false },
@@ -46,7 +43,6 @@ export default function NotificationPage() {
       if (data.success && data.data.length > 0) {
         setNotifications(data.data);
       } else {
-         // Fallback ke dummy jika DB kosong
          setNotifications([
             { _id: '1', title: 'Your Order is Ready!', message: 'Order #TJ-2024-001 is ready go pick it up in terminal juice!', type: 'ready', createdAt: '', isRead: false },
             { _id: '2', title: 'Your Order is being process', message: 'Order #TJ-2024-001 is in the kitchen please wait for a moment', type: 'process', createdAt: '', isRead: true },
@@ -60,7 +56,6 @@ export default function NotificationPage() {
     }
   };
 
-  // Helper untuk menentukan Icon & Style Kartu
   const getCardStyle = (type: string) => {
     switch (type) {
       case 'ready': return { cardClass: styles.cardHighlight, iconClass: styles.iconReady, icon: '🥤' };
@@ -70,16 +65,13 @@ export default function NotificationPage() {
     }
   };
 
-  // --- LOGIKA FILTER FRONTEND ---
   const handleFilterChange = (filterType: string) => {
     setActiveFilter(filterType);
   };
 
   const filteredNotifications = notifications.filter(notif => {
-    // Tipe notifikasi yang dianggap 'Active' (masih butuh perhatian user)
     const activeTypes = ['ready', 'process', 'info'];
     
-    // Tipe notifikasi yang dianggap 'Completed' (sudah selesai/final)
     const completedTypes = ['success', 'cancelled'];
     
     if (activeFilter === 'All') return true;
@@ -88,11 +80,8 @@ export default function NotificationPage() {
     
     return true;
   });
-  // -----------------------------
-
 
   if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading notifications...</div>;
-
 
   return (
     <div>

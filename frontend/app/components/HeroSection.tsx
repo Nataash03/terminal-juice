@@ -1,6 +1,6 @@
 import React from 'react';
+import Link from 'next/link'; 
 import styles from './HeroSection.module.css';
-
 
 const HeroSection: React.FC = () => {
   return (
@@ -14,9 +14,13 @@ const HeroSection: React.FC = () => {
         <p className={styles.tagline}>
           Taste nature's best in every drop with real fruit and vibrant flavour
         </p>
-        <a href="/flavours" className={styles.sipFreshButton}>
+        
+        {/* [2] Ganti <a> jadi <Link> */}
+        {/* Hapus atribut href="" di dalam className, pindahkan ke prop Link */}
+        <Link href="/flavours" className={styles.sipFreshButton}>
           Sip Fresh →
-        </a>
+        </Link>
+
       </div>
 
       {/* Gambar */}

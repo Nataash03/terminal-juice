@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import styles from './CartItem.module.css';
 
 interface CartItemProps {
@@ -11,6 +11,7 @@ interface CartItemProps {
   isSelected: boolean;
   onQuantityChange: (id: string | number, newQuantity: number) => void;
   onSelectChange: (id: string | number, isSelected: boolean) => void;
+  onDelete: (id: string | number) => void; 
 }
 
 const CartItem: React.FC<CartItemProps> = ({ 
@@ -22,9 +23,14 @@ const CartItem: React.FC<CartItemProps> = ({
   price,
   isSelected,
   onQuantityChange,
-  onSelectChange
+  onSelectChange,
+  onDelete 
 }) => {
   const [quantity, setQuantity] = useState(initialQuantity);
+
+  useEffect(() => {
+    setQuantity(initialQuantity);
+  }, [initialQuantity]);
 
   const handleDecrease = () => {
     if (quantity > 1) {
@@ -42,6 +48,13 @@ const CartItem: React.FC<CartItemProps> = ({
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSelectChange(id, e.target.checked);
+  };
+
+  // Logic Hapus
+  const handleDelete = () => {
+    if(confirm("Yakin mau hapus item ini dari keranjang?")) {
+        onDelete(id);
+    }
   };
 
   const formattedPrice = `Rp.${(price * quantity).toLocaleString('id-ID')}`;
@@ -69,7 +82,7 @@ const CartItem: React.FC<CartItemProps> = ({
         </div>
       </div>
 
-      {/* Quantity and Price */}
+      {/* Quantity, Price, & DELETE */}
       <div className={styles.actions}>
         <div className={styles.quantityControl}>
           <button 
@@ -87,7 +100,22 @@ const CartItem: React.FC<CartItemProps> = ({
             +
           </button>
         </div>
+        
         <div className={styles.itemPrice}>{formattedPrice}</div>
+
+        {/* Tombol Delete */}
+        <button 
+            onClick={handleDelete}
+            className={styles.deleteButton}
+            aria-label="Hapus Item"
+        >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                <line x1="10" y1="11" x2="10" y2="17"></line>
+                <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+        </button>
       </div>
     </div>
   );

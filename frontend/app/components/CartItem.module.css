@@ -125,6 +125,28 @@
     text-align: right;
 }
 
+.deleteButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: #999;
+    /* Warna abu-abu default */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    margin-left: 8px;
+    /* Jarak dari harga */
+}
+
+.deleteButton:hover {
+    background-color: #FFF0F0;
+    color: #FF4444;
+    /* Warna merah saat hover */
+}
+
 @media (max-width: 768px) {
     .itemCard {
         flex-direction: column;

@@ -7,9 +7,9 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
 }
 
-/* Styling Emoji */
 .reviewsHeader {
     text-align: center;
     padding-top: 50px;
@@ -31,7 +31,6 @@
     margin-bottom: 30px;
 }
 
-/* Styling Carousel Container */
 .reviewCarouselContainer {
     width: 100%;
     margin-top: 80px;
@@ -52,7 +51,6 @@
     display: none;
 }
 
-/* Tata Letak Kartu  */
 .reviewCardWrapper {
     flex: 0 0 calc(25% - 22.5px);
     min-width: 300px;
@@ -60,10 +58,89 @@
 
 }
 
+.stars {
+    color: #FFB800;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.quote {
+    font-size: 16px;
+    color: #555;
+    line-height: 1.6;
+    font-style: italic;
+    margin-bottom: 20px;
+    flex-grow: 1;
+    /* Biar dia ngisi ruang kosong */
+}
+
+.author {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+    margin-top: auto;
+    /* Dorong ke bawah */
+}
+
+.authorInfo {
+    margin-top: auto;
+}
+
+.actionButtons {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.role {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+}
+
+.card:hover .actionButtons {
+    opacity: 1;
+}
+
+.actionBtn {
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.actionBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.editBtn {
+    background-color: #FFB800;
+    /* Kuning */
+    color: #fff;
+}
+
+.deleteBtn {
+    background-color: #FF4444;
+    /* Merah */
+    color: #fff;
+}
+
 /* Responsive */
-@media (max-width: 1024px) {
-    .reviewCardWrapper {
-        flex: 0 0 calc(90% - 15px);
+@media (max-width: 768px) {
+    .actionButtons {
+        opacity: 1;
     }
 }
 

@@ -41,7 +41,6 @@
     color: #e56ebf;
 }
 
-/* Filter Buttons */
 .filterButtons,
 .subFilterContainer {
     display: flex;
@@ -74,7 +73,6 @@
     box-shadow: 0 4px 10px rgba(229, 110, 191, 0.4);
 }
 
-/* Sub-Filters */
 .subFilterContainer {
     margin-top: 1rem;
     margin-bottom: 2rem;
@@ -101,7 +99,6 @@
     font-weight: 600;
 }
 
-/* Product Grid */
 .productGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -109,7 +106,6 @@
     padding: 1rem 0;
 }
 
-/* Product Card Styles */
 .productCard {
     --bg-color: #fff;
     background-color: white;
@@ -132,7 +128,6 @@
     color: #d63384;
 }
 
-/* --- Slider Controls --- */
 .sliderControls {
     display: flex;
     justify-content: center;
@@ -154,7 +149,6 @@
     box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
 }
 
-/* Responsif */
 @media (max-width: 600px) {
     .shopPageContainer {
         padding: 1.5rem 15px;

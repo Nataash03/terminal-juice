@@ -87,7 +87,7 @@ export default function UserOrdersPage() {
     }
   };
 
-  // Logic Filter (Opsional, filter di sisi frontend)
+  // Logic Filter 
   const filteredOrders = orders.filter(order => {
     if (filter === 'All') return true;
     if (filter === 'Active') return ['pending', 'processing'].includes(order.status.toLowerCase());

@@ -56,6 +56,19 @@
     margin-top: 2px;
 }
 
+.noteBox {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fff9c4;
+    /* Kuning muda */
+    border: 1px solid #fbc02d;
+    /* Kuning tua */
+    border-radius: 8px;
+    color: #f57f17;
+    font-size: 13px;
+    font-style: italic;
+}
+
 /* Status Badge */
 .badge {
     padding: 5px 12px;

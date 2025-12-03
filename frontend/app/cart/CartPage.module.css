@@ -111,6 +111,14 @@
     margin-left: auto;
 }
 
+.totalWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+    margin-left: auto;
+}
+
 .totalAmount {
     font-size: 28px;
     font-weight: 550;

@@ -10,6 +10,7 @@ router.post('/login', userController.authUser);
 
 // Route Private 
 router.get('/profile', protect, userController.getUserProfile);
+router.put('/profile', protect, userController.updateUserProfile);
 router.put('/upgrade-to-seller', protect, userController.upgradeToSeller);
 
 module.exports = router;
