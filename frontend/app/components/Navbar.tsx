@@ -113,7 +113,7 @@ const Navbar: React.FC = () => {
         setUser(updatedUser);
         setMenuOpen(false);
         window.dispatchEvent(new Event('storage')); 
-        router.push('/dashboard/seller'); 
+        router.push('/dashboard/seller/se'); 
       } else {
         alert("Gagal: " + (data.message || "Kode verifikasi salah.")); 
       }
@@ -162,9 +162,9 @@ const Navbar: React.FC = () => {
 
                 {/* Link Dashboard */}
                 {user.role === 'seller' ? (
-                  <Link href="/dashboard/se" className={styles.navLink} style={{color:'#d63384', fontWeight:'bold'}}>Seller Dashboard</Link>
+                  <Link href="/dashboard/seller/se" className={styles.navLink} style={{color:'#d63384', fontWeight:'bold'}}>Seller Dashboard</Link>
                 ) : (
-                  <Link href="/dashboard" className={styles.navLink}>My Profile</Link>
+                  <Link href="/dashboard/user" className={styles.navLink}>My Profile</Link>
                 )}
               </>
             ) : (
@@ -239,7 +239,7 @@ const Navbar: React.FC = () => {
                </div>
                
                {user.role === 'seller' ? (
-                  <Link href="/dashboard/se" className={styles.dropdownLink} onClick={toggleMenu}>Seller Dashboard</Link>
+                  <Link href="/dashboard/seller/se" className={styles.dropdownLink} onClick={toggleMenu}>Seller Dashboard</Link>
                ) : (
                   <>
                     <Link href="/dashboard/user" className={styles.dropdownLink} onClick={toggleMenu}>My Profile</Link>
