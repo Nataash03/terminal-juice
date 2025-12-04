@@ -45,7 +45,7 @@ router.put('/:id', async (req, res) => {
             rating: req.body.rating
         }
       },
-      { new: true } // Opsi ini biar yang dikembalikan adalah data setelah update
+      { new: true } 
     );
     
     if (!updatedReview) return res.status(404).json({ message: "Review not found" });

@@ -5,7 +5,6 @@ const { protect } = require('../middleware/authMiddleware');
 // Import Controller
 const { 
     addOrderItems, 
-    // Import fungsi lain juga: getMyOrders, updateOrderStatus, dll
     getMyOrders,
     updateOrderStatus,
     getOrderStats,
@@ -14,7 +13,7 @@ const {
 
 // 1. Jalur Utama (Create & Get)
 router.route('/')
-    .post(protect, addOrderItems) // <--- Ini akan panggil controller yang support 'note'
+    .post(protect, addOrderItems) 
     .get(protect, getMyOrders);
 
 // 2. Jalur Seller

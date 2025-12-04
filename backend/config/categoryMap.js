@@ -12,7 +12,7 @@ const determineCategory = (productName) => {
     const name = productName.toUpperCase();
 
     if (name.includes('AQUA') || name.includes('AIR MIN')) {
-        return CATEGORY_MAPPING.MINERAL_WATER; // FIX: tadinya WATER
+        return CATEGORY_MAPPING.MINERAL_WATER; 
     }
     
     if (name.includes('BASRENG') || name.includes('KERUPUK') || name.includes('CHIPS') || name.includes('SNACK')) {
@@ -24,7 +24,7 @@ const determineCategory = (productName) => {
     }
     
     if (name.includes('JUS') || name.includes('JUICE') || name.includes('BLENDA') || name.includes('SMOOTHIE') || name.includes('ALPUKAT') || name.includes('MANGGA') || name.includes('JERUK')) {
-        return CATEGORY_MAPPING.FRUIT_JUICE; // FIX: tadinya JUICE
+        return CATEGORY_MAPPING.FRUIT_JUICE; 
     }
     
     return CATEGORY_MAPPING.DEFAULT; 

@@ -85,9 +85,7 @@ const updateBestSellers = async (topN = 3, dayRange = 7) => {
   }
 };
 
-/**
- * Manual trigger untuk testing atau admin panel
- */
+
 const manualUpdateBestSellers = async (req, res) => {
   try {
     const topN = parseInt(req.query.topN) || 10;

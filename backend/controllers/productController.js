@@ -57,10 +57,10 @@ const createProduct = async (req, res) => {
       price,
       stock,
       images, 
-      category: categoryId, // KATEGORI OTOMATIS
-      seller: req.user._id,  // WAJIB: ID SELLER
+      category: categoryId, 
+      seller: req.user._id,  
       isActive: true, 
-      slug: productSlug, // WAJIB: SLUG
+      slug: productSlug, 
     });
 
     const createdProduct = await product.save();
@@ -84,10 +84,9 @@ const updateProduct = async (req, res) => {
         updateFields.slug = slugify(name, { lower: true, strict: true });
     }
     
-    // Gunakan findByIdAndUpdate untuk kemudahan dan menghindari error validasi
     const product = await Product.findByIdAndUpdate(
         req.params.id, 
-        updateFields, // Gunakan objek update yang sudah diolah
+        updateFields, 
         { new: true, runValidators: true } 
     );
 

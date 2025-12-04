@@ -44,7 +44,7 @@ const getMyOrders = async (req, res) => {
     try {
       let query = { user: req.user._id };
       if (req.user.role === 'seller') {
-          query = {}; // Seller liat semua
+          query = {}; 
       }
       const orders = await Order.find(query).sort({ createdAt: -1 });
       res.json({ success: true, data: orders });
@@ -79,7 +79,6 @@ const updateOrderStatus = async (req, res) => {
     }
 };
 
-// 4. [FUNGSI YANG HILANG] GET ORDER STATS
 const getOrderStats = async (req, res) => {
     try {
         const totalOrders = await Order.countDocuments();
@@ -103,7 +102,6 @@ const getOrderStats = async (req, res) => {
     }
 };
 
-// 5. [FUNGSI YANG HILANG] GET TOP SELLING
 const getTopSelling = async (req, res) => {
     try {
         const top = await Order.aggregate([

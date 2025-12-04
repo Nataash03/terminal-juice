@@ -7,9 +7,8 @@ const {
   createProduct, 
   updateProduct, 
   deleteProduct,
-  cleanupOldProducts 
+
 } = require('../controllers/productController'); 
-// --------------------------------
 
 const { protect } = require('../middleware/authMiddleware');
 

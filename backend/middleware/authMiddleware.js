@@ -11,13 +11,10 @@ const protect = async (req, res, next) => {
     try {
       token = req.headers.authorization.split(' ')[1];
 
-      // Decode token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      // Cari user di DB dan simpan ke req.user (tanpa password)
       req.user = await User.findById(decoded.id).select('-password');
 
-      next(); // Lanjut ke controller berikutnya
+      next(); 
     } catch (error) {
       console.error(error);
       res.status(401).json({ message: 'Not authorized, token failed' });

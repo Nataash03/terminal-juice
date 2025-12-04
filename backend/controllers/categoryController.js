@@ -10,13 +10,12 @@ exports.getAllCategories = async (req, res) => {
     }
 };
 
-// 2. GET single category by ID (Dibutuhkan oleh router.get('/:id'))
+// 2. GET single category by ID ( router.get('/:id'))
 exports.getCategoryById = async (req, res) => {
-    // 💡 Placeholder: Kamu bisa melengkapi logikanya nanti
     res.status(501).json({ message: 'GET by ID Not Implemented Yet' }); 
 };
 
-// 3. POST create new category (Sudah kita buat sebelumnya)
+// 3. POST create new category 
 exports.createCategory = async (req, res) => {
     try {
         const category = new Category(req.body);
@@ -27,7 +26,6 @@ exports.createCategory = async (req, res) => {
             data: savedCategory
         });
     } catch (error) {
-        // Ini akan menangani error jika 'name' atau 'slug' kosong
         res.status(400).json({
             success: false,
             message: 'Failed to create category',
@@ -36,14 +34,13 @@ exports.createCategory = async (req, res) => {
     }
 };
 
-// 4. PUT update category (Dibutuhkan oleh router.put('/:id'))
+// 4. PUT update category (router.put('/:id'))
 exports.updateCategory = async (req, res) => {
     // 💡 Placeholder
     res.status(501).json({ message: 'PUT/Update Not Implemented Yet' }); 
 };
 
-// 5. DELETE category (Dibutuhkan oleh router.delete('/:id'))
+// 5. DELETE category (router.delete('/:id'))
 exports.deleteCategory = async (req, res) => {
-    // 💡 Placeholder
     res.status(501).json({ message: 'DELETE Not Implemented Yet' }); 
 };

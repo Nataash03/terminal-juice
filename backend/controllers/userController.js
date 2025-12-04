@@ -108,10 +108,10 @@ const updateUserProfile = async (req, res) => {
   if (user) {
     // Update data basic
     user.username = req.body.username || user.username;
-    user.fullName = req.body.fullName || user.fullName; // Ambil mana aja yang dikirim
+    user.fullName = req.body.fullName || user.fullName; 
     user.email = req.body.email || user.email;
 
-    // Update Address & Phone (PENTING BIAR KESIMPEN)
+    // Update Address & Phone 
     if (req.body.address) {
         user.address = req.body.address;
     }
@@ -119,7 +119,7 @@ const updateUserProfile = async (req, res) => {
         user.phone = req.body.phone;
     }
 
-    // Update Password kalau diisi
+    // Update Password 
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -133,7 +133,7 @@ const updateUserProfile = async (req, res) => {
       fullName: updatedUser.fullName,
       email: updatedUser.email,
       role: updatedUser.role,
-      address: updatedUser.address, // Pastikan address dikirim balik
+      address: updatedUser.address, 
       phone: updatedUser.phone,
       token: generateToken(updatedUser._id),
     });

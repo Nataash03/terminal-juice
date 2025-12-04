@@ -14,7 +14,6 @@ const orderSchema = new mongoose.Schema({
   totalAmount: { type: Number, required: true },
   paymentMethod: { type: String, required: true },
   
-  // [FIX] Sesuai frontend kamu: 'note' (tunggal)
   note: { 
     type: String,
     default: '' 
