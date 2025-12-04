@@ -20,15 +20,15 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
       <aside className={styles.sidebar}>
         <div className={styles.avatar}></div>
         <nav className={styles.nav}>
-          <Link href="/dashboard/se" className={`${styles.menuItem} ${pathname === '/dashboard/se' ? styles.active : ''}`}>
+          <Link href="/dashboard/seller/se" className={`${styles.menuItem} ${pathname === '/dashboard/se' ? styles.active : ''}`}>
             Dashboard
           </Link>
           
-          <Link href="/dashboard/se/incoming" className={`${styles.menuItem} ${pathname.includes('/incoming') ? styles.active : ''}`}>
+          <Link href="/dashboard/seller/se/incoming" className={`${styles.menuItem} ${pathname.includes('/incoming') ? styles.active : ''}`}>
             Incoming Orders
           </Link>
 
-          <Link href="/dashboard/se/orders" className={`${styles.menuItem} ${pathname.includes('/orders') ? styles.active : ''}`}>
+          <Link href="/dashboard/seller/se/orders" className={`${styles.menuItem} ${pathname.includes('/orders') ? styles.active : ''}`}>
             My Products
           </Link>
         </nav>

@@ -44,7 +44,7 @@ export default function SellerMyProducts() {
     <div className={styles.container}>
       <div className={styles.header}>
         <h2 className={styles.title}>My Products</h2>
-        <Link href="/dashboard/se/orders/new" className={styles.addButton}>
+        <Link href="/dashboard/seller/se/orders/new" className={styles.addButton}>
           + Add Product
         </Link>
       </div>
@@ -62,7 +62,7 @@ export default function SellerMyProducts() {
             
             <div className={styles.actions}>
               <Link 
-                href={`/dashboard/se/orders/edit/${item._id}`}
+                href={`/dashboard/seller/se/orders/edit/${item._id}`}
                 className={styles.editBtn}
               >
                 ✏️ Edit

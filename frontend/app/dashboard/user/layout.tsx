@@ -83,23 +83,23 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
         <nav className={styles.nav}>
           {/* My Profile */}
           <Link 
-            href="/dashboard" 
-            className={`${styles.menuItem} ${pathname === '/dashboard' ? styles.active : ''}`}
+            href="/dashboard/user" 
+            className={`${styles.menuItem} ${pathname === '/dashboard/user' ? styles.active : ''}`}
           >
             My Profile
           </Link>
           
           {/* Orders dan Notification */}
           <Link 
-            href="/dashboard/orders" 
-            className={`${styles.menuItem} ${pathname.startsWith('/dashboard/orders') ? styles.active : ''}`}
+            href="/dashboard/user/orders" 
+            className={`${styles.menuItem} ${pathname.startsWith('/dashboard/user/orders') ? styles.active : ''}`}
           >
             My Orders
           </Link>
 
           <Link 
-            href="/dashboard/notification" 
-            className={`${styles.menuItem} ${pathname === '/dashboard/notification' ? styles.active : ''}`}
+            href="/dashboard/user/notification" 
+            className={`${styles.menuItem} ${pathname === '/dashboard/user/notification' ? styles.active : ''}`}
           >
             Notification
           </Link>
