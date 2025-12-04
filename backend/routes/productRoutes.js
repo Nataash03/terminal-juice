@@ -1,25 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const productController = require('../controllers/productController');
+const { protect } = require('../middleware/authMiddleware'); // Middleware untuk cek token
 
-const { 
-  getProducts, 
-  getProductById, 
-  createProduct, 
-  updateProduct, 
-  deleteProduct,
+// User Routes
+router.get('/', productController.getProducts); 
+router.get('/:id', productController.getProductById); 
 
-} = require('../controllers/productController'); 
-
-const { protect } = require('../middleware/authMiddleware');
-
-// Route Public
-router.get('/', getProducts);
-router.get('/:id', getProductById);
-
-// Route Private (Seller/CRUD)
-router.post('/', protect, createProduct);
-router.put('/:id', protect, updateProduct);
-router.delete('/:id', protect, deleteProduct);
-
+// Seller Routes
+router.post('/', protect, productController.createProduct); 
+router.put('/:id', protect, productController.updateProduct);
+router.delete('/:id', protect, productController.deleteProduct);
 
 module.exports = router;
