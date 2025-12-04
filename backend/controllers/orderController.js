@@ -111,7 +111,6 @@ const getTopSelling = async (req, res) => {
             { $limit: 3 }
         ]);
         
-        // Map biar formatnya enak dibaca frontend
         const formattedTop = top.map(t => ({
             productId: t._id,
             name: t.name,
