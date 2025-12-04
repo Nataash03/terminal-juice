@@ -114,7 +114,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialData, isEditMode = fal
 
       if (res.ok) {
         alert(isEditMode ? '✅ Product Updated!' : '✅ Product Created!');
-        router.push('/dashboard/se/orders');
+        router.push('/dashboard/seller/se/orders');
         router.refresh();
       } else {
         const errorData = await res.json();
