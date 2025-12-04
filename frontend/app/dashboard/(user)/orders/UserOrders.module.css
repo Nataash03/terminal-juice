@@ -139,3 +139,69 @@
 .totalPrice {
     color: #d63384;
 }
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .filterGroup {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        padding-bottom: 5px;
+    }
+
+    .filterBtn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+    }
+
+    .card {
+        padding: 15px;
+        border-radius: 15px;
+    }
+
+    .cardHeader {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .orderInfo strong {
+        font-size: 1rem;
+    }
+
+    .badge {
+        font-size: 0.75rem;
+        padding: 4px 10px;
+    }
+
+    .itemRow {
+        margin-bottom: 10px;
+        align-items: flex-start;
+    }
+
+    .itemDetail {
+        gap: 10px;
+        max-width: 70%;
+    }
+
+    .itemName {
+        font-size: 0.9rem;
+    }
+
+    .itemPrice {
+        font-size: 1rem;
+    }
+
+    .cardFooter {
+        font-size: 1rem;
+    }
+}

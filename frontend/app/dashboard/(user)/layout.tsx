@@ -10,6 +10,7 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true); 
 
   const getInitials = (name: string) => {
       if (!name) return ""; 
@@ -23,11 +24,20 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
 
   const loadUserFromStorage = () => {
       const storedUser = localStorage.getItem('user');
+      const token = Cookies.get('token'); 
+
+      if (!token) {
+          router.push('/auth');
+          return;
+      }
+      
       if (storedUser) {
           try {
               setUser(JSON.parse(storedUser));
           } catch (e) { console.error(e); }
       }
+      
+      setLoading(false); 
   };
 
   useEffect(() => {
@@ -43,6 +53,25 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
     router.push('/auth');
   };
 
+  if (loading) {
+      return (
+          <div style={{
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              height: '100vh', 
+              fontSize: '20px'
+          }}>
+              Memeriksa sesi...
+          </div>
+      );
+  }
+
+  if (!user && !loading) {
+      router.push('/auth');
+      return null;
+  }
+
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
@@ -52,16 +81,18 @@ export default function UserLayout({ children }: { children: React.ReactNode }) 
         </div>
 
         <nav className={styles.nav}>
+          {/* My Profile */}
           <Link 
             href="/dashboard" 
             className={`${styles.menuItem} ${pathname === '/dashboard' ? styles.active : ''}`}
           >
             My Profile
           </Link>
-
+          
+          {/* Orders dan Notification */}
           <Link 
             href="/dashboard/orders" 
-            className={`${styles.menuItem} ${pathname === '/dashboard/orders' ? styles.active : ''}`}
+            className={`${styles.menuItem} ${pathname.startsWith('/dashboard/orders') ? styles.active : ''}`}
           >
             My Orders
           </Link>
