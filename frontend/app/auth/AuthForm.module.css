@@ -97,6 +97,7 @@
     padding: 15px 20px;
     border-radius: 15px;
     border: 1px solid transparent;
+    color: #000 !important;
     background-color: #fff;
     font-size: 0.95rem;
     outline: none;
