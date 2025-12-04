@@ -35,6 +35,10 @@ const AuthForm = () => {
     setLoading(true);
     setError('');
 
+    const payload = isLogin 
+        ? { email: formData.email, password: formData.password } 
+        : formData; 
+
     const endpoint = isLogin 
       ? `${baseUrl}/api/users/login`
       : `${baseUrl}/api/users/register`;
@@ -43,21 +47,21 @@ const AuthForm = () => {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload) 
       });
 
       const data = await res.json();
 
       if (data.success) {
-        Cookies.set('token', data.token, { expires: 1 });
-        Cookies.set('user_role', data.user.role, { expires: 1 });
+        Cookies.set('token', data.token, { expires: 30 }); 
+        Cookies.set('user_role', data.user.role, { expires: 30 }); 
 
         localStorage.setItem('user', JSON.stringify(data.user));
 
         window.dispatchEvent(new Event('storage'));
 
         if (data.user.role === 'seller') {
-            router.push('/dashboard/se'); 
+            router.push('/dashboard/seller/se'); 
         } else {
             router.push('/dashboard'); 
         }
