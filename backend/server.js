@@ -20,9 +20,13 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const app = express();
 const PORT = process.env.PORT || 5001;
 const MONGO_URI = process.env.MONGO_URI;
+const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // 4. Middleware
-app.use(cors());
+app.use(cors({
+  origin: frontendUrl, 
+  credentials: true 
+}));
 app.use(express.json());
 
 // 5. Definisikan Route 
