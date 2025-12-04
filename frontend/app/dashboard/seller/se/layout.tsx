@@ -20,7 +20,7 @@ export default function SellerLayout({ children }: { children: React.ReactNode }
       <aside className={styles.sidebar}>
         <div className={styles.avatar}></div>
         <nav className={styles.nav}>
-          <Link href="/dashboard/seller/se" className={`${styles.menuItem} ${pathname === '/dashboard/se' ? styles.active : ''}`}>
+          <Link href="/dashboard/seller/se" className={`${styles.menuItem} ${pathname === '/dashboard/seller/se' ? styles.active : ''}`}>
             Dashboard
           </Link>
           
